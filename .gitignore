@@ -1,1 +1,18 @@
+# apk files
+*.apk
+*.ap_
+*.dex
+
+# java classes
+*.class
+
+# generated folders
 bin/
+gen/
+
+# properties file
+local.properties
+
+# eclipse files
+.classpath
+.project
