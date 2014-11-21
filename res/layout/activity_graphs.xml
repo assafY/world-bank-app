@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/container"
+	android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="org.worldbank.seg_2g.worldbankapp.GraphsActivity"
+    tools:ignore="MergeRootFrame"
+    android:orientation="horizontal" >
+    
+    <LinearLayout 
+        android:id="@+id/list_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+        
+        <AutoCompleteTextView
+            android:id="@+id/countries_text_view"
+            android:layout_width="@dimen/list_fragment_width"
+            android:layout_height="wrap_content"
+            android:hint="@string/countries_text_view_hint" />
+        
+        <ListView
+            android:id="@+id/countries_list_view"
+            android:layout_width="@dimen/list_fragment_width"
+            android:layout_height="fill_parent" />
+        
+    </LinearLayout>
+    
+    <LinearLayout 
+        android:id="@+id/graph_layout"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical" >
+        
+        <TextView 
+            android:id="@+id/graph_layout_label"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/graph_label_text" />
+             
+    </LinearLayout>
+
+</LinearLayout>
