@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -16,25 +17,24 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.AsyncTask;
-import android.widget.TextView;
 
 public class QueryGenerator {
 
 	public final static String QUERY_RESULT = "org.worldbank.seg_2g.RESULT";
 	
 	private static final String WB_URL = "http://api.worldbank.org/countries/";
-	private static final String POPULATION_CODE = "/indicators/SP.POP.TOTL?";
+	private static final String POPULATION = "SP.POP.TOTL?";
+	private static final String ENERGY_PRODUCTION = "EG.EGY.PROD.KT.OE?";
+	// TODO: Create constants for all queries
 	
 	private Context context;
-	private TextView testText;
 	
 	private String URL;
+	private String indicatorCode;
 	
-	public QueryGenerator(Context context, TextView testText) {
+	public QueryGenerator(Context context) {
 		this.context = context;
-		this.testText = testText;
 	}
 	
 	public void setCountryList(ArrayList<Country> countryList) {
@@ -56,7 +56,6 @@ public class QueryGenerator {
 			
 		} catch (JSONException e) {
 			//TODO: Handle exception
-			testText.setText("Something is Wrong");
 		}
 	}
 	
@@ -83,14 +82,30 @@ public class QueryGenerator {
         
         return data;
 	}
-
-	public void createGraph(Country selectedCountry, int queryCode, int startYear, int endYear, TextView t) {
+	
+	private void setIndicatorCode(int indicator) {
 		
+		switch(indicator) {
+			case Settings.POPULATION: 			indicatorCode = POPULATION;
+									  			break;
+			case Settings.ENERGY_PRODUCTION:	indicatorCode = ENERGY_PRODUCTION;
+												break;
+		}
+	}
+	
+	public String getJSON(Country selectedCountry, int queryCode, int startYear, int endYear) {
+		
+		// Set the correct indicator
+		setIndicatorCode(queryCode);
 		// Build URL string
-		URL = "" + WB_URL + selectedCountry.getTwoLetterCode() + POPULATION_CODE + "date=" + startYear + ":" + endYear + "&format=json";
-		testText = t;
-		new getDataFeed().execute();
-		
+		URL = WB_URL + selectedCountry.getTwoLetterCode() + "/indicators/" + indicatorCode + "date=" + startYear + ":" + endYear + "&format=json";
+		try {
+			return new getDataFeed().execute().get();
+		} catch (InterruptedException | ExecutionException e) {
+			// TODO: Handle exception
+			e.printStackTrace();
+			}
+		return null;
 	}
 	
 	// Fetch the data and put it into the app.
@@ -125,14 +140,6 @@ public class QueryGenerator {
             }
             // return data
             return content.toString();
-        }
-
-        protected void onPostExecute(String result) {
-        	
-            Intent intent = new Intent(context, GraphActivity.class);
-            intent.putExtra(QUERY_RESULT, result);
-            context.startActivity(intent);
-
         }
 
     }

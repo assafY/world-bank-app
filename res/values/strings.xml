@@ -2,8 +2,10 @@
 <resources>
 
     <string name="app_name">World Bank App</string>
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_graph">GraphActivity</string>
+    <string name="title_activity_graphs">GraphsActivity</string>
+    <string name="countries_text_view_hint">Enter country name</string>
+    <string name="graph_label_text">Graphs</string>
 
 </resources>
