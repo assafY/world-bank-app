@@ -21,11 +21,20 @@ import android.os.AsyncTask;
 
 public class QueryGenerator {
 
-	public final static String QUERY_RESULT = "org.worldbank.seg_2g.RESULT";
+	//public final static String QUERY_RESULT = "org.worldbank.seg_2g.RESULT";
 	
+	// list of contstants containing different indicator query codes to use when querying server
 	private static final String WB_URL = "http://api.worldbank.org/countries/";
 	private static final String POPULATION = "SP.POP.TOTL?";
+	private static final String URBAN_RURAL_POPULATION = "SP.URB.TOTL.IN.ZS?";
 	private static final String ENERGY_PRODUCTION = "EG.EGY.PROD.KT.OE?";
+	private static final String ENERGY_USE = "EG.USE.COMM.KT.OE?";
+	private static final String FOSSIL_FUEL = "EG.USE.COMM.FO.ZS?";
+	private static final String FOREST_AREA = "AG.LND.FRST.K2?";
+	private static final String CO2_EMISSIONS = "EG.USE.COMM.FO.ZS?";
+	private static final String CH4_EMISSIONS = "EN.ATM.METH.KT.CE?";
+	private static final String GREENHOUSE_GASSES = "EN.ATM.GHGO.KT.CE?";
+	private static final String FUEL_PRICE = "SP.RUR.TOTL.ZS?";
 	// TODO: Create constants for all queries
 	
 	private Context context;
@@ -85,10 +94,27 @@ public class QueryGenerator {
 	
 	private void setIndicatorCode(int indicator) {
 		
+		// set indicator string to the correct code based on constant int passed from main activity (activity does not yet exist)
 		switch(indicator) {
 			case Settings.POPULATION: 			indicatorCode = POPULATION;
 									  			break;
+			case Settings.URBAN_RURAL:			indicatorCode = URBAN_RURAL_POPULATION;
+												break;
 			case Settings.ENERGY_PRODUCTION:	indicatorCode = ENERGY_PRODUCTION;
+												break;
+			case Settings.ENERGY_USE: 			indicatorCode = ENERGY_USE;
+			  									break;
+			case Settings.FOSSIL_FUEL:			indicatorCode = FOSSIL_FUEL;
+												break;
+			case Settings.FOREST_AREA:			indicatorCode = FOREST_AREA;
+												break;
+			case Settings.CO2_EMISSIONS:		indicatorCode = CO2_EMISSIONS;
+												break;
+			case Settings.CH4_EMISSIONS: 		indicatorCode = CH4_EMISSIONS;
+												break;
+			case Settings.GREENHOUSE_GASSES:	indicatorCode = GREENHOUSE_GASSES;
+												break;
+			case Settings.FUEL_PRICE:			indicatorCode = FUEL_PRICE;
 												break;
 		}
 	}
