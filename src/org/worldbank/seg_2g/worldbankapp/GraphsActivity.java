@@ -25,6 +25,8 @@ import com.jjoe64.graphview.LineGraphView;
 
 public class GraphsActivity extends Activity {
 
+	private String queryJSON;
+	
 	private ArrayList<Country> countryList;
 	private QueryGenerator queryGen;
 	private AutoCompleteTextView countryTextView;
@@ -88,7 +90,7 @@ public class GraphsActivity extends Activity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int pos,
 					long id) {
-				String queryJSON = queryGen.getJSON((Country) parent.getItemAtPosition(pos), Settings.POPULATION, 1999, 2009);
+				queryJSON = queryGen.getJSON((Country) parent.getItemAtPosition(pos), Settings.POPULATION, 1999, 2009);
 				createGraph(queryJSON, parent.getItemAtPosition(pos).toString());	
 			}
 		};
