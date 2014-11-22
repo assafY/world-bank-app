@@ -14,9 +14,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GraphView.GraphViewData;
@@ -29,7 +29,7 @@ public class GraphsActivity extends Activity {
 	
 	private ArrayList<Country> countryList;
 	private QueryGenerator queryGen;
-	private AutoCompleteTextView countryTextView;
+	private TextView countryTextView;
 	
 	private GraphViewSeries populationEntries;
 	private LinearLayout graphLayout;
@@ -76,12 +76,10 @@ public class GraphsActivity extends Activity {
 	private void createCountryViews() {
 		
 		// at the moment creates a text view and list view which overlap, need to fix the text view
-		countryTextView = (AutoCompleteTextView) findViewById(R.id.countries_text_view);
+		countryTextView = (TextView) findViewById(R.id.countries_text_view);
 		countryListView = (ListView) findViewById(R.id.countries_list_view);
 		
-		ArrayAdapter<Country> textViewArrayAdapter = new ArrayAdapter<Country>(this, android.R.layout.simple_spinner_dropdown_item, countryList);
 		CountryListAdapter listAdapter = new CountryListAdapter(this, countryList);
-		countryTextView.setAdapter(textViewArrayAdapter);
 		countryListView.setAdapter(listAdapter);
 		
 		// add selection listeners
@@ -95,7 +93,6 @@ public class GraphsActivity extends Activity {
 			}
 		};
 		
-		countryTextView.setOnItemClickListener(clickListener);
 		countryListView.setOnItemClickListener(clickListener);
 	}
 
