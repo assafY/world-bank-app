@@ -36,8 +36,8 @@ public class GraphsActivity extends Activity {
 	private String queryJSON;
 	private boolean offlineMode;
 	
-	private ArrayList<Country> countryList;
-	private ArrayList<Country> autoCompleteList;
+	private ArrayList<Country> countryList;      // will always contain all countries
+	private ArrayList<Country> autoCompleteList; // will be reset every time text changes in text field
 	private QueryGenerator queryGen;
 	private EditText countryTextView;
 	
@@ -45,6 +45,7 @@ public class GraphsActivity extends Activity {
 	private LinearLayout graphLayout;
 	private ListView countryListView;
 	
+	//
 	private CountryListAdapter listAdapter;
 	private CountryListAdapter autoCompleteAdapter;
 	
@@ -68,7 +69,7 @@ public class GraphsActivity extends Activity {
 		
 		graphLayout = (LinearLayout) findViewById(R.id.graph_layout);
 		
-		// load all countries from local json file into list
+		// load all countries into list from local json file
 		countryList = new ArrayList<Country>();
 		queryGen = new QueryGenerator(this);
 		queryGen.setCountryList(countryList);
@@ -77,10 +78,10 @@ public class GraphsActivity extends Activity {
 		startYear = 1999;
 		endYear = 2009;
 		
-		// create country autocomplete textview and listview
+		// create country editText and listView
 		createCountryViews();
 		
-		// check if network is available and set connectivity boolean
+		// check if network is available and set connectivity boolean (offline mode not yet available)
 		if (deviceHasNetwork()) {
 			offlineMode = false;
 		} else {
