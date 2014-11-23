@@ -10,14 +10,18 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.GraphView.GraphViewData;
@@ -26,6 +30,7 @@ import com.jjoe64.graphview.LineGraphView;
 
 public class GraphsActivity extends Activity {
 
+	private int indicatorSelection;
 	private String queryJSON;
 	
 	private ArrayList<Country> countryList;
@@ -40,10 +45,23 @@ public class GraphsActivity extends Activity {
 	private CountryListAdapter listAdapter;
 	private CountryListAdapter autoCompleteAdapter;
 	
+	private int startYear;
+	private int endYear;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_graphs);
+		
+		/* This code is for when this activity will be started by
+		 * the main activity and send the user's indicator selection
+		 * 
+		 * Intent intent = getIntent();
+		 * indicatorSelection = intent.getStringExtra(MainActivity.SELECTED_INDICATOR);
+		 */
+		
+		// for now the code sent to the query generator is for the population indicator
+		indicatorSelection = Settings.POPULATION;
 		
 		graphLayout = (LinearLayout) findViewById(R.id.graph_layout);
 		
@@ -51,6 +69,10 @@ public class GraphsActivity extends Activity {
 		countryList = new ArrayList<Country>();
 		queryGen = new QueryGenerator(this);
 		queryGen.setCountryList(countryList);
+		
+		// year selection currently hard coded
+		startYear = 1999;
+		endYear = 2009;
 		
 		// create country autocomplete textview and listview
 		createCountryViews();
@@ -94,7 +116,8 @@ public class GraphsActivity extends Activity {
 			public void onItemClick(AdapterView<?> parent, View view, int pos,
 					long id) {
 				// when a country is selected from the list, get JSON data and create graph
-				queryJSON = queryGen.getJSON((Country) parent.getItemAtPosition(pos), Settings.POPULATION, 1999, 2009);
+				// TODO: change hard coded year range to two bar seekbar
+				queryJSON = queryGen.getJSON((Country) parent.getItemAtPosition(pos), indicatorSelection, startYear, endYear);
 				createGraph(queryJSON, parent.getItemAtPosition(pos).toString());	
 			}
 		});
@@ -140,6 +163,25 @@ public class GraphsActivity extends Activity {
 			
 		});
 		
+		countryTextView.setOnEditorActionListener(new OnEditorActionListener() {
+
+			@Override
+			public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
+				//
+				String currentInput = view.getText().toString().toLowerCase();
+				if (actionId == EditorInfo.IME_NULL) {
+					if(!currentInput.equals("")) {
+						//
+						if (autoCompleteList.size() == 1) {
+							queryJSON = queryGen.getJSON(autoCompleteList.get(0), indicatorSelection, startYear, endYear);
+							createGraph(queryJSON, autoCompleteList.get(0).toString());
+							return true;
+						}
+					}		
+				}			
+				return true;
+			}
+		});
 	}
 
 	protected void createGraph(String data, String countryName) {
