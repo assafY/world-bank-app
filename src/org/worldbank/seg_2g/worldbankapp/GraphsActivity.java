@@ -7,6 +7,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Activity;
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,6 +34,7 @@ public class GraphsActivity extends Activity {
 
 	private int indicatorSelection;
 	private String queryJSON;
+	private boolean offlineMode;
 	
 	private ArrayList<Country> countryList;
 	private ArrayList<Country> autoCompleteList;
@@ -77,7 +80,12 @@ public class GraphsActivity extends Activity {
 		// create country autocomplete textview and listview
 		createCountryViews();
 		
-		//TODO: Check if network is available
+		// check if network is available and set connectivity boolean
+		if (deviceHasNetwork()) {
+			offlineMode = false;
+		} else {
+			offlineMode = true;
+		}
 	}
 
 	@Override
@@ -99,6 +107,20 @@ public class GraphsActivity extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	// check if the device has network access
+	private boolean deviceHasNetwork() {
+		
+        ConnectivityManager networkManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean isDataConnected = networkManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting();
+        boolean isWifiConnected = networkManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting();
+        
+        if (isDataConnected || isWifiConnected) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 	
 	private void createCountryViews() {
 		
