@@ -59,8 +59,16 @@ public class QueryGenerator {
 			JSONArray feedArray = dataFeed.getJSONArray(1);
 			for (int i = 0; i < totalCountries; ++i) {
 				JSONObject json = feedArray.getJSONObject(i);
-				Country currentCountry = new Country(json.getString("name"), json.getString("id"), json.getString("iso2Code"), context);
-				countryList.add(currentCountry);
+				// skip any input that is not a country
+				String countryName = json.getString("name");
+				if (!(countryName.startsWith("High") || countryName.startsWith("Fragile") || countryName.startsWith("Heavily")
+						|| countryName.startsWith("Not") || countryName.startsWith("Least") || countryName.startsWith("Low")
+						|| countryName.startsWith("Middle income") || countryName.startsWith("OECD") || countryName.startsWith("World")
+						|| countryName.startsWith("Small") || countryName.startsWith("Upper"))) {
+					
+					Country currentCountry = new Country(countryName, json.getString("id"), json.getString("iso2Code"), context);
+					countryList.add(currentCountry);
+				}
 			}	
 			
 		} catch (JSONException e) {

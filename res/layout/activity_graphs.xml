@@ -9,20 +9,25 @@
     
     <LinearLayout 
         android:id="@+id/list_layout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/list_fragment_width"
+        android:layout_height="fill_parent"
         android:orientation="vertical" >
         
         <EditText
             android:id="@+id/countries_text_view"
-            android:layout_width="@dimen/list_fragment_width"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/countries_text_view_hint" />
-        
+            android:layout_weight="0"
+            android:textSize="14sp"
+            android:hint="@string/countries_text_view_hint"
+            android:inputType="textCapWords|textNoSuggestions"
+            android:imeOptions="flagNoFullscreen|actionGo" />
+                
         <ListView
             android:id="@+id/countries_list_view"
-            android:layout_width="@dimen/list_fragment_width"
-            android:layout_height="fill_parent" />
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="1" />
         
     </LinearLayout>
     

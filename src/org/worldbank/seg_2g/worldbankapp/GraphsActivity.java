@@ -192,7 +192,7 @@ public class GraphsActivity extends Activity {
 			public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
 				//
 				String currentInput = view.getText().toString().toLowerCase();
-				if (actionId == EditorInfo.IME_NULL) {
+				if (actionId == EditorInfo.IME_ACTION_GO) {
 					if(!currentInput.equals("")) {
 						//
 						if (autoCompleteList.size() == 1) {
