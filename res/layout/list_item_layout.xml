@@ -5,9 +5,10 @@
     
     <TableRow>
         <ImageView
-            android:layout_width="@dimen/flag_icon_width"
-            android:layout_height="@dimen/flag_icon_height"
-            android:id="@+id/flag_image_view" />
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:id="@+id/flag_image_view"
+            android:scaleType="center" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
