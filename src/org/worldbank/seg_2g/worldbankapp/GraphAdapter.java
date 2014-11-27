@@ -13,6 +13,8 @@ public class GraphAdapter extends FragmentPagerAdapter {
 	private static final CharSequence POPULATION = "Population";
 	private static final CharSequence ENERGY = "Energy";
 	private static final CharSequence ENVIRONMENT = "Environment";
+	
+	private static final int TOTAL_PAGES = 3;
 
 	public GraphAdapter(FragmentManager frame) {
 		super(frame);
@@ -25,8 +27,8 @@ public class GraphAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public int getCount() {
-		// Show 3 total pages.
-		return 3;
+		// Show number of pages.
+		return TOTAL_PAGES;
 	}
 
 	@Override
