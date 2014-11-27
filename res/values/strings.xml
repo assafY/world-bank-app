@@ -5,7 +5,7 @@
     <string name="title_activity_graph">GraphActivity</string>
     <string name="countries_text_view_hint">Enter country</string>
     <string name="title_activity_main"></string>
-    <string name="button1">Countries</string>
+    <string name="button1">Graphs</string>
     <string name="button2">Help</string>
     <string name="title_activity_country">CountryActivity</string>
     <string name="hello_world">Hello world!</string>

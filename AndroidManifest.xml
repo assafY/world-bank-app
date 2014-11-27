@@ -24,7 +24,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
+        <!-- <activity
             android:name=".CountryActivity"
             android:label="@string/title_activity_country"
             android:parentActivityName=".MainActivity"
@@ -32,7 +32,7 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.worldbank.seg_2g.worldbankapp.MainActivity" />
-        </activity>
+        </activity> -->
         <activity
             android:name=".HelpActivity"
             android:label="@string/title_activity_help"
