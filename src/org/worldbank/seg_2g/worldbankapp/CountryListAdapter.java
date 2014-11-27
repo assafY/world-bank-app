@@ -36,7 +36,7 @@ public class CountryListAdapter extends ArrayAdapter<Country> {
 		
 		Country currentCountry = countryList.get(position);
 		
-		countryTextView.setText(" " + currentCountry.toString());
+		countryTextView.setText(currentCountry.toString());
 		// if country has a flag icon add it to the list
 		if (currentCountry.hasFlagIcon()) {
 			countryImageView.setImageResource(currentCountry.getFlagId());
