@@ -46,7 +46,8 @@
             android:name=".GraphActivity"
             android:label="@string/title_activity_graph"
             android:parentActivityName=".MainActivity"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustPan" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.worldbank.seg_2g.worldbankapp.MainActivity" />

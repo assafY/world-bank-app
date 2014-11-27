@@ -12,13 +12,20 @@ import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 public class GraphActivity extends Activity implements ActionBar.TabListener {
@@ -28,10 +35,15 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	private static final CharSequence DRAWER_TITLE = "Select Country";
 	
 	private CountryListAdapter listAdapter;
+	private CountryListAdapter autoCompleteAdapter;
+	
 	private ArrayList<Country> countryList;      // will always contain all countries
+	private ArrayList<Country> autoCompleteList; // will be reset every time text changes in text field
+	
+	private EditText countryTextView;
+	private ListView countryListView;
 	private DrawerLayout countryDrawerLayout;
 	private ActionBarDrawerToggle drawerToggle;
-	private ListView countryListView;
 	
 	private QueryGenerator queryGen;
 	private String queryJSON;
@@ -115,6 +127,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 			
 	private void createCountryViews() {
 				
+		countryTextView = (EditText) findViewById(R.id.countries_text_view);
 		countryDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		countryListView = (ListView) findViewById(R.id.countries_list_view);
 		
@@ -165,6 +178,66 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 			}
 		});
 		
+		// add EditText key listener, update list on key typed
+				countryTextView.addTextChangedListener(new TextWatcher() {
+
+					@Override
+					public void afterTextChanged(Editable e) {
+						// store current EditText input in lower case
+						String currentInput = countryTextView.getText().toString().toLowerCase();
+						
+						// if the text field is not empty
+						if (!currentInput.equals("")) {
+							
+							autoCompleteList = new ArrayList<Country>();
+							for (Country c: countryList) {
+								// for every country in the full country list, if it starts with the same text in the text field
+								// add it to a new country list
+								if(c.toString().toLowerCase().startsWith(currentInput)) {
+									autoCompleteList.add(c);
+								}
+							}
+							// create a new adapter using the new country list and set it to the ListView
+							autoCompleteAdapter = new CountryListAdapter(GraphActivity.this, autoCompleteList);
+							countryListView.setAdapter(autoCompleteAdapter); 
+						}
+						// if the text field is empty, set the original adapter with the full country list to the ListView
+						else {
+							countryListView.setAdapter(listAdapter);
+						}
+					}
+
+					// not needed for this listener but needs to be implemented
+					@Override
+					public void beforeTextChanged(CharSequence arg0, int arg1,
+							int arg2, int arg3) {}
+					
+					// not needed for this listener but needs to be implemented
+					@Override
+					public void onTextChanged(CharSequence arg0, int arg1, int arg2,
+							int arg3) {}
+					
+				});
+				
+				countryTextView.setOnEditorActionListener(new OnEditorActionListener() {
+
+					@Override
+					public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
+						//
+						String currentInput = view.getText().toString().toLowerCase();
+						if (actionId == EditorInfo.IME_ACTION_GO) {
+							if(!currentInput.equals("")) {
+								//
+								if (autoCompleteList.size() == 1) {
+									queryJSON = queryGen.getJSON(autoCompleteList.get(0), indicatorSelection, startYear, endYear);
+									new GraphFragment().createLinearGraph(GraphActivity.this, queryJSON, autoCompleteList.get(0).toString());
+									return true;
+								}
+							}		
+						}			
+						return true;
+					}
+				});
 	}
 			
 	@Override
