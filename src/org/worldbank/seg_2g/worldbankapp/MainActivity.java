@@ -30,11 +30,9 @@ public class MainActivity extends Activity {
 	}
 	
 	// called when country button is clicked
-	public void countryMenu(View view){
-		//if (deviceHasNetwork()) {
+	public void countryMenu(View view) {
 			Intent countryIntent = new Intent(this,CountryActivity.class);
 			startActivity(countryIntent);
-		//}
 	}
 	
 	// called when help button is clicked
@@ -43,17 +41,4 @@ public class MainActivity extends Activity {
 		startActivity(helpIntent);
 	}
 	
-	/*// check if the device has network access
-	private boolean deviceHasNetwork() {
-		
-        ConnectivityManager networkManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        boolean isDataConnected = networkManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting();
-        boolean isWifiConnected = networkManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting();
-        
-        if (isDataConnected || isWifiConnected) {
-            return true;
-        } else {
-            return false;
-        }
-    }*/
 }

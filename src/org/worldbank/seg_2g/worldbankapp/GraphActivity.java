@@ -121,10 +121,14 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 					long id) {
 				// when a country is selected from the list, get JSON data and create graph
 				// TODO: change hard coded year range to two bar seekbar
+				
+				// if a user is connected, create graph layout
 				if (deviceHasNetwork()) {
 					queryJSON = queryGen.getJSON((Country) parent.getItemAtPosition(pos), indicatorSelection, startYear, endYear);
 					new GraphFragment().createLinearGraph(GraphActivity.this,queryJSON, parent.getItemAtPosition(pos).toString());
-				} else {
+				}
+				// if disconnected do nothing and notify with Toast
+				else {
 					Toast.makeText(getApplicationContext(), NO_NETWORK_TEXT, 
 							   Toast.LENGTH_LONG).show();
 				}
