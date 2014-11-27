@@ -11,7 +11,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_help">HelpActivity</string>
     <string name="action_example">Example action</string>
-    <string name="app_name">World Bank</string>
+    <string name="app_name">Sun Bank</string>
     <string name="title_activity_graph_fragment">GraphFragment</string>
     <string name="drawer_open">Show Country List</string>
     <string name="drawer_close">Hide Country List</string>

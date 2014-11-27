@@ -29,37 +29,13 @@
 	       android:layout_height="match_parent" />
 	    
     </RelativeLayout>
-	
-    <LinearLayout 
-        android:id="@+id/list_layout"
+                
+    <ListView
+        android:id="@+id/countries_list_view"
         android:layout_width="205dp"
         android:layout_height="match_parent"
         android:layout_gravity="left"
-        android:orientation="vertical" >
-        
-        <EditText
-            android:id="@+id/countries_text_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:hint="@string/countries_text_view_hint"
-            android:inputType="textCapWords|textNoSuggestions"
-            android:imeOptions="flagNoFullscreen|actionGo" />
-                
-        <ListView
-            android:id="@+id/countries_list_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-        
-     </LinearLayout>
-   	
-   <!-- 	<ListView
-       android:id="@+id/countries_list_view"
-       android:layout_width="205dp"
-       android:layout_height="match_parent"
-       android:layout_gravity="left" /> -->
+        android:background="#000000" />
 
-    
-    
 </android.support.v4.widget.DrawerLayout>
 
