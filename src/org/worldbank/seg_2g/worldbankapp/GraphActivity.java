@@ -6,6 +6,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -137,15 +138,6 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 			}
 		};
 		
-		countryDrawerLayout.post(new Runnable() {
-
-			@Override
-			public void run() {
-				drawerToggle.syncState();
-			}
-			
-		});
-		
 		countryDrawerLayout.setDrawerListener(drawerToggle);
 				
 		listAdapter = new CountryListAdapter(this, countryList);
@@ -175,6 +167,18 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		
 	}
 			
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		drawerToggle.syncState();
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		drawerToggle.onConfigurationChanged(newConfig);
+	}
+	
 	@Override
 	public void onTabSelected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
