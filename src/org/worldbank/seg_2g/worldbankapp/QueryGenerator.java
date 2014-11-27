@@ -36,7 +36,6 @@ public class QueryGenerator {
 	private static final String CH4_EMISSIONS = "EN.ATM.METH.KT.CE?";
 	private static final String GREENHOUSE_GASSES = "EN.ATM.GHGO.KT.CE?";
 	private static final String FUEL_PRICE = "SP.RUR.TOTL.ZS?";
-	// TODO: Create constants for all queries
 	
 	private Context context;
 	

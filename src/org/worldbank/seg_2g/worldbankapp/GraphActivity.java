@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
@@ -16,9 +18,12 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class GraphActivity extends Activity implements ActionBar.TabListener {
 
+	private static final CharSequence NO_NETWORK_TEXT = "Your device has no network";
+	
 	private CountryListAdapter listAdapter;
 	private CountryListAdapter autoCompleteAdapter;
 	private ArrayList<Country> countryList;      // will always contain all countries
@@ -116,8 +121,13 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 					long id) {
 				// when a country is selected from the list, get JSON data and create graph
 				// TODO: change hard coded year range to two bar seekbar
-				queryJSON = queryGen.getJSON((Country) parent.getItemAtPosition(pos), indicatorSelection, startYear, endYear);
-				new GraphFragment().createLinearGraph(GraphActivity.this,queryJSON, parent.getItemAtPosition(pos).toString());
+				if (deviceHasNetwork()) {
+					queryJSON = queryGen.getJSON((Country) parent.getItemAtPosition(pos), indicatorSelection, startYear, endYear);
+					new GraphFragment().createLinearGraph(GraphActivity.this,queryJSON, parent.getItemAtPosition(pos).toString());
+				} else {
+					Toast.makeText(getApplicationContext(), NO_NETWORK_TEXT, 
+							   Toast.LENGTH_LONG).show();
+				}
 			}
 		});
 
@@ -178,5 +188,19 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	public void onTabReselected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
 	}
+	
+	// check if the device has network access
+	private boolean deviceHasNetwork() {
+		
+        ConnectivityManager networkManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        boolean isDataConnected = networkManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting();
+        boolean isWifiConnected = networkManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting();
+        
+        if (isDataConnected || isWifiConnected) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }
