@@ -8,28 +8,28 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.ViewPager;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 public class GraphActivity extends Activity implements ActionBar.TabListener {
 
 	private static final CharSequence NO_NETWORK_TEXT = "Your device has no network";
+	private static final CharSequence ACTIVITY_TITLE = "Graph Activity";
+	private static final CharSequence DRAWER_TITLE = "Select Country";
 	
 	private CountryListAdapter listAdapter;
-	private CountryListAdapter autoCompleteAdapter;
 	private ArrayList<Country> countryList;      // will always contain all countries
-	private ArrayList<Country> autoCompleteList; // will be reset every time text changes in text field
 
-	private EditText countryTextView;
+	private DrawerLayout countryDrawerLayout;
+	private ActionBarDrawerToggle drawerToggle;
 	private ListView countryListView;
 	
 	private QueryGenerator queryGen;
@@ -107,8 +107,25 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 			
 	private void createCountryViews() {
 				
-		countryTextView = (EditText) findViewById(R.id.countries_text_view);
+		countryDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		countryListView = (ListView) findViewById(R.id.countries_list_view);
+		
+		drawerToggle = new ActionBarDrawerToggle(this, countryDrawerLayout, R.drawable.icon, R.string.drawer_open, R.string.drawer_close) {
+			
+			public void onDrawerClosed(View view) {
+				super.onDrawerClosed(view);
+				getActionBar().setTitle(ACTIVITY_TITLE);
+				invalidateOptionsMenu();
+			}
+			
+			public void onDrawerOpened(View drawerView) {
+				super.onDrawerOpened(drawerView);
+				getActionBar().setTitle(DRAWER_TITLE);
+				invalidateOptionsMenu();
+			}
+		};
+		
+		countryDrawerLayout.setDrawerListener(drawerToggle);
 				
 		listAdapter = new CountryListAdapter(this, countryList);
 		countryListView.setAdapter(listAdapter);
@@ -133,46 +150,6 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 							   Toast.LENGTH_LONG).show();
 				}
 			}
-		});
-
-		countryTextView.addTextChangedListener(new TextWatcher() {
-
-			@Override
-			public void afterTextChanged(Editable e) {
-				// store current EditText input in lower case
-				String currentInput = countryTextView.getText().toString().toLowerCase();
-				
-				// if the text field is not empty
-				if (!currentInput.equals("")) {
-					
-					autoCompleteList = new ArrayList<Country>();
-					for (Country c: countryList) {
-						// for every country in the full country list, if it starts with the same text in the text field
-						// add it to a new country list
-						if(c.toString().toLowerCase().startsWith(currentInput)) {
-							autoCompleteList.add(c);
-						}
-					}
-					// create a new adapter using the new country list and set it to the ListView
-					autoCompleteAdapter = new CountryListAdapter(GraphActivity.this, autoCompleteList);
-					countryListView.setAdapter(autoCompleteAdapter); 
-				}
-				// if the text field is empty, set the original adapter with the full country list to the ListView
-				else {
-					countryListView.setAdapter(listAdapter);
-				}
-			}
-
-			// not needed for this listener but needs to be implemented
-			@Override
-			public void beforeTextChanged(CharSequence arg0, int arg1,
-					int arg2, int arg3) {}
-			
-			// not needed for this listener but needs to be implemented
-			@Override
-			public void onTextChanged(CharSequence arg0, int arg1, int arg2,
-					int arg3) {}
-			
 		});
 	}
 			
