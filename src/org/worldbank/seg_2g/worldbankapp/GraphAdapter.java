@@ -9,6 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class GraphAdapter extends FragmentPagerAdapter {
+	
+	private static final CharSequence POPULATION = "Population";
+	private static final CharSequence ENERGY = "Energy";
+	private static final CharSequence ENVIRONMENT = "Environment";
 
 	public GraphAdapter(FragmentManager frame) {
 		super(frame);
@@ -28,12 +32,12 @@ public class GraphAdapter extends FragmentPagerAdapter {
 	@Override
 	public CharSequence getPageTitle(int position) {
 		switch (position) {
-		case 0:
-			return "Population";
-		case 1:
-			return "Energy";
-		case 2:
-			return "Environment";
+			case 0:
+				return POPULATION;
+			case 1:
+				return ENERGY;
+			case 2:
+				return ENVIRONMENT;
 		}
 		return null;
 	}
@@ -42,6 +46,7 @@ public class GraphAdapter extends FragmentPagerAdapter {
 	public static class GraphFrameHolder extends Fragment {
 
 		private static final String CATEGORY_PAGE = "frameID";
+		
 		public static GraphFrameHolder newInstance(int sectionNumber) {
 			GraphFrameHolder graphFrame = new GraphFrameHolder();
 			Bundle fMap = new Bundle();
