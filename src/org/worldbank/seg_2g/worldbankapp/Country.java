@@ -1,5 +1,6 @@
 package org.worldbank.seg_2g.worldbankapp;
 
+
 import android.content.Context;
 
 public class Country {
@@ -12,7 +13,7 @@ public class Country {
 	
 	// boolean for existence of country flag icon
 	private final boolean hasIcon;
-	private final int flagId;
+	private int flagId;
 	
 	public Country(String countryName, String threeLetterCode, String twoLetterCode, Context context) {
 		//this.context = context;
@@ -22,7 +23,7 @@ public class Country {
 		this.twoLetterCode = twoLetterCode;
 		
 		// check if flag icon exists and set boolean
-		flagId = context.getResources().getIdentifier(twoLetterCode.toLowerCase(), "drawable", context.getPackageName());
+		 checkFlag(context);
 		if (flagId != 0) {
 			hasIcon = true;
 		}
@@ -52,5 +53,14 @@ public class Country {
 		return name;
 	}
 	
+	
+	public void checkFlag(Context context){
+	if(twoLetterCode.equalsIgnoreCase("do")){
+	flagId = context.getResources().getIdentifier(threeLetterCode.toLowerCase(), "drawable", context.getPackageName());
+	}else{
+	flagId = context.getResources().getIdentifier(twoLetterCode.toLowerCase(), "drawable", context.getPackageName());}
+	}
+	
+
 	
 }

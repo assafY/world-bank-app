@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.http.HttpResponse;
@@ -59,15 +60,10 @@ public class QueryGenerator {
 			JSONArray feedArray = dataFeed.getJSONArray(1);
 			for (int i = 0; i < totalCountries; ++i) {
 				JSONObject json = feedArray.getJSONObject(i);
-				// skip any input that is not a country
-				String countryName = json.getString("name");
-				if (!(countryName.startsWith("High") || countryName.startsWith("Fragile") || countryName.startsWith("Heavily")
-						|| countryName.startsWith("Not") || countryName.startsWith("Least") || countryName.startsWith("Low")
-						|| countryName.startsWith("Middle income") || countryName.startsWith("OECD") || countryName.startsWith("World")
-						|| countryName.startsWith("Small") || countryName.startsWith("Upper"))) {
-					
-					Country currentCountry = new Country(countryName, json.getString("id"), json.getString("iso2Code"), context);
-					countryList.add(currentCountry);
+				String country = json.getString("name");
+				if(checkCountry(country)){
+				Country currentCountry = new Country(country, json.getString("id"), json.getString("iso2Code"), context);
+				countryList.add(currentCountry);
 				}
 			}	
 			
@@ -81,15 +77,15 @@ public class QueryGenerator {
         
         try {
         	// load local country json file into InputStream
-            InputStream is = context.getAssets().open("countries.json");
-            int size = is.available();
-            byte[] buffer = new byte[size];
+            InputStream dataStream = context.getAssets().open("countries.json");
+            int size = dataStream.available();
+            byte[] dataBuffer = new byte[size];
 
-            is.read(buffer);
-            is.close();
+            dataStream.read(dataBuffer);
+            dataStream.close();
             
             // convert to string
-            data = new String(buffer, "UTF-8");
+            data = new String(dataBuffer);
 
         } catch (IOException e) {
         	//TODO: Handle exception
@@ -175,8 +171,31 @@ public class QueryGenerator {
             // return data
             return content.toString();
         }
-
     }
+	
+	 public boolean checkCountry(String isValidCountry){
+		 if(AdditionalCountry(isValidCountry)){
+		 return true;
+		 }else{
+		  String[] listOfCountries = Locale.getISOCountries();
+		  for (String countryID : listOfCountries) {
+		  Locale country = new Locale("", countryID);
+		  if(country.getDisplayCountry().equals(isValidCountry)){
+		  return true;  }   }
+		  return false;
+		 }
+		 }
+
+	public boolean AdditionalCountry(String isValidCountry){
+	if(isValidCountry.contains("Cyprus")||isValidCountry.contains("Korea, Rep")||
+	isValidCountry.contains("Korea, Dem. Rep")||isValidCountry.contains("Egypt")||isValidCountry.contains("Hong Kong")||
+	isValidCountry.contains("Iran")||isValidCountry.contains("Syria")||isValidCountry.contains("Venezuela")||isValidCountry.contains("Yemen")||
+	isValidCountry.contains("Bahamas")||isValidCountry.contains("Congo")||isValidCountry.contains("Cabo Verde")){
+	return true;
+	}
+	return false;
+	}
+	
 	
 }
  

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="DefaultLocale" severity="ignore" />
+    <issue id="InflateParams">
+        <ignore path="src/org/worldbank/seg_2g/worldbankapp/CountryListAdapter.java" />
+    </issue>
+    <issue id="ViewHolder" severity="ignore" />
+</lint>

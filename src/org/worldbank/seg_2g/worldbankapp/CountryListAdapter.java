@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-// custom ArrayAdapter to implement list items with flag icon and country name
 public class CountryListAdapter extends ArrayAdapter<Country> {
 	
 	private ArrayList<Country> countryList;	
@@ -35,6 +34,8 @@ public class CountryListAdapter extends ArrayAdapter<Country> {
 		ImageView countryImageView = (ImageView) tableRow.findViewById(R.id.flag_image_view);
 		
 		Country currentCountry = countryList.get(position);
+		countryTextView.setText(" " + currentCountry.toString());
+		countryTextView.setText(currentCountry.toString());
 		
 		countryTextView.setText(currentCountry.toString());
 		// if country has a flag icon add it to the list

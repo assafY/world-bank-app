@@ -1,0 +1,19 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="org.worldbank.seg_2g.worldbankapp.GraphFragment" >
+
+           <item
+        android:id="@+id/action"
+        android:orderInCategory="100"
+        android:showAsAction="always"
+         android:icon="@drawable/tweeter"
+        android:title="@string/action_settings"/>  
+    
+      <item
+        android:id="@+id/help"
+        android:orderInCategory="100"
+        android:showAsAction="ifRoom"
+         android:icon="@drawable/helpicon"
+        android:title="@string/action_settings"/>  
+
+</menu>

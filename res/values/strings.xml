@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">World Bank App</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_graph">GraphActivity</string>
-    <string name="title_activity_graphs">GraphsActivity</string>
     <string name="countries_text_view_hint">Enter country</string>
+    <string name="title_activity_main"></string>
+    <string name="button1">Countries</string>
+    <string name="button2">Help</string>
+    <string name="title_activity_country">CountryActivity</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_help">HelpActivity</string>
+    <string name="action_example">Example action</string>
+    <string name="app_name">World Bank</string>
+    <string name="title_activity_graph_fragment">GraphFragment</string>
 
 </resources>
