@@ -29,29 +29,16 @@ public class MainActivity extends Activity {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	public void countryMenu(View view){
-		if(deviceHasNetwork()){
-		Intent countryIntent = new Intent(this,CountryActivity.class);
-		startActivity(countryIntent);
-		}
+	// called when country button is clicked
+	public void countryMenu(View view) {
+			Intent countryIntent = new Intent(this,CountryActivity.class);
+			startActivity(countryIntent);
 	}
 	
-	public void helpMenu(View view){
-	Intent helpIntent = new Intent(this, HelpActivity.class);
-	startActivity(helpIntent);
+	// called when help button is clicked
+	public void helpMenu(View view) {
+		Intent helpIntent = new Intent(this, HelpActivity.class);
+		startActivity(helpIntent);
 	}
 	
-	// check if the device has network access
-	private boolean deviceHasNetwork() {
-		
-        ConnectivityManager networkManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        boolean isDataConnected = networkManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting();
-        boolean isWifiConnected = networkManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting();
-        
-        if (isDataConnected || isWifiConnected) {
-            return true;
-        } else {
-            return false;
-        }
-    }
 }
