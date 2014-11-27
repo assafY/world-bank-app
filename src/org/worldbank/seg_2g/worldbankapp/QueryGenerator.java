@@ -39,6 +39,7 @@ public class QueryGenerator {
 	
 	private Context context;
 	
+	private String[] listOfLocaleCountries = Locale.getISOCountries();;
 	private String URL;
 	private String indicatorCode;
 	
@@ -172,27 +173,32 @@ public class QueryGenerator {
         }
     }
 	
-	 public boolean checkCountry(String isValidCountry){
-		 if(AdditionalCountry(isValidCountry)){
-		 return true;
-		 }else{
-		  String[] listOfCountries = Locale.getISOCountries();
-		  for (String countryID : listOfCountries) {
-		  Locale country = new Locale("", countryID);
-		  if(country.getDisplayCountry().equals(isValidCountry)){
-		  return true;  }   }
+	public boolean checkCountry(String isValidCountry) {
+		 // check against countries that have different codes to Locale
+		 // return true if found
+		 if (additionalCountry(isValidCountry)) {
+			 return true;
+		 } else {
+			 // otherwise crosscheck with local android list of countries to eliminate unwanted entries
+			 for (String countryID : listOfLocaleCountries) {
+				 Locale country = new Locale("", countryID);
+				 if (country.getDisplayCountry().equals(isValidCountry)) {
+					 return true;  
+				 }   
+			 }
 		  return false;
 		 }
-		 }
-
-	public boolean AdditionalCountry(String isValidCountry){
-	if(isValidCountry.contains("Cyprus")||isValidCountry.contains("Korea, Rep")||
-	isValidCountry.contains("Korea, Dem. Rep")||isValidCountry.contains("Egypt")||isValidCountry.contains("Hong Kong")||
-	isValidCountry.contains("Iran")||isValidCountry.contains("Syria")||isValidCountry.contains("Venezuela")||isValidCountry.contains("Yemen")||
-	isValidCountry.contains("Bahamas")||isValidCountry.contains("Congo")||isValidCountry.contains("Cabo Verde")){
-	return true;
 	}
-	return false;
+
+	public boolean additionalCountry(String isValidCountry) {
+		if (isValidCountry.contains("Cyprus")||isValidCountry.contains("Korea, Rep")||
+				isValidCountry.contains("Korea, Dem. Rep")||isValidCountry.contains("Egypt")||isValidCountry.contains("Hong Kong")||
+				isValidCountry.contains("Iran")||isValidCountry.contains("Syria")||isValidCountry.contains("Venezuela")||isValidCountry.contains("Yemen")||
+				isValidCountry.contains("Bahamas")||isValidCountry.contains("Congo")||isValidCountry.contains("Cabo Verde")) {
+			return true;
+		}
+		
+		return false;
 	}
 	
 	
