@@ -291,15 +291,24 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	// check if the device has network access
 	private boolean deviceHasNetwork() {
 		
-        ConnectivityManager networkManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        boolean isDataConnected = networkManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting();
-        boolean isWifiConnected = networkManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting();
+		ConnectivityManager networkManager = null;
+        networkManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         
-        if (isDataConnected || isWifiConnected) {
-            return true;
-        } else {
-            return false;
+        try {
+        	boolean isDataConnected = networkManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting();
+	        boolean isWifiConnected = networkManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting();
+	        
+	        if (isDataConnected || isWifiConnected) {
+	            return true;
+	        }
+        } catch (NullPointerException e) {
+        	// null is returned on tablets, therefore return true
+        	return true;
         }
+        
+        
+        return false;
+        
     }
 
 }

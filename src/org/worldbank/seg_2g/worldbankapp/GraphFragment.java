@@ -52,6 +52,8 @@ public class GraphFragment extends Fragment {
 		                values.add(new PointValue(i, json.getInt("value")));
 		            }
 		            
+		            
+		            
 		            Line line = new Line(values).setColor(Color.BLUE).setCubic(true);
 		            List<Line> lines = new ArrayList<Line>();
 		            lines.add(line);
