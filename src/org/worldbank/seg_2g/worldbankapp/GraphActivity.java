@@ -6,6 +6,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -44,6 +45,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	private ListView countryListView;
 	private DrawerLayout countryDrawerLayout;
 	private ActionBarDrawerToggle drawerToggle;
+	private ActionBar actionBar;
 	
 	private QueryGenerator queryGen;
 	private String queryJSON;
@@ -51,6 +53,8 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
     private	GraphAdapter graphAdapter;
     private	ViewPager graphView;
     private RelativeLayout graphLayout;
+    
+    private SharedPreferences graphPreferences;
 	
 	private final int startYear = 1999;
 	private final int endYear = 2009;
@@ -62,10 +66,12 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		setContentView(R.layout.activity_graph);
 
 		// Set up the action bar.
-		final ActionBar actionBar = getActionBar();
+		actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
 		graphLayout = (RelativeLayout) findViewById(R.id.container);
+		
+		graphPreferences = getPreferences(0);
 		
 		// Returns a fragment for each of the categories.
 		graphAdapter = new GraphAdapter(getFragmentManager());		
@@ -95,6 +101,12 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		createCountryViews();
 		// set listeners for country views
 		setCountryViewListeners();
+		
+		if (!graphPreferences.getBoolean("activityPreviouslyOpened", false)) {
+			// find way to open drawer first time app is used
+			SharedPreferences.Editor graphPrefsEditor = graphPreferences.edit();
+			graphPrefsEditor.putBoolean("activityPreviouslyOpened", true);
+		}
 		 
 	}
 
@@ -140,6 +152,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 			
 			public void onDrawerClosed(View view) {
 				super.onDrawerClosed(view);
+				actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 				graphLayout.setPadding(graphLayout.getPaddingLeft() - 510, graphLayout.getPaddingTop(), graphLayout.getPaddingRight(), graphLayout.getPaddingBottom());
 				getActionBar().setTitle(ACTIVITY_TITLE);
 				invalidateOptionsMenu();
@@ -147,6 +160,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 			
 			public void onDrawerOpened(View drawerView) {
 				super.onDrawerOpened(drawerView);
+				actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 				graphLayout.setPadding(graphLayout.getPaddingLeft() + 510, graphLayout.getPaddingTop(), graphLayout.getPaddingRight(), graphLayout.getPaddingBottom());
 				getActionBar().setTitle(DRAWER_TITLE);
 				invalidateOptionsMenu();
