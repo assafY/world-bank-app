@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 public class GraphFragment extends Fragment {
 
@@ -35,40 +36,47 @@ public class GraphFragment extends Fragment {
 		  
 			protected void createLinearGraph(GraphActivity context, String data, String countryName) {
 				
-				try {
-		            JSONArray dataFeed = new JSONArray(data);
-		            JSONObject titleValues = dataFeed.getJSONObject(0);
-		            
-		            // get total number of entries
-		            int totalEntries = titleValues.getInt("total");
-		            LineChartView graph = new LineChartView(context);
-		            List<PointValue> values = new ArrayList<PointValue>();
-		            
-		            JSONArray feedArray = dataFeed.getJSONArray(1);
-		            int jsonCounter = totalEntries - 1;
-		            
-		            for (int i = 0; i <totalEntries; ++i) {
-		                JSONObject json = feedArray.getJSONObject(jsonCounter--);
-		                values.add(new PointValue(i, json.getInt("value")));
-		            }
-		            
-		            
-		            
-		            Line line = new Line(values).setColor(Color.BLUE).setCubic(true);
-		            List<Line> lines = new ArrayList<Line>();
-		            lines.add(line);
-		            
-		            LineChartData chartData = new LineChartData();
-		            chartData.setLines(lines);
-		            graph.setLineChartData(chartData);
-		            
-		            graphLayout.removeAllViews();
-		            graphLayout.addView(graph);
-
-		        } catch (JSONException e) {
-		            // TODO: Handle exception
-		            e.printStackTrace();
-		        }	
+				// if data is null, there is no network (second check for tablets)
+				if (data == null) {
+					Toast.makeText(context, GraphActivity.NO_NETWORK_TEXT, 
+							   Toast.LENGTH_LONG).show();
+				}
+				else {
+					try {
+			            JSONArray dataFeed = new JSONArray(data);
+			            JSONObject titleValues = dataFeed.getJSONObject(0);
+			            
+			            // get total number of entries
+			            int totalEntries = titleValues.getInt("total");
+			            LineChartView graph = new LineChartView(context);
+			            List<PointValue> values = new ArrayList<PointValue>();
+			            
+			            JSONArray feedArray = dataFeed.getJSONArray(1);
+			            int jsonCounter = totalEntries - 1;
+			            
+			            for (int i = 0; i <totalEntries; ++i) {
+			                JSONObject json = feedArray.getJSONObject(jsonCounter--);
+			                values.add(new PointValue(i, json.getInt("value")));
+			            }
+			            
+			            
+			            
+			            Line line = new Line(values).setColor(Color.BLUE).setCubic(true);
+			            List<Line> lines = new ArrayList<Line>();
+			            lines.add(line);
+			            
+			            LineChartData chartData = new LineChartData();
+			            chartData.setLines(lines);
+			            graph.setLineChartData(chartData);
+			            
+			            graphLayout.removeAllViews();
+			            graphLayout.addView(graph);
+	
+			        } catch (JSONException e) {
+			            // TODO: Handle exception
+			            e.printStackTrace();
+			        }
+				}
 			}	
 		
 	

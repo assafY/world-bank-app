@@ -31,7 +31,7 @@ import android.widget.Toast;
 
 public class GraphActivity extends Activity implements ActionBar.TabListener {
 
-	private static final CharSequence NO_NETWORK_TEXT = "Your device has no network";
+	public static final CharSequence NO_NETWORK_TEXT = "Your device has no network";
 	private static final CharSequence ACTIVITY_TITLE = "Graph Activity";
 	private static final CharSequence DRAWER_TITLE = "Select Country";
 	
