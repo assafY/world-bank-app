@@ -153,7 +153,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 			public void onDrawerClosed(View view) {
 				super.onDrawerClosed(view);
 				actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-				graphLayout.setPadding(graphLayout.getPaddingLeft() - 510, graphLayout.getPaddingTop(), graphLayout.getPaddingRight(), graphLayout.getPaddingBottom());
+				//graphLayout.setPadding(graphLayout.getPaddingLeft() - 510, graphLayout.getPaddingTop(), graphLayout.getPaddingRight(), graphLayout.getPaddingBottom());
 				getActionBar().setTitle(ACTIVITY_TITLE);
 				invalidateOptionsMenu();
 			}
@@ -161,7 +161,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 			public void onDrawerOpened(View drawerView) {
 				super.onDrawerOpened(drawerView);
 				actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-				graphLayout.setPadding(graphLayout.getPaddingLeft() + 510, graphLayout.getPaddingTop(), graphLayout.getPaddingRight(), graphLayout.getPaddingBottom());
+				//graphLayout.setPadding(graphLayout.getPaddingLeft() + 510, graphLayout.getPaddingTop(), graphLayout.getPaddingRight(), graphLayout.getPaddingBottom());
 				getActionBar().setTitle(DRAWER_TITLE);
 				invalidateOptionsMenu();
 			}
