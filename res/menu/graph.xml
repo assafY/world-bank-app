@@ -6,7 +6,7 @@
         android:id="@+id/action"
         android:orderInCategory="100"
         android:showAsAction="always"
-         android:icon="@drawable/tweeter"
+         android:icon="@drawable/save"
         android:title="@string/action_settings"/>  
     
       <item

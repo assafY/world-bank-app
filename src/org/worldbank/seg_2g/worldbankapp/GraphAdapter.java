@@ -14,7 +14,7 @@ public class GraphAdapter extends FragmentPagerAdapter {
 	private static final CharSequence ENERGY = "Energy";
 	private static final CharSequence ENVIRONMENT = "Environment";
 	
-	private static final int TOTAL_PAGES = 3;
+	private static final int TOTAL_PAGES = 6;
 
 	public GraphAdapter(FragmentManager frame) {
 		super(frame);
@@ -34,12 +34,11 @@ public class GraphAdapter extends FragmentPagerAdapter {
 	@Override
 	public CharSequence getPageTitle(int position) {
 		switch (position) {
-			case 0:
-				return POPULATION;
 			case 1:
-				return ENERGY;
 			case 2:
-				return ENVIRONMENT;
+			case 3:
+			case 4:	
+			case 5:	
 		}
 		return null;
 	}
@@ -70,3 +69,4 @@ public class GraphAdapter extends FragmentPagerAdapter {
 	}
 
 }
+

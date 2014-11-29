@@ -8,6 +8,8 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -15,6 +17,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,7 +49,10 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	private DrawerLayout countryDrawerLayout;
 	private ActionBarDrawerToggle drawerToggle;
 	private ActionBar actionBar;
-	
+    private final String [] category = {"Population","Energy","Environment"};
+
+	private int categoryCounter;
+
 	private QueryGenerator queryGen;
 	private String queryJSON;
 	
@@ -83,17 +89,20 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		graphView.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 					@Override
 					public void onPageSelected(int position) {
-						actionBar.setSelectedNavigationItem(position);
-						new GraphFragment().removeFragment();
+						Log.d("Debug", "Value: " + Integer.toString(position)); // Test Info **DONT REMOVE**
+						graphPage(position);
 					}
 				});
 
 		// add the tabs to the action bar.
-		for (int i = 0; i < graphAdapter.getCount(); i++) {
+		// add the tabs to the action bar.
+		for (int i = 0; i < category.length; i++) {
 			actionBar.addTab(actionBar.newTab()
-					.setText(graphAdapter.getPageTitle(i))
+					.setText(category[i])
 					.setTabListener(this));
+			
 		}
+		
 		
 		// load countries into list
 		loadCountries();
@@ -113,6 +122,8 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
+		getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));   
+		getActionBar().setDisplayShowTitleEnabled(false);
 		getMenuInflater().inflate(R.menu.graph, menu);
 		return true;
 	}
@@ -256,6 +267,45 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 			}
 		});
 	}
+	
+	/**TEMP this will be improved.
+	 * This will provide the swap motion and will allow to fetch data from a 2D array of fragment [X][Y] where X is the category number and Y is the Graph
+	 * If Position is 0 then it will return to the last category available, starting from page 1 of that category.
+	 * @param position
+	 * Contains certain bugs which will be fixed
+	 */
+	public void graphPage(int position){
+		switch (position) {
+		case 0:
+		if(categoryCounter>0){
+		actionBar.setSelectedNavigationItem(--categoryCounter);	
+		new GraphFragment().removeFragment();	
+		new GraphFragment().getlayout().setBackgroundColor(Color.TRANSPARENT);	
+		break;
+		}	
+		case 1: 
+		new GraphFragment().removeFragment();	
+		new GraphFragment().getlayout().setBackgroundColor(Color.BLUE);		
+		break;
+		case 2:
+		new GraphFragment().removeFragment();	
+		new GraphFragment().getlayout().setBackgroundColor(Color.RED);			
+		break;
+		case 3:
+		new GraphFragment().removeFragment();	
+		new GraphFragment().getlayout().setBackgroundColor(Color.GREEN);			
+		break;
+		case 4:
+		new GraphFragment().removeFragment();	
+		new GraphFragment().getlayout().setBackgroundColor(Color.YELLOW);				
+		break;
+		case 5:
+		if(categoryCounter<2){
+		actionBar.setSelectedNavigationItem(++categoryCounter);
+		}
+	    break;
+		}
+		}
 			
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {

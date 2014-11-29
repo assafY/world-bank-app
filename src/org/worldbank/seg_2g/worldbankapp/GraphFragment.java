@@ -143,4 +143,9 @@ public class GraphFragment extends Fragment {
 	            graphLayout.removeAllViews();
 	
 			}
+		
+			public RelativeLayout getlayout(){ //TEMP for testing purpose.
+				return graphLayout;
+				}
+			
 }
