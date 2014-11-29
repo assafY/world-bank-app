@@ -68,7 +68,6 @@ public class GraphFragment extends Fragment {
 			                values.add(new PointValue(year, population));
 			                
 			                // add commas to Y axis labels
-							
 			                String popString = String.valueOf(population);
 			                int digitCount = popString.length() - 1;
 							int charCounter = 0;
@@ -111,7 +110,7 @@ public class GraphFragment extends Fragment {
 							popAxisValues.add(new AxisValue(roundedPop, label));
 			            }
 			            
-			            Line line = new Line(values).setColor(Color.BLUE).setCubic(false);
+			            Line line = new Line(values).setColor(Color.BLUE).setCubic(false).setStrokeWidth(1);
 			            List<Line> lines = new ArrayList<Line>();
 			            lines.add(line);
 			            
@@ -124,33 +123,6 @@ public class GraphFragment extends Fragment {
 						
 						chartData.setAxisXBottom(axisX);
 						chartData.setAxisYLeft(axisY);
-						
-						/*// add commas to Y axis labels
-						List<AxisValue> popAxisValues = new ArrayList<AxisValue>();
-						
-						for (AxisValue av: axisY.getValues()) {
-							String popString = String.valueOf(av.getValue());
-							int digitCount = popString.length() - 1;
-							int charCounter = 0;
-							// put first digit char in new label
-							String newLabel = "" + popString.charAt(charCounter++);
-							
-							while (digitCount > 3) {
-								while (digitCount-- % 3 != 0) {
-									newLabel += popString.charAt(charCounter++);
-								}
-								newLabel += ",";
-							}
-							// finalise new label with last three chars from string
-							newLabel += popString.substring(charCounter);
-							// convert string to char array
-							char[] label = newLabel.toCharArray();
-							// add label to new list
-							popAxisValues.add(new AxisValue(av.getValue(), label));
-						}
-						
-						//axisY.setValues(popAxisValues);*/
-						
 						
 			            chartData.setLines(lines);
 			            
