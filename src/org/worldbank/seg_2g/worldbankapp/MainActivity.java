@@ -31,8 +31,8 @@ public class MainActivity extends Activity {
 	
 	// called when country button is clicked
 	public void countryMenu(View view) {
-			Intent countryIntent = new Intent(this,CountryActivity.class);
-			startActivity(countryIntent);
+		Intent graphIntent = new Intent(this, GraphActivity.class);
+		startActivity(graphIntent);
 	}
 	
 	// called when help button is clicked

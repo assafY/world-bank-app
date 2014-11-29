@@ -6,37 +6,55 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
 
 public class GraphActivity extends Activity implements ActionBar.TabListener {
 
-	private static final CharSequence NO_NETWORK_TEXT = "Your device has no network";
+	public static final CharSequence NO_NETWORK_TEXT = "Your device has no network";
+	private static final CharSequence ACTIVITY_TITLE = "Graph Activity";
+	private static final CharSequence DRAWER_TITLE = "Select Country";
 	
 	private CountryListAdapter listAdapter;
 	private CountryListAdapter autoCompleteAdapter;
+	
 	private ArrayList<Country> countryList;      // will always contain all countries
 	private ArrayList<Country> autoCompleteList; // will be reset every time text changes in text field
-
+	
 	private EditText countryTextView;
 	private ListView countryListView;
+	private DrawerLayout countryDrawerLayout;
+	private ActionBarDrawerToggle drawerToggle;
+	private ActionBar actionBar;
 	
 	private QueryGenerator queryGen;
 	private String queryJSON;
 	
     private	GraphAdapter graphAdapter;
     private	ViewPager graphView;
+    private RelativeLayout graphLayout;
+    
+    private SharedPreferences graphPreferences;
 	
 	private final int startYear = 1999;
 	private final int endYear = 2009;
@@ -48,16 +66,20 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		setContentView(R.layout.activity_graph);
 
 		// Set up the action bar.
-		final ActionBar actionBar = getActionBar();
+		actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
+		graphLayout = (RelativeLayout) findViewById(R.id.container);
+		
+		graphPreferences = getPreferences(0);
+		
 		// Returns a fragment for each of the categories.
 		graphAdapter = new GraphAdapter(getFragmentManager());		
 
 		graphView = (ViewPager) findViewById(R.id.graphPager);
 		graphView.setAdapter(graphAdapter);
 
-		//Swap tab
+		// swap tab
 		graphView.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 					@Override
 					public void onPageSelected(int position) {
@@ -73,10 +95,18 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 					.setTabListener(this));
 		}
 		
-		//load the countries
+		// load countries into list
 		loadCountries();
-		//puts the  country in the list
+		// create country list, text field, navigation drawer and adapters
 		createCountryViews();
+		// set listeners for country views
+		setCountryViewListeners();
+		
+		if (!graphPreferences.getBoolean("activityPreviouslyOpened", false)) {
+			// find way to open drawer first time app is used
+			SharedPreferences.Editor graphPrefsEditor = graphPreferences.edit();
+			graphPrefsEditor.putBoolean("activityPreviouslyOpened", true);
+		}
 		 
 	}
 
@@ -94,6 +124,10 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		if (id == R.id.action_settings) {
 			return true;
 		}
+		else if (drawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		}
+		
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -108,11 +142,37 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	private void createCountryViews() {
 				
 		countryTextView = (EditText) findViewById(R.id.countries_text_view);
+		countryDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		countryListView = (ListView) findViewById(R.id.countries_list_view);
+		
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setHomeButtonEnabled(true);
+		
+		drawerToggle = new ActionBarDrawerToggle(this, countryDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
+			
+			public void onDrawerClosed(View view) {
+				super.onDrawerClosed(view);
+				actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+				getActionBar().setTitle(ACTIVITY_TITLE);
+				invalidateOptionsMenu();
+			}
+			
+			public void onDrawerOpened(View drawerView) {
+				super.onDrawerOpened(drawerView);
+				actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+				getActionBar().setTitle(DRAWER_TITLE);
+				invalidateOptionsMenu();
+			}
+		};
+		
+		countryDrawerLayout.setDrawerListener(drawerToggle);
 				
 		listAdapter = new CountryListAdapter(this, countryList);
 		countryListView.setAdapter(listAdapter);
-				
+	}
+	
+	private void setCountryViewListeners() {
+		
 		// add list selection listener
 		countryListView.setOnItemClickListener(new OnItemClickListener() {
 			
@@ -125,7 +185,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 				// if a user is connected, create graph layout
 				if (deviceHasNetwork()) {
 					queryJSON = queryGen.getJSON((Country) parent.getItemAtPosition(pos), indicatorSelection, startYear, endYear);
-					new GraphFragment().createLinearGraph(GraphActivity.this,queryJSON, parent.getItemAtPosition(pos).toString());
+					new GraphFragment().createLinearGraph(GraphActivity.this, queryJSON, parent.getItemAtPosition(pos).toString());
 				}
 				// if disconnected do nothing and notify with Toast
 				else {
@@ -134,7 +194,8 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 				}
 			}
 		});
-
+		
+		// add EditText key listener, update list on key typed
 		countryTextView.addTextChangedListener(new TextWatcher() {
 
 			@Override
@@ -174,8 +235,40 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 					int arg3) {}
 			
 		});
+		
+		countryTextView.setOnEditorActionListener(new OnEditorActionListener() {
+
+			@Override
+			public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
+				//
+				String currentInput = view.getText().toString().toLowerCase();
+				if (actionId == EditorInfo.IME_ACTION_GO) {
+					if(!currentInput.equals("")) {
+						//
+						if (autoCompleteList.size() == 1) {
+							queryJSON = queryGen.getJSON(autoCompleteList.get(0), indicatorSelection, startYear, endYear);
+							new GraphFragment().createLinearGraph(GraphActivity.this, queryJSON, autoCompleteList.get(0).toString());
+							return true;
+						}
+					}		
+				}			
+				return true;
+			}
+		});
 	}
 			
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		drawerToggle.syncState();
+	}
+	
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		drawerToggle.onConfigurationChanged(newConfig);
+	}
+	
 	@Override
 	public void onTabSelected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
@@ -196,15 +289,24 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	// check if the device has network access
 	private boolean deviceHasNetwork() {
 		
-        ConnectivityManager networkManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        boolean isDataConnected = networkManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting();
-        boolean isWifiConnected = networkManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting();
+		ConnectivityManager networkManager = null;
+        networkManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         
-        if (isDataConnected || isWifiConnected) {
-            return true;
-        } else {
-            return false;
+        try {
+        	boolean isDataConnected = networkManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).isConnectedOrConnecting();
+	        boolean isWifiConnected = networkManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).isConnectedOrConnecting();
+	        
+	        if (isDataConnected || isWifiConnected) {
+	            return true;
+	        }
+        } catch (NullPointerException e) {
+        	// null is returned on tablets, therefore return true
+        	return true;
         }
+        
+        
+        return false;
+        
     }
 
 }

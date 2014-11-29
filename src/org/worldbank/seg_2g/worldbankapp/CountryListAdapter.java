@@ -34,7 +34,6 @@ public class CountryListAdapter extends ArrayAdapter<Country> {
 		ImageView countryImageView = (ImageView) tableRow.findViewById(R.id.flag_image_view);
 		
 		Country currentCountry = countryList.get(position);
-		countryTextView.setText(" " + currentCountry.toString());
 		countryTextView.setText(currentCountry.toString());
 		
 		countryTextView.setText(currentCountry.toString());
