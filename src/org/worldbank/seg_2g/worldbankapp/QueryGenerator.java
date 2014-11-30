@@ -27,6 +27,7 @@ public class QueryGenerator {
 	// list of contstants containing different indicator query codes to use when
 	// querying server
 	private static final String WB_URL = "http://api.worldbank.org/countries/";
+	
 	private static final String POPULATION = "SP.POP.TOTL?";
 	private static final String URBAN_RURAL_POPULATION = "SP.URB.TOTL.IN.ZS?";
 	private static final String ENERGY_PRODUCTION = "EG.EGY.PROD.KT.OE?";
