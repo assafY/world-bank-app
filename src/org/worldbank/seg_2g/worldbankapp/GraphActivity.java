@@ -58,6 +58,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 
 	private QueryGenerator queryGen;
 	private String queryJSON;
+	private String comparisonQuery;
 	
     private	GraphAdapter graphAdapter;
     private	ViewPager graphView;
@@ -65,7 +66,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
     
     private SharedPreferences graphPreferences;
 	
-	private final int startYear = 1999;
+	private final int startYear = 1989;
 	private final int endYear = 2009;
 	private int indicatorSelection = Settings.POPULATION;
 
@@ -261,7 +262,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 						//
 						if (autoCompleteList.size() == 1) {
 							queryJSON = queryGen.getJSON(autoCompleteList.get(0), indicatorSelection, startYear, endYear);
-							new GraphFragment().createLinearGraph(GraphActivity.this, queryJSON, autoCompleteList.get(0).toString());
+							new GraphFragment().createGraph(GraphActivity.this, queryJSON, autoCompleteList.get(0).toString());
 							return true;
 						}
 					}		
@@ -277,69 +278,157 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	 * @param position
 	 * Contains certain bugs which will be fixed
 	 */
-	public void graphPage(int position){
+	public void graphPage(int position) {
+		/*if (currentTab.equals(CATEGORY[0])) {
+			switch (position) {
+				case 1: queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						break;
+				case 2:	//queryJSON = queryGen.getJSON(currentCountry, Settings.URBAN_RURAL, startYear, endYear);
+						//new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						break;
+				case 3: queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
+						comparisonQuery = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
+						break;
+				case 4: queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
+						comparisonQuery = queryGen.getJSON(currentCountry, Settings.ENERGY_USE, startYear, endYear);
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
+						break;
+				default: if (position == 0) {
+					if (categoryCounter > 0) {
+						actionBar.setSelectedNavigationItem(--categoryCounter);	
+						break;
+					}
+					 }
+					 else if (position == 5) {
+						if (categoryCounter < 2) {
+							actionBar.setSelectedNavigationItem(++categoryCounter);
+							break;
+						}
+					 }
+					 break;
+				}
+		}
+		else if (currentTab.equals(CATEGORY[1])) {
+			switch (position) {
+				case 1: queryJSON = queryGen.getJSON(currentCountry, Settings.ENERGY_PRODUCTION, startYear, endYear);
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						break;
+				case 2:	queryJSON = queryGen.getJSON(currentCountry, Settings.ENERGY_USE, startYear, endYear);
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						break;
+				case 3: //queryJSON = queryGen.getJSON(currentCountry, Settings.FOSSIL_FUEL, startYear, endYear);
+						//new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						break;
+				default: if (position == 0) {
+							if (categoryCounter > 0) {
+								actionBar.setSelectedNavigationItem(--categoryCounter);	
+								break;
+							}
+						 }
+						 else if (position >= 4) {
+							if (categoryCounter < 2) {
+								actionBar.setSelectedNavigationItem(++categoryCounter);
+								break;
+							}
+						 }
+						 break;
+				}	
+		}
+		else if (currentTab.equals(CATEGORY[2])) {
+			switch (position) {
+				case 1: queryJSON = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						break;
+				case 2:	//queryJSON = queryGen.getJSON(currentCountry, Settings.CH4_EMISSIONS, startYear, endYear);
+						//new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						break;
+				case 3: queryJSON = queryGen.getJSON(currentCountry, Settings.FOREST_AREA, startYear, endYear);
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						break;
+				default: if (position == 0) {
+							if (categoryCounter > 0) {
+								actionBar.setSelectedNavigationItem(--categoryCounter);	
+								break;
+							}
+						 }
+						 else if (position >= 4) {
+							if (categoryCounter < 2) {
+								actionBar.setSelectedNavigationItem(++categoryCounter);
+								break;
+							}
+						 }
+						 break;
+				}	
+		}*/
+	
 		switch (position) {
 			case 0: if (categoryCounter > 0) {
+						currentPagePosition = 4;
 						actionBar.setSelectedNavigationItem(--categoryCounter);	
 						break;
 					}	
 			case 1: new GraphFragment().removeFragment();
 					if (currentTab.equals(CATEGORY[0])) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
-						new GraphFragment().createLinearGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[1])) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.ENERGY_PRODUCTION, startYear, endYear);
-						new GraphFragment().createLinearGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[2])) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
-						new GraphFragment().createLinearGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}
 					break;
 			case 2: new GraphFragment().removeFragment();	
 					if (currentTab.equals(CATEGORY[0])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
-						new GraphFragment().createLinearGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						//queryJSON = queryGen.getJSON(currentCountry, Settings.URBAN_RURAL, startYear, endYear);
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[1])) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.ENERGY_USE, startYear, endYear);
-						new GraphFragment().createLinearGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[2])) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.FOREST_AREA, startYear, endYear);
-						new GraphFragment().createLinearGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}			
 					break;
 			case 3: new GraphFragment().removeFragment();	
 					if (currentTab.equals(CATEGORY[0])) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
-						new GraphFragment().createLinearGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						comparisonQuery = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[1])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.ENERGY_PRODUCTION, startYear, endYear);
-						new GraphFragment().createLinearGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						queryJSON = queryGen.getJSON(currentCountry, Settings.FOSSIL_FUEL, startYear, endYear);
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[2])) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
-						new GraphFragment().createLinearGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}			
 					break;
 			case 4: new GraphFragment().removeFragment();	
 					if (currentTab.equals(CATEGORY[0])) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
-						new GraphFragment().createLinearGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						comparisonQuery = queryGen.getJSON(currentCountry, Settings.ENERGY_USE, startYear, endYear);
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[1])) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.ENERGY_USE, startYear, endYear);
-						new GraphFragment().createLinearGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[2])) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.FOREST_AREA, startYear, endYear);
-						new GraphFragment().createLinearGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}			
 					break;
 			case 5: if (categoryCounter < 2) {
+						currentPagePosition = 0;
 						actionBar.setSelectedNavigationItem(++categoryCounter);
 					}
 				    break;
@@ -362,6 +451,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	public void onTabSelected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
 		currentTab = (String) tab.getText();
+		currentPagePosition = 1;
 		// switch to the corresponding graph. not implemented yet
 		graphView.setCurrentItem(tab.getPosition());
 	}
