@@ -11,6 +11,8 @@ public class MapActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
+
+		onCreateExtra();
 	}
 
 	@Override
@@ -30,5 +32,10 @@ public class MapActivity extends Activity {
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	protected void onCreateExtra() {
+		
+		
 	}
 }
