@@ -10,8 +10,6 @@ public class Settings {
 	public static final int FOREST_AREA = 6;
 	public static final int CO2_EMISSIONS = 7;
 	public static final int CH4_EMISSIONS = 8;
-	public static final int GREENHOUSE_GASSES = 9;
-	public static final int FUEL_PRICE = 10;
 	
 	// TODO: Create constant ints for every query
 	

@@ -33,11 +33,8 @@ public class QueryGenerator {
 	private static final String ENERGY_USE = "EG.USE.COMM.KT.OE?";
 	private static final String FOSSIL_FUEL = "EG.USE.COMM.FO.ZS?";
 	private static final String FOREST_AREA = "AG.LND.FRST.K2?";
-	private static final String CO2_EMISSIONS = "EG.USE.COMM.FO.ZS?";
+	private static final String CO2_EMISSIONS = "EN.ATM.CO2E.KT?";
 	private static final String CH4_EMISSIONS = "EN.ATM.METH.KT.CE?";
-	private static final String GREENHOUSE_GASSES = "EN.ATM.GHGO.KT.CE?";
-	private static final String FUEL_PRICE = "SP.RUR.TOTL.ZS?";
-
 	private Context context;
 
 	private String[] listOfLocaleCountries = Locale.getISOCountries();
@@ -128,13 +125,6 @@ public class QueryGenerator {
 			break;
 		case Settings.CH4_EMISSIONS:
 			indicatorCode = CH4_EMISSIONS;
-			break;
-		case Settings.GREENHOUSE_GASSES:
-			indicatorCode = GREENHOUSE_GASSES;
-			break;
-		case Settings.FUEL_PRICE:
-			indicatorCode = FUEL_PRICE;
-			break;
 		}
 	}
 

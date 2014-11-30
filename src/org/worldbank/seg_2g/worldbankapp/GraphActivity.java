@@ -280,24 +280,29 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		if(categoryCounter>0){
 		actionBar.setSelectedNavigationItem(--categoryCounter);	
 		new GraphFragment().removeFragment();	
-		new GraphFragment().getlayout().setBackgroundColor(Color.TRANSPARENT);	
+		//queryJSON = queryGen.getJSON((Country) countryList.get(6), Settings.POPULATION, startYear, endYear);
+		//new GraphFragment().createLinearGraph(GraphActivity.this, queryJSON, countryList.get(10).toString());	
 		break;
 		}	
 		case 1: 
 		new GraphFragment().removeFragment();	
-		new GraphFragment().getlayout().setBackgroundColor(Color.BLUE);		
+		queryJSON = queryGen.getJSON((Country) countryList.get(6), Settings.POPULATION, startYear, endYear);
+		new GraphFragment().createLinearGraph(GraphActivity.this, queryJSON, countryList.get(10).toString());		
 		break;
 		case 2:
-		new GraphFragment().removeFragment();	
-		new GraphFragment().getlayout().setBackgroundColor(Color.RED);			
+			new GraphFragment().removeFragment();	
+			queryJSON = queryGen.getJSON((Country) countryList.get(6), Settings.CO2_EMISSIONS, startYear, endYear);
+			new GraphFragment().createLinearGraph(GraphActivity.this, queryJSON, countryList.get(10).toString());			
 		break;
 		case 3:
-		new GraphFragment().removeFragment();	
-		new GraphFragment().getlayout().setBackgroundColor(Color.GREEN);			
+			new GraphFragment().removeFragment();	
+			queryJSON = queryGen.getJSON((Country) countryList.get(6), Settings.ENERGY_USE, startYear, endYear);
+			new GraphFragment().createLinearGraph(GraphActivity.this, queryJSON, countryList.get(10).toString());			
 		break;
 		case 4:
-		new GraphFragment().removeFragment();	
-		new GraphFragment().getlayout().setBackgroundColor(Color.YELLOW);				
+			new GraphFragment().removeFragment();	
+			queryJSON = queryGen.getJSON((Country) countryList.get(6), Settings.ENERGY_PRODUCTION, startYear, endYear);
+			new GraphFragment().createLinearGraph(GraphActivity.this, queryJSON, countryList.get(10).toString());				
 		break;
 		case 5:
 		if(categoryCounter<2){

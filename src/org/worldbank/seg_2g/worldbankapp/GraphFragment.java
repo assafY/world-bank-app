@@ -55,8 +55,11 @@ public class GraphFragment extends Fragment {
 			            List<PointValue> values = new ArrayList<PointValue>();
 			            
 			            JSONArray feedArray = dataFeed.getJSONArray(1);
+			            
 			            int jsonCounter = totalEntries - 1;
 			            List<AxisValue> popAxisValues = new ArrayList<AxisValue>();
+			            
+			            String measureLabel = null;
 			            
 			            for (int i = 0; i < totalEntries; ++i) {
 			            	// extract current population entry
@@ -66,6 +69,12 @@ public class GraphFragment extends Fragment {
 			                
 			                // add year and population to the list later used to draw graph
 			                values.add(new PointValue(year, population));
+			                
+			                // add measure type label to string
+			                if (measureLabel == null) {
+			                	JSONObject indicator = json.getJSONObject("indicator");
+			                	measureLabel = indicator.getString("value");
+			                }
 			                
 			                // add commas to Y axis labels
 			                String popString = String.valueOf(population);
@@ -117,7 +126,7 @@ public class GraphFragment extends Fragment {
 			            LineChartData chartData = new LineChartData();
 			            
 			            Axis axisX = new Axis().setMaxLabelChars(4);
-						Axis axisY = new Axis().setHasLines(true).setMaxLabelChars(11);
+						Axis axisY = new Axis().setName(measureLabel).setHasLines(true).setMaxLabelChars(11);
 						
 						axisY.setValues(popAxisValues);
 						
