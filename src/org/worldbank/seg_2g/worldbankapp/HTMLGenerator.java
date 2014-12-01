@@ -19,7 +19,47 @@ public class HTMLGenerator {
 
 		// TODO check for internet connection
 
-		return getCountryValueBlock(queryCode, year);
+		String html = "";
+		
+		html = getHTMLBeginning(""+queryCode)
+				+ getCountryValueBlock(queryCode, year)
+				+ getHTMLEnding();
+		
+		return html;
+	}
+
+	private String getHTMLBeginning(String queryCode) {
+		String s = "<html>\n"
+				+ "  <head>\n"
+				+ "    <script type=\"text/javascript\" src=\"https://www.google.com/jsapi\"></script>\n"
+				+ "    <script type=\"text/javascript\">\n"
+				+ "      google.load(\"visualization\", \"1\", {packages:[\"geochart\"]});\n"
+				+ "      google.setOnLoadCallback(drawRegionsMap);\n"
+				+ "\n"
+				+ "      function drawRegionsMap() {\n"
+				+ "\n"
+				+ "        var data = google.visualization.arrayToDataTable([\n"
+				+ "          ['Countries', '" + "CO2" + "'],\n";
+		return s;
+	}
+
+	private String getHTMLEnding() {
+		String s = "        ]);\n"
+				+ "\n"
+				+ "        var options = {};\n"
+				+ "\n"
+				+ "        var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));\n"
+				+ "\n"
+				+ "        chart.draw(data, options);\n"
+				+ "      }\n"
+				+ "    </script>\n"
+				+ "  </head>\n"
+				+ "  <body>\n"
+				+ "    <div id=\"regions_div\"></div>\n"
+				+ "  </body>\n"
+				+ "</html>\n";
+
+		return s;
 	}
 
 	private String getCountryValueBlock(int queryCode, int year) {
@@ -33,7 +73,8 @@ public class HTMLGenerator {
 			double value = getAttributeValueForCountry(selectedCountry,
 					queryCode, year);
 			if (value > -1) {
-				returnString += getCountryAttributeLine(selectedCountry, value) + "\n";
+				returnString += getCountryAttributeLine(selectedCountry, value)
+						+ "\n";
 			}
 		}
 
@@ -47,7 +88,7 @@ public class HTMLGenerator {
 	private double getAttributeValueForCountry(Country selectedCountry,
 			int queryCode, int year) {
 
-		String value = null;
+		String value = "null";
 
 		try {
 			String data = qG.getJSON(selectedCountry, queryCode, year, year);
@@ -60,6 +101,11 @@ public class HTMLGenerator {
 		} catch (Exception e) {
 		}
 
-		return (value != null) ? (double) Double.parseDouble(value) : null;
+		if (value == "null")
+			return -1;
+		else {
+			double v = (double) Double.parseDouble(value);
+			return v;
+		}
 	}
 }
