@@ -41,4 +41,10 @@ public class MainActivity extends Activity {
 		startActivity(helpIntent);
 	}
 	
+	// called when map button is clicked
+	public void mapMenu(View view) {
+		Intent mapIntent = new Intent(this, MapActivity.class);
+		startActivity(mapIntent);
+	}
+	
 }

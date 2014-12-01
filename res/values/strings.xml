@@ -15,5 +15,6 @@
     <string name="title_activity_graph_fragment">GraphFragment</string>
     <string name="drawer_open">Show Country List</string>
     <string name="drawer_close">Hide Country List</string>
+    <string name="title_activity_map">MapActivity</string>
 
 </resources>
