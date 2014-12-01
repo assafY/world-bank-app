@@ -8,6 +8,7 @@ import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.LineChartView;
 
 import org.json.JSONArray;
@@ -56,6 +57,7 @@ public class GraphFragment extends Fragment {
 	private int roundedValue;
 	private int highestValue;
 	private int lowestValue;
+	private int increment;
 	
 	private String valueString;
 	private int digitCount;
@@ -114,8 +116,6 @@ public class GraphFragment extends Fragment {
 					Toast.LENGTH_LONG).show();
 		} else {
 			try {
-				
-				
 				if (comparisonChart) {
 					dataFeed = new JSONArray(comparisonData);
 					titleValues = dataFeed.getJSONObject(0);
@@ -123,6 +123,7 @@ public class GraphFragment extends Fragment {
 					comparisonValues = new ArrayList<PointValue>();
 					
 					feedArray = dataFeed.getJSONArray(1);
+					jsonCounter = totalEntries - 1;
 					comparisonGraphLine = new Line().setColor(Color.RED).setCubic(false).setStrokeWidth(1);
 				}
 				else {
@@ -226,6 +227,7 @@ public class GraphFragment extends Fragment {
 					comparisonGraphLine.setValues(comparisonValues);
 					graphLines.add(comparisonGraphLine);
 					chartData.setLines(graphLines);
+					graph.setLineChartData(chartData);
 				}
 				
 			} catch (JSONException e) {
@@ -233,10 +235,6 @@ public class GraphFragment extends Fragment {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	private void createComparisonLinearGraph() {
-		
 	}
 
 	// called if the graph contains percent values
@@ -256,7 +254,7 @@ public class GraphFragment extends Fragment {
 		int lowestRoundedValue = roundedValue;
 		
 		// determine value increment to display in graph axis labels
-		int increment = (highestRoundedValue - lowestRoundedValue) / totalEntries;
+		increment = (highestRoundedValue - lowestRoundedValue) / totalEntries;
 		
 		for (int i = highestRoundedValue; i >= lowestRoundedValue; i -= increment) {
 			
