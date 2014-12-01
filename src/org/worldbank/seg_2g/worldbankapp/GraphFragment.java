@@ -52,6 +52,12 @@ public class GraphFragment extends Fragment {
 	private int year;
 	private int roundedValue;
 	
+	private String valueString;
+	private int digitCount;
+	private int charCounter;
+	private String newLabel;
+	private int firstThreeDigits;
+	
 	private Line invisiblePercentGraphLine;
 	private Line mainGraphLine;
 	private Line comparisonGraphLine;
@@ -110,6 +116,10 @@ public class GraphFragment extends Fragment {
 				graphLines = new ArrayList<Line>();
 
 				measureLabel = null;
+				
+				// integers to contain highest and lowest values, used to assign labels to graph
+				int highestValue = 0;
+				int lowestValue = 2000000000;
 
 				// put every entry from JSON in graph and create a label
 				for (int i = 0; i < totalEntries; ++i) {
@@ -142,14 +152,21 @@ public class GraphFragment extends Fragment {
 					else {
 						value = json.getInt("value");
 						year = json.getInt("date");
-						// round the entry value for representation in the graph Y axis
-						createNumberLabel();
+						// assign highest and lowest value
+						if (value > highestValue) { highestValue = value; }
+						if (value < lowestValue) { lowestValue = value; }
 						// add year and value to the list later used to draw graph
 						values.add(new PointValue(year, value));
 					}
 					
 					
 				}
+				
+				if (!measureLabel.contains("%")) {
+					// round the entry value for representation in the graph Y axis
+					createNumberLabels(highestValue, lowestValue);
+				}
+				
 
 				mainGraphLine.setValues(values);
 				graphLines.add(mainGraphLine);
@@ -188,15 +205,49 @@ public class GraphFragment extends Fragment {
 	}
 	
 	// called if the graph contains number values
-	private void createNumberLabel() {
+	private void createNumberLabels(int highestValue, int lowestValue) {
 
-		String valueString = String.valueOf(value);
-		int digitCount = valueString.length() - 1;
-		int charCounter = 0;
-		// put first digit char in new label
-		String newLabel = "" + valueString.charAt(charCounter++);
+		setRoundedValue(highestValue);
+		int highestRoundedValue = roundedValue;
+		setRoundedValue(lowestValue);
+		int lowestRoundedValue = roundedValue;
+		
+		// determine value increment to display in graph axis labels
+		int increment = (highestRoundedValue - lowestRoundedValue) / totalEntries;
+		
+		for (int i = highestRoundedValue; i >= lowestRoundedValue; i -= increment) {
+			
+			setRoundedValue(i);
+			
+			// put first digit char in new label
+			newLabel = "" + valueString.charAt(charCounter++);
+	
+			// add commas to the value string
+			while (digitCount > 3) {
+				while (digitCount-- % 3 != 0) {
+					newLabel += valueString.charAt(charCounter++);
+				}
+				newLabel += "," + valueString.charAt(charCounter++);
+			}
+			// finalise new label with last three chars from string
+			newLabel += valueString.substring(charCounter);
+	
+			// convert string to char array
+			char[] label = newLabel.toCharArray();
+	
+			// add label to new list
+			axisValues.add(new AxisValue(roundedValue, label));
+		}
+	}
+	
+	private void setRoundedValue(int value) {
+		
+		// change string to represent rounded value
+		valueString = String.valueOf(value);
+		digitCount = valueString.length() - 1;
+		charCounter = 0;
 		// store the first three digits as int for rounded display value
-		int firstThreeDigits = Integer.parseInt(valueString.substring(0, 3));
+		firstThreeDigits = Integer.parseInt(valueString.substring(0, 3));
 		// calculate rounded value for display
 		roundedValue = 1;
 		switch (digitCount) {
@@ -224,25 +275,8 @@ public class GraphFragment extends Fragment {
 		case 2:
 			roundedValue = firstThreeDigits;
 		}
-
-		// change string to represent rounded population value
+		// store rounded value in value string
 		valueString = String.valueOf(roundedValue);
-
-		// add commas to the value string
-		while (digitCount > 3) {
-			while (digitCount-- % 3 != 0) {
-				newLabel += valueString.charAt(charCounter++);
-			}
-			newLabel += "," + valueString.charAt(charCounter++);
-		}
-		// finalise new label with last three chars from string
-		newLabel += valueString.substring(charCounter);
-
-		// convert string to char array
-		char[] label = newLabel.toCharArray();
-
-		// add label to new list
-		axisValues.add(new AxisValue(roundedValue, label));
 	}
 
 	public void removeFragment() {
