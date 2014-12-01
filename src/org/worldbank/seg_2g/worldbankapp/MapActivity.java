@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class MapActivity extends Activity {
 
@@ -35,7 +36,10 @@ public class MapActivity extends Activity {
 	}
 
 	protected void onCreateExtra() {
-		
+		TextView tv = (TextView) findViewById(R.id.textView1);
+		HTMLGenerator hg = new HTMLGenerator(this);
+		String s = hg.getHTMLCode(Settings.CO2_EMISSIONS, 1994);
+		tv.setText(s);
 		
 	}
 }

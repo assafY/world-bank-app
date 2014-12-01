@@ -8,33 +8,58 @@ import org.json.JSONObject;
 import android.content.Context;
 
 public class HTMLGenerator {
-	
-	Context context;
+
+	QueryGenerator qG;
 
 	public HTMLGenerator(Context context) {
-		this.context = context;
+		qG = new QueryGenerator(context);
 	}
-	public void lala() {
 
-		//TODO check for internet connection
-				
-		QueryGenerator qG = new QueryGenerator(context);
+	public String getHTMLCode(int queryCode, int year) {
+
+		// TODO check for internet connection
+
+		return getCountryValueBlock(queryCode, year);
+	}
+
+	private String getCountryValueBlock(int queryCode, int year) {
+
 		ArrayList<Country> arrlCountries = new ArrayList<Country>();
 		qG.setCountryList(arrlCountries);
-		Country selectedCountry = arrlCountries.get(152); //146RO-152null
-		int queryCode = Settings.CO2_EMISSIONS;
-		int year = 1994;
+		String returnString = "";
+
+		for (int i = 0; i < arrlCountries.size(); i++) {
+			Country selectedCountry = arrlCountries.get(i);
+			double value = getAttributeValueForCountry(selectedCountry,
+					queryCode, year);
+			if (value > -1) {
+				returnString += getCountryAttributeLine(selectedCountry, value) + "\n";
+			}
+		}
+
+		return returnString;
+	}
+
+	private String getCountryAttributeLine(Country country, double value) {
+		return "          ['" + country.getName() + "', " + value + "],";
+	}
+
+	private double getAttributeValueForCountry(Country selectedCountry,
+			int queryCode, int year) {
+
+		String value = null;
+
 		try {
 			String data = qG.getJSON(selectedCountry, queryCode, year, year);
 
 			JSONArray dataFeed = new JSONArray(data);
 			JSONObject json = dataFeed.getJSONArray(1).getJSONObject(0);
-			
-			String value = json.getString("value");
-			System.out.println(value);
+
+			value = json.getString("value");
 
 		} catch (Exception e) {
 		}
 
+		return (value != null) ? (double) Double.parseDouble(value) : null;
 	}
 }
