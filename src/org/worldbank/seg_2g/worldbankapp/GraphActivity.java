@@ -385,7 +385,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 					break;
 			case 2: new GraphFragment().removeFragment();	
 					if (currentTab.equals(CATEGORY[0])) {
-						//queryJSON = queryGen.getJSON(currentCountry, Settings.URBAN_RURAL, startYear, endYear);
+						queryJSON = queryGen.getJSON(currentCountry, Settings.URBAN_RURAL, startYear, endYear);
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[1])) {
