@@ -39,7 +39,7 @@ public class HTMLGenerator {
 				+ "      function drawRegionsMap() {\n"
 				+ "\n"
 				+ "        var data = google.visualization.arrayToDataTable([\n"
-				+ "          ['Countries', '" + "CO2" + "'],\n";
+				+ "          ['Country', '" + "CO2" + "'],\n";
 		return s;
 	}
 
