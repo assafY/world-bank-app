@@ -283,8 +283,8 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	
 		switch (position) {
 			case 0: if (categoryCounter > 0) {
-						currentPagePosition = 4;
 						actionBar.setSelectedNavigationItem(--categoryCounter);	
+						currentPagePosition = position;
 						break;
 					}	
 			case 1: new GraphFragment().removeFragment();
@@ -327,7 +327,8 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 					}
 					else if (currentTab.equals(CATEGORY[2])) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
-						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						comparisonQuery = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
 					}			
 					break;
 			case 4: new GraphFragment().removeFragment();	
@@ -337,19 +338,22 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[1])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.ENERGY_USE, startYear, endYear);
+						queryJSON = queryGen.getJSON(currentCountry, Settings.ENERGY_PRODUCTION, startYear, endYear);
+						comparisonQuery = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[2])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.FOREST_AREA, startYear, endYear);
+						queryJSON = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
+						comparisonQuery = queryGen.getJSON(currentCountry, Settings.ENERGY_PRODUCTION, startYear, endYear);
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}			
 					break;
 			case 5: if (categoryCounter < 2) {
-						currentPagePosition = 0;
 						actionBar.setSelectedNavigationItem(++categoryCounter);
+						currentPagePosition = position;
+						break;
 					}
-				    break;
+				    
 			}
 		}
 			
