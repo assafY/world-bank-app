@@ -127,7 +127,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));   
-		getActionBar().setDisplayShowTitleEnabled(true);
+		getActionBar().setDisplayShowTitleEnabled(false);
 		getMenuInflater().inflate(R.menu.graph, menu);
 		return true;
 	}
@@ -280,7 +280,6 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	 * Contains certain bugs which will be fixed
 	 */
 	public void graphPage(int position) {
-	
 		switch (position) {
 			case 0: if (categoryCounter > 0) {
 						actionBar.setSelectedNavigationItem(--categoryCounter);	
@@ -306,12 +305,12 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.URBAN_RURAL, startYear, endYear);
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}
-					else if (currentTab.equals(CATEGORY[1])) {
+					else if (currentTab.equals(CATEGORY[1])			) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.ENERGY_USE, startYear, endYear);
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[2])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.FOREST_AREA, startYear, endYear);
+						queryJSON = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}			
 					break;
@@ -326,9 +325,8 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[2])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
-						comparisonQuery = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
-						new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
+						queryJSON = queryGen.getJSON(currentCountry, Settings.FOREST_AREA, startYear, endYear);
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}			
 					break;
 			case 4: new GraphFragment().removeFragment();	
@@ -344,16 +342,20 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 					}
 					else if (currentTab.equals(CATEGORY[2])) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
-						comparisonQuery = queryGen.getJSON(currentCountry, Settings.ENERGY_PRODUCTION, startYear, endYear);
-						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						comparisonQuery = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
 					}			
 					break;
 			case 5: if (categoryCounter < 2) {
 						actionBar.setSelectedNavigationItem(++categoryCounter);
 						currentPagePosition = position;
 						break;
+					}else if(categoryCounter==2){
+						new GraphFragment().removeFragment();	
+						queryJSON = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
+						comparisonQuery = queryGen.getJSON(currentCountry, Settings.ENERGY_PRODUCTION, startYear, endYear);
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());	
 					}
-				    
 			}
 		}
 			
@@ -386,7 +388,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	public void onTabReselected(ActionBar.Tab tab,
 			FragmentTransaction fragmentTransaction) {
 	}
-	
+		
 	// check if the device has network access
 	private boolean deviceHasNetwork() {
 		
