@@ -8,7 +8,7 @@ import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
-import lecho.lib.hellocharts.model.SimpleValueFormatter;
+import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.LineChartView;
 
 import org.json.JSONArray;
@@ -26,126 +26,307 @@ import android.widget.Toast;
 
 public class GraphFragment extends Fragment {
 
-	//TEMP class, once the action bar works properly it will be removed.
-		//private GraphViewSeries populationEntries;
-		private static RelativeLayout graphLayout;
+	// TEMP class, once the action bar works properly it will be removed.
+	// private GraphViewSeries populationEntries;
+	private static RelativeLayout graphLayout;
+	
+	private boolean comparisonChart = false;
+
+	private String countryName;
+	private String data;
+	private String comparisonData;
+	private GraphActivity context;
+
+	private JSONArray dataFeed;
+	private JSONObject titleValues;
+	private JSONArray feedArray;
+
+	private int totalEntries;
+	private LineChartView graph;
+	private List<PointValue> values;
+	private ArrayList<PointValue> comparisonValues;
+	private List<PointValue> invisiblePercentGraphValues;
+
+	private int jsonCounter;
+	private List<AxisValue> axisValues;
+	private String measureLabel;
+
+	private int value;
+	private float percentValue;
+	private int year;
+	private int roundedValue;
+	private int highestValue;
+	private int lowestValue;
+	private int increment;
+	
+	private String valueString;
+	private int digitCount;
+	private int charCounter;
+	private String newLabel;
+	private int firstThreeDigits;
+	
+	private Line invisiblePercentGraphLine;
+	private Line mainGraphLine;
+	private Line comparisonGraphLine;
+	private List<Line> graphLines;
+	
+	private LineChartData chartData;
+
+	private Axis axisX;
+	private Axis axisY;
+	
+	
+	// Inflate the layout
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View fragmentView = (RelativeLayout) inflater.inflate(
+				R.layout.fragment_graphs, container, false);
+		graphLayout = (RelativeLayout) fragmentView.findViewById(R.id.Graphs);
+		return fragmentView;
+	}
+
+	protected void createGraph(GraphActivity context, String JSONdata,
+			String countryName) {
+		this.countryName = countryName;
+		this.data = JSONdata;
+		this.context = context;
+
+		createLinearGraph();
+	}
+
+	protected void createGraph(GraphActivity context, String JSONdata,
+			String comparisonData, String countryName) {
+		this.countryName = countryName;
+		this.data = JSONdata;
+		this.comparisonData = comparisonData;
+		this.context = context;
 		
-		   // Inflate the layout
-		  public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
-	            View fragmentView =  (RelativeLayout) inflater.inflate(R.layout.fragment_graphs, container, false);
-	            graphLayout = (RelativeLayout) fragmentView.findViewById(R.id.Graphs);
-			    return fragmentView;
-			    }  
-		  
-			protected void createLinearGraph(GraphActivity context, String data, String countryName) {
-				
-				// if data is null, there is no network (second check for tablets)
-				if (data == null) {
-					Toast.makeText(context, GraphActivity.NO_NETWORK_TEXT, 
-							   Toast.LENGTH_LONG).show();
+		createLinearGraph();
+		comparisonChart = true;
+		createLinearGraph();
+		comparisonChart = false;
+
+	}
+
+	private void createLinearGraph() {
+
+		// if data is null, there is no network (second check for tablets)
+		if (data == null) {
+			Toast.makeText(context, GraphActivity.NO_NETWORK_TEXT,
+					Toast.LENGTH_LONG).show();
+		} else {
+			try {
+				if (comparisonChart) {
+					dataFeed = new JSONArray(comparisonData);
+					titleValues = dataFeed.getJSONObject(0);
+					totalEntries = titleValues.getInt("total");
+					comparisonValues = new ArrayList<PointValue>();
+					
+					feedArray = dataFeed.getJSONArray(1);
+					jsonCounter = totalEntries - 1;
+					comparisonGraphLine = new Line().setColor(Color.RED).setCubic(false).setStrokeWidth(1);
 				}
 				else {
-					try {
-			            JSONArray dataFeed = new JSONArray(data);
-			            JSONObject titleValues = dataFeed.getJSONObject(0);
-			            
-			            // get total number of entries
-			            int totalEntries = titleValues.getInt("total");
-			            LineChartView graph = new LineChartView(context);
-			            List<PointValue> values = new ArrayList<PointValue>();
-			            
-			            JSONArray feedArray = dataFeed.getJSONArray(1);
-			            int jsonCounter = totalEntries - 1;
-			            List<AxisValue> popAxisValues = new ArrayList<AxisValue>();
-			            
-			            for (int i = 0; i < totalEntries; ++i) {
-			            	// extract current population entry
-			                JSONObject json = feedArray.getJSONObject(jsonCounter--);
-			                int population = json.getInt("value");
-			                int year = json.getInt("date");
-			                
-			                // add year and population to the list later used to draw graph
-			                values.add(new PointValue(year, population));
-			                
-			                // add commas to Y axis labels
-			                String popString = String.valueOf(population);
-			                int digitCount = popString.length() - 1;
-							int charCounter = 0;
-							// put first digit char in new label
-							String newLabel = "" + popString.charAt(charCounter++);
-							// store the first digit as int for rounded display value
-							int firstThreeDigits = Integer.parseInt(popString.substring(0, 3));
-							// calculate rounded population for display
-							int roundedPop = 1;
-							switch(digitCount) {
-								case 8: roundedPop = firstThreeDigits * 1000000;
-										break;
-								case 7: roundedPop = firstThreeDigits * 100000;
-										break;
-								case 6: roundedPop = firstThreeDigits * 10000;
-										break;
-								case 5: roundedPop = firstThreeDigits * 1000;
-										break;
-								case 4: roundedPop = firstThreeDigits * 100;
-										break;
-								case 3: roundedPop = firstThreeDigits * 10;
-										break;
-							}
-							
-							// change string to represent rounded population value
-							popString = String.valueOf(roundedPop);
-							
-							while (digitCount > 3) {
-								while (digitCount-- % 3 != 0) {
-									newLabel += popString.charAt(charCounter++);
-								}
-								newLabel += "," + popString.charAt(charCounter++);
-							}
-							// finalise new label with last three chars from string
-							newLabel += popString.substring(charCounter);
-							// convert string to char array
-							char[] label = newLabel.toCharArray();
-							
-							// add label to new list
-							popAxisValues.add(new AxisValue(roundedPop, label));
-			            }
-			            
-			            Line line = new Line(values).setColor(Color.BLUE).setCubic(false).setStrokeWidth(1);
-			            List<Line> lines = new ArrayList<Line>();
-			            lines.add(line);
-			            
-			            LineChartData chartData = new LineChartData();
-			            
-			            Axis axisX = new Axis().setMaxLabelChars(4);
-						Axis axisY = new Axis().setHasLines(true).setMaxLabelChars(11);
-						
-						axisY.setValues(popAxisValues);
-						
-						chartData.setAxisXBottom(axisX);
-						chartData.setAxisYLeft(axisY);
-						
-			            chartData.setLines(lines);
-			            
-			            graph.setLineChartData(chartData);
-			            
-			            graphLayout.removeAllViews();
-			            graphLayout.addView(graph);
+					dataFeed = new JSONArray(data);
+					titleValues = dataFeed.getJSONObject(0);
+					
+					// get total number of entries
+					totalEntries = titleValues.getInt("total");
+					graph = new LineChartView(context);
+					values = new ArrayList<PointValue>();
 	
-			        } catch (JSONException e) {
-			            // TODO: Handle exception
-			            e.printStackTrace();
-			        }
+					feedArray = dataFeed.getJSONArray(1);
+	
+					jsonCounter = totalEntries - 1;
+					axisValues = new ArrayList<AxisValue>();
+					mainGraphLine = new Line().setColor(Color.BLUE).setCubic(false).setStrokeWidth(1);
+					graphLines = new ArrayList<Line>();
+	
+					measureLabel = null;
+					
+					// integers to contain highest and lowest values, used to assign labels to graph
+					highestValue = 0;
+					lowestValue = 2000000000;
 				}
-			}	
-		
+
+				// put every entry from JSON in graph and create a label
+				for (int i = 0; i < totalEntries; ++i) {
+					
+					JSONObject json = feedArray.getJSONObject(jsonCounter--);
+					
+					if(!comparisonChart) {
+						// add measure type label to string
+						if (measureLabel == null) {
+							JSONObject indicator = json.getJSONObject("indicator");
+							measureLabel = indicator.getString("value");
+						}
+						
+						// extract current entry (int for value graph, float for percent graph)
+						if (measureLabel.contains("%")) {
+							percentValue = (float) json.getDouble("value");
+							year = json.getInt("date");
+							// create percent value labels for representation in the graph Y axis (single run)
+							// and add invisible dummy 0 and 100 values to show full graph scale
+							if (axisValues.size() == 0) {
+								createPercentLabel();
+								invisiblePercentGraphValues = new ArrayList<PointValue>();
+								invisiblePercentGraphValues.add(new PointValue(year, 0));
+								invisiblePercentGraphValues.add(new PointValue(year, 100));
+								invisiblePercentGraphLine = new Line(invisiblePercentGraphValues).setHasPoints(false).setHasLines(false);
+								graphLines.add(invisiblePercentGraphLine);
+							}
+							// add year and value to the list later used to draw graph
+							values.add(new PointValue(year, percentValue));
+						}
+						else {
+							value = json.getInt("value");
+							year = json.getInt("date");
+							// assign highest and lowest value
+							if (value > highestValue) { highestValue = value; }
+							if (value < lowestValue) { lowestValue = value; }
+							// add year and value to the list later used to draw graph
+							values.add(new PointValue(year, value));
+						}
+					}
+					else {
+						value = json.getInt("value");
+						year = json.getInt("date");
+						comparisonValues.add(new PointValue(year, value));
+					}
+				}
+				
+				
+				if (!measureLabel.contains("%") && !comparisonChart) {
+					// round the entry value for representation in the graph Y axis
+					createNumberLabels(highestValue, lowestValue);
+				}
+				
+				if (!comparisonChart) {
+					
+					mainGraphLine.setValues(values);
+					graphLines.add(mainGraphLine);
+					chartData = new LineChartData();
 	
-			public void removeFragment(){
-	            graphLayout.removeAllViews();
+					axisX = new Axis().setMaxLabelChars(4);
+					axisY = new Axis().setName(measureLabel).setHasLines(true)
+							.setMaxLabelChars(11);
 	
+					axisY.setValues(axisValues);
+	
+					chartData.setAxisXBottom(axisX);
+					chartData.setAxisYLeft(axisY);
+	
+					chartData.setLines(graphLines);
+	
+					graph.setLineChartData(chartData);
+	
+					graphLayout.removeAllViews();
+					graphLayout.addView(graph);
+				}
+				else {
+					comparisonGraphLine.setValues(comparisonValues);
+					graphLines.add(comparisonGraphLine);
+					chartData.setLines(graphLines);
+					graph.setLineChartData(chartData);
+				}
+				
+			} catch (JSONException e) {
+				// TODO: Handle exception
+				e.printStackTrace();
 			}
+		}
+	}
+
+	// called if the graph contains percent values
+	private void createPercentLabel() {
+		for (int i = 100; i >= 0; i -= 20) {
+			char[] label = String.valueOf(i).toCharArray();
+			axisValues.add(new AxisValue(i, label));
+		}
+	}
+	
+	// called if the graph contains number values
+	private void createNumberLabels(int highestValue, int lowestValue) {
+
+		setRoundedValue(highestValue);
+		int highestRoundedValue = roundedValue;
+		setRoundedValue(lowestValue);
+		int lowestRoundedValue = roundedValue;
 		
-			public RelativeLayout getlayout(){ //TEMP for testing purpose.
-				return graphLayout;
-				}
+		// determine value increment to display in graph axis labels
+		increment = (highestRoundedValue - lowestRoundedValue) / totalEntries;
+		
+		for (int i = highestRoundedValue; i >= lowestRoundedValue; i -= increment) {
 			
+			setRoundedValue(i);
+			
+			// put first digit char in new label
+			newLabel = "" + valueString.charAt(charCounter++);
+	
+			// add commas to the value string
+			while (digitCount > 3) {
+				while (digitCount-- % 3 != 0) {
+					newLabel += valueString.charAt(charCounter++);
+				}
+				newLabel += "," + valueString.charAt(charCounter++);
+			}
+			// finalise new label with last three chars from string
+			newLabel += valueString.substring(charCounter);
+	
+			// convert string to char array
+			char[] label = newLabel.toCharArray();
+	
+			// add label to new list
+			axisValues.add(new AxisValue(roundedValue, label));
+		}
+	}
+	
+	private void setRoundedValue(int value) {
+		
+		// change string to represent rounded value
+		valueString = String.valueOf(value);
+		digitCount = valueString.length() - 1;
+		charCounter = 0;
+		// store the first three digits as int for rounded display value
+		firstThreeDigits = Integer.parseInt(valueString.substring(0, 3));
+		// calculate rounded value for display
+		roundedValue = 1;
+		switch (digitCount) {
+		case 9:
+			roundedValue = firstThreeDigits * 10000000;
+			break;
+		case 8:
+			roundedValue = firstThreeDigits * 1000000;
+			break;
+		case 7:
+			roundedValue = firstThreeDigits * 100000;
+			break;
+		case 6:
+			roundedValue = firstThreeDigits * 10000;
+			break;
+		case 5:
+			roundedValue = firstThreeDigits * 1000;
+			break;
+		case 4:
+			roundedValue = firstThreeDigits * 100;
+			break;
+		case 3:
+			roundedValue = firstThreeDigits * 10;
+			break;
+		case 2:
+			roundedValue = firstThreeDigits;
+		}
+		// store rounded value in value string
+		valueString = String.valueOf(roundedValue);
+	}
+
+	public void removeFragment() {
+		graphLayout.removeAllViews();
+
+	}
+
+	public RelativeLayout getlayout() { // TEMP for testing purpose.
+		return graphLayout;
+	}
+
 }
