@@ -77,11 +77,12 @@ public class GraphFragment extends Fragment {
 	
 	
 	// Inflate the layout
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View fragmentView = (RelativeLayout) inflater.inflate(
-				R.layout.fragment_graphs, container, false);
-		graphLayout = (RelativeLayout) fragmentView.findViewById(R.id.Graphs);
+		View fragmentView = inflater.inflate(
+				R.layout.fragment_graph, container, false);
+		graphLayout = (RelativeLayout) fragmentView.findViewById(R.id.graph_fragment);
 		
 		return fragmentView;
 	}
@@ -105,6 +106,9 @@ public class GraphFragment extends Fragment {
 			@Override
 			protected void onPostExecute(Void v) {
 				graph.setLineChartData(chartData);
+				graph.setBackgroundColor(Color.parseColor("#3399CC"));
+				graph.setZoomEnabled(false);
+				graph.setScrollEnabled(false);
 				graphLayout.removeAllViews();
 				graphLayout.addView(graph);
 			}
@@ -115,7 +119,7 @@ public class GraphFragment extends Fragment {
 
 	protected void createGraph(GraphActivity context, String JSONdata,
 			String comparisonData, String countryName) {
-		this.countryName = countryName;
+		/*this.countryName = countryName;
 		this.data = JSONdata;
 		this.comparisonData = comparisonData;
 		this.context = context;
@@ -123,24 +127,13 @@ public class GraphFragment extends Fragment {
 		createLinearGraph();
 		comparisonChart = true;
 		createLinearGraph();
-		comparisonChart = false;
+		comparisonChart = false;*/
 
 	}
 
 	private void createLinearGraph() {
 			
 		try {
-		/*	if (comparisonChart) {
-				dataFeed = new JSONArray(comparisonData);
-				titleValues = dataFeed.getJSONObject(0);
-				totalEntries = titleValues.getInt("total");
-				comparisonValues = new ArrayList<PointValue>();
-				
-				feedArray = dataFeed.getJSONArray(1);
-				jsonCounter = totalEntries - 1;
-				comparisonGraphLine = new Line().setColor(Color.RED).setCubic(false).setStrokeWidth(1);
-			}
-			else { */
 				dataFeed = new JSONArray(data);
 				titleValues = dataFeed.getJSONObject(0);
 				
@@ -153,7 +146,7 @@ public class GraphFragment extends Fragment {
 
 				jsonCounter = totalEntries - 1;
 				axisValues = new ArrayList<AxisValue>();
-				mainGraphLine = new Line().setColor(Color.BLUE).setCubic(false).setStrokeWidth(1);
+				mainGraphLine = new Line().setColor(Color.RED).setCubic(false).setStrokeWidth(2).setPointRadius(3);
 				graphLines = new ArrayList<Line>();
 
 				measureLabel = null;
@@ -221,9 +214,9 @@ public class GraphFragment extends Fragment {
 				graphLines.add(mainGraphLine);
 				chartData = new LineChartData();
 
-				axisX = new Axis().setMaxLabelChars(4);
+				axisX = new Axis().setMaxLabelChars(4).setTextColor(Color.BLACK).setTextSize(11);
 				axisY = new Axis().setName(measureLabel).setHasLines(true)
-						.setMaxLabelChars(11);
+						.setMaxLabelChars(11).setTextColor(Color.BLACK).setLineColor(Color.LTGRAY).setTextSize(11);
 
 				axisY.setValues(axisValues);
 

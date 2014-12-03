@@ -8,7 +8,6 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -22,12 +21,12 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
@@ -62,13 +61,14 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	
     private	GraphAdapter graphAdapter;
     private	ViewPager graphView;
-    private RelativeLayout graphLayout;
     
     private SharedPreferences graphPreferences;
 	
 	private final int startYear = 1989;
 	private final int endYear = 2009;
 	private int indicatorSelection = Settings.POPULATION;
+	
+	private ViewGroup graphViews;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +80,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-		graphLayout = (RelativeLayout) findViewById(R.id.container);
+		
 		
 		graphPreferences = getPreferences(0);
 		
@@ -99,6 +99,9 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 						graphPage(position);
 					}
 				});
+		
+		
+		
 
 		// add the tabs to the action bar.
 		for (int i = 0; i < CATEGORY.length; i++) {
@@ -294,8 +297,8 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[1])) {
-						//queryJSON = queryGen.getJSON(currentCountry, Settings.ENERGY_PRODUCTION, startYear, endYear);
-						//new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						queryJSON = queryGen.getJSON(currentCountry, Settings.ENERGY_PRODUCTION, startYear, endYear);
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[2])) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
@@ -304,8 +307,8 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 					break;
 			case 2: 	
 					if (currentTab.equals(CATEGORY[0])) {
-						//queryJSON = queryGen.getJSON(currentCountry, Settings.URBAN_RURAL, startYear, endYear);
-						//new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						queryJSON = queryGen.getJSON(currentCountry, Settings.URBAN_RURAL, startYear, endYear);
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[1])			) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.ENERGY_USE, startYear, endYear);

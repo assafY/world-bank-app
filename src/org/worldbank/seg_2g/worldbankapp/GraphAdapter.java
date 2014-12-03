@@ -1,5 +1,7 @@
 package org.worldbank.seg_2g.worldbankapp;
 
+import java.util.ArrayList;
+
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
@@ -24,7 +26,7 @@ public class GraphAdapter extends FragmentPagerAdapter {
 	public Fragment getItem(int position) {
 		return GraphFrameHolder.newInstance(position + 1);
 	}
-
+	
 	@Override
 	public int getCount() {
 		// Show number of pages.
