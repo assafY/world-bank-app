@@ -37,6 +37,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	private static final CharSequence ACTIVITY_TITLE = "Graph Activity";
 	private static final CharSequence DRAWER_TITLE = "Select Country";
 	private static final String[] CATEGORY = {"Population","Energy","Environment"};
+	public static int CATEGORY_COUNTER = 0;
 	
 	private CountryListAdapter listAdapter;
 	private CountryListAdapter autoCompleteAdapter;
@@ -50,8 +51,8 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	private ActionBarDrawerToggle drawerToggle;
 	private ActionBar actionBar;
 
-	private int categoryCounter;
-	private int currentPagePosition = 1;
+	
+	public static int currentPagePosition = 1;
 	private Country currentCountry;
 	private String currentTab = CATEGORY[0];
 
@@ -60,7 +61,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	private String comparisonQuery;
 	
     private	GraphAdapter graphAdapter;
-    private	ViewPager graphView;
+    public static	ViewPager graphView;
     
     private SharedPreferences graphPreferences;
 	
@@ -68,7 +69,6 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	private final int endYear = 2009;
 	private int indicatorSelection = Settings.POPULATION;
 	
-	private ViewGroup graphViews;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -89,7 +89,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 
 		graphView = (ViewPager) findViewById(R.id.graph_pager);
 		graphView.setAdapter(graphAdapter);
-
+		
 		// swap tab
 		graphView.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 					@Override
@@ -285,9 +285,9 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	 */
 	public void graphPage(int position) {
 		switch (position) {
-			case 0: if (categoryCounter > 0) {
-						actionBar.setSelectedNavigationItem(--categoryCounter);	
-						currentPagePosition = position;
+			case 0: if (CATEGORY_COUNTER > 0) {
+						currentPagePosition = 4;
+						actionBar.setSelectedNavigationItem(--CATEGORY_COUNTER);	
 						break;
 					}	
 			case 1: 
@@ -351,16 +351,16 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
 					}			
 					break;
-			case 5: if (categoryCounter < 2) {
-						actionBar.setSelectedNavigationItem(++categoryCounter);
-						currentPagePosition = position;
+			case 5: if (CATEGORY_COUNTER < 2) {
+						currentPagePosition = 1;
+						actionBar.setSelectedNavigationItem(++CATEGORY_COUNTER);
 						break;
-					}else if(categoryCounter==2){
+					}/* else if (CATEGORY_COUNTER == 2){
 							
 						queryJSON = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
 						comparisonQuery = queryGen.getJSON(currentCountry, Settings.ENERGY_PRODUCTION, startYear, endYear);
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());	
-					}
+					}*/
 			}
 		}
 			

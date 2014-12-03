@@ -19,10 +19,11 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 public class GraphFragment extends Fragment {
 
@@ -87,7 +88,7 @@ public class GraphFragment extends Fragment {
 		return fragmentView;
 	}
 
-	protected LineChartView createGraph(GraphActivity context, String JSONdata,
+	protected LineChartView createGraph(final GraphActivity context, String JSONdata,
 			String countryName) {
 		this.countryName = countryName;
 		this.data = JSONdata;
@@ -110,6 +111,45 @@ public class GraphFragment extends Fragment {
 				graph.setZoomEnabled(false);
 				graph.setScrollEnabled(false);
 				graphLayout.removeAllViews();
+				
+				
+				graph.setOnTouchListener(new OnTouchListener() {
+
+					int downX, upX;
+					@Override
+					public boolean onTouch(View v, MotionEvent e) {
+						if (e.getAction() == MotionEvent.ACTION_DOWN) {
+				             downX = (int) e.getX(); 
+				           //  return true;
+				         } 
+
+						else if (e.getAction() == MotionEvent.ACTION_UP) {
+				             upX = (int) e.getX(); 
+				             
+				                 // swipe right
+				             if (downX - upX > -100) {
+				            	 //GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
+				            	 if (GraphActivity.currentPagePosition < 5) {
+				            		 GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
+				            	 }
+				            	 graphLayout.removeAllViews();
+				            	 // swipe left
+				             }
+				             
+
+				             else if (downX - upX < -100) {
+				            	 //GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
+				            	 if (GraphActivity.currentPagePosition > 0) {
+				            		 GraphActivity.graphView.setCurrentItem(--GraphActivity.currentPagePosition);
+				            	 }
+				            	 graphLayout.removeAllViews();
+				            	 // swipe right
+				             }
+						}
+				             return true;	
+					}
+				});
+				
 				graphLayout.addView(graph);
 			}
 		}.execute();
