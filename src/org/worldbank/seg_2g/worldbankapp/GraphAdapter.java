@@ -48,7 +48,7 @@ public class GraphAdapter extends FragmentPagerAdapter {
 
 		private static final String CATEGORY_PAGE = "frameID";
 		
-		public static GraphFrameHolder newInstance(int sectionNumber) {
+		static GraphFrameHolder newInstance(int sectionNumber) {
 			GraphFrameHolder graphFrame = new GraphFrameHolder();
 			Bundle fMap = new Bundle();
 			fMap.putInt(CATEGORY_PAGE, sectionNumber);
@@ -62,8 +62,9 @@ public class GraphAdapter extends FragmentPagerAdapter {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_graph,
+			View rootView = inflater.inflate(R.layout.fragment_graph_holder,
 					container, false);
+			
 			return rootView;
 		}
 	}

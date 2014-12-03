@@ -8,7 +8,6 @@ import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
-import lecho.lib.hellocharts.model.Viewport;
 import lecho.lib.hellocharts.view.LineChartView;
 
 import org.json.JSONArray;
@@ -17,6 +16,7 @@ import org.json.JSONObject;
 
 import android.app.Fragment;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +28,7 @@ public class GraphFragment extends Fragment {
 
 	// TEMP class, once the action bar works properly it will be removed.
 	// private GraphViewSeries populationEntries;
-	private static RelativeLayout graphLayout;
+	public static RelativeLayout graphLayout;
 	
 	private boolean comparisonChart = false;
 
@@ -82,16 +82,35 @@ public class GraphFragment extends Fragment {
 		View fragmentView = (RelativeLayout) inflater.inflate(
 				R.layout.fragment_graphs, container, false);
 		graphLayout = (RelativeLayout) fragmentView.findViewById(R.id.Graphs);
+		
 		return fragmentView;
 	}
 
-	protected void createGraph(GraphActivity context, String JSONdata,
+	protected LineChartView createGraph(GraphActivity context, String JSONdata,
 			String countryName) {
 		this.countryName = countryName;
 		this.data = JSONdata;
 		this.context = context;
+		
+		graph = new LineChartView(context);
 
-		createLinearGraph();
+		new AsyncTask<Void,Void,Void>() {
+
+			@Override
+			protected Void doInBackground(Void... params) {
+				createLinearGraph();
+				return null;
+			}
+			
+			@Override
+			protected void onPostExecute(Void v) {
+				graph.setLineChartData(chartData);
+				graphLayout.removeAllViews();
+				graphLayout.addView(graph);
+			}
+		}.execute();
+		
+		return graph;
 	}
 
 	protected void createGraph(GraphActivity context, String JSONdata,
@@ -109,132 +128,123 @@ public class GraphFragment extends Fragment {
 	}
 
 	private void createLinearGraph() {
+			
+		try {
+		/*	if (comparisonChart) {
+				dataFeed = new JSONArray(comparisonData);
+				titleValues = dataFeed.getJSONObject(0);
+				totalEntries = titleValues.getInt("total");
+				comparisonValues = new ArrayList<PointValue>();
+				
+				feedArray = dataFeed.getJSONArray(1);
+				jsonCounter = totalEntries - 1;
+				comparisonGraphLine = new Line().setColor(Color.RED).setCubic(false).setStrokeWidth(1);
+			}
+			else { */
+				dataFeed = new JSONArray(data);
+				titleValues = dataFeed.getJSONObject(0);
+				
+				// get total number of entries
+				totalEntries = titleValues.getInt("total");
+				
+				values = new ArrayList<PointValue>();
 
-		// if data is null, there is no network (second check for tablets)
-		if (data == null) {
-			Toast.makeText(context, GraphActivity.NO_NETWORK_TEXT,
-					Toast.LENGTH_LONG).show();
-		} else {
-			try {
-				if (comparisonChart) {
-					dataFeed = new JSONArray(comparisonData);
-					titleValues = dataFeed.getJSONObject(0);
-					totalEntries = titleValues.getInt("total");
-					comparisonValues = new ArrayList<PointValue>();
-					
-					feedArray = dataFeed.getJSONArray(1);
-					jsonCounter = totalEntries - 1;
-					comparisonGraphLine = new Line().setColor(Color.RED).setCubic(false).setStrokeWidth(1);
-				}
-				else {
-					dataFeed = new JSONArray(data);
-					titleValues = dataFeed.getJSONObject(0);
-					
-					// get total number of entries
-					totalEntries = titleValues.getInt("total");
-					graph = new LineChartView(context);
-					values = new ArrayList<PointValue>();
-	
-					feedArray = dataFeed.getJSONArray(1);
-	
-					jsonCounter = totalEntries - 1;
-					axisValues = new ArrayList<AxisValue>();
-					mainGraphLine = new Line().setColor(Color.BLUE).setCubic(false).setStrokeWidth(1);
-					graphLines = new ArrayList<Line>();
-	
-					measureLabel = null;
-					
-					// integers to contain highest and lowest values, used to assign labels to graph
-					highestValue = 0;
-					lowestValue = 2000000000;
-				}
+				feedArray = dataFeed.getJSONArray(1);
 
-				// put every entry from JSON in graph and create a label
-				for (int i = 0; i < totalEntries; ++i) {
+				jsonCounter = totalEntries - 1;
+				axisValues = new ArrayList<AxisValue>();
+				mainGraphLine = new Line().setColor(Color.BLUE).setCubic(false).setStrokeWidth(1);
+				graphLines = new ArrayList<Line>();
+
+				measureLabel = null;
+				
+				// integers to contain highest and lowest values, used to assign labels to graph
+				highestValue = 0;
+				lowestValue = 2000000000;
+			//}
+
+			// put every entry from JSON in graph and create a label
+			for (int i = 0; i < totalEntries; ++i) {
+				
+				JSONObject json = feedArray.getJSONObject(jsonCounter--);
+				
+				//if(!comparisonChart) {
+					// add measure type label to string
+					if (measureLabel == null) {
+						JSONObject indicator = json.getJSONObject("indicator");
+						measureLabel = indicator.getString("value");
+					}
 					
-					JSONObject json = feedArray.getJSONObject(jsonCounter--);
-					
-					if(!comparisonChart) {
-						// add measure type label to string
-						if (measureLabel == null) {
-							JSONObject indicator = json.getJSONObject("indicator");
-							measureLabel = indicator.getString("value");
+					// extract current entry (int for value graph, float for percent graph)
+					if (measureLabel.contains("%")) {
+						percentValue = (float) json.getDouble("value");
+						year = json.getInt("date");
+						// create percent value labels for representation in the graph Y axis (single run)
+						// and add invisible dummy 0 and 100 values to show full graph scale
+						if (axisValues.size() == 0) {
+							createPercentLabel();
+							invisiblePercentGraphValues = new ArrayList<PointValue>();
+							invisiblePercentGraphValues.add(new PointValue(year, 0));
+							invisiblePercentGraphValues.add(new PointValue(year, 100));
+							invisiblePercentGraphLine = new Line(invisiblePercentGraphValues).setHasPoints(false).setHasLines(false);
+							graphLines.add(invisiblePercentGraphLine);
 						}
-						
-						// extract current entry (int for value graph, float for percent graph)
-						if (measureLabel.contains("%")) {
-							percentValue = (float) json.getDouble("value");
-							year = json.getInt("date");
-							// create percent value labels for representation in the graph Y axis (single run)
-							// and add invisible dummy 0 and 100 values to show full graph scale
-							if (axisValues.size() == 0) {
-								createPercentLabel();
-								invisiblePercentGraphValues = new ArrayList<PointValue>();
-								invisiblePercentGraphValues.add(new PointValue(year, 0));
-								invisiblePercentGraphValues.add(new PointValue(year, 100));
-								invisiblePercentGraphLine = new Line(invisiblePercentGraphValues).setHasPoints(false).setHasLines(false);
-								graphLines.add(invisiblePercentGraphLine);
-							}
-							// add year and value to the list later used to draw graph
-							values.add(new PointValue(year, percentValue));
-						}
-						else {
-							value = json.getInt("value");
-							year = json.getInt("date");
-							// assign highest and lowest value
-							if (value > highestValue) { highestValue = value; }
-							if (value < lowestValue) { lowestValue = value; }
-							// add year and value to the list later used to draw graph
-							values.add(new PointValue(year, value));
-						}
+						// add year and value to the list later used to draw graph
+						values.add(new PointValue(year, percentValue));
 					}
 					else {
 						value = json.getInt("value");
 						year = json.getInt("date");
-						comparisonValues.add(new PointValue(year, value));
+						// assign highest and lowest value
+						if (value > highestValue) { highestValue = value; }
+						if (value < lowestValue) { lowestValue = value; }
+						// add year and value to the list later used to draw graph
+						values.add(new PointValue(year, value));
 					}
-				}
-				
-				
-				if (!measureLabel.contains("%") && !comparisonChart) {
-					// round the entry value for representation in the graph Y axis
-					createNumberLabels(highestValue, lowestValue);
-				}
-				
-				if (!comparisonChart) {
-					
-					mainGraphLine.setValues(values);
-					graphLines.add(mainGraphLine);
-					chartData = new LineChartData();
-	
-					axisX = new Axis().setMaxLabelChars(4);
-					axisY = new Axis().setName(measureLabel).setHasLines(true)
-							.setMaxLabelChars(11);
-	
-					axisY.setValues(axisValues);
-	
-					chartData.setAxisXBottom(axisX);
-					chartData.setAxisYLeft(axisY);
-	
-					chartData.setLines(graphLines);
-	
-					graph.setLineChartData(chartData);
-	
-					graphLayout.removeAllViews();
-					graphLayout.addView(graph);
-				}
+				/*}
 				else {
-					comparisonGraphLine.setValues(comparisonValues);
-					graphLines.add(comparisonGraphLine);
-					chartData.setLines(graphLines);
-					graph.setLineChartData(chartData);
-				}
-				
-			} catch (JSONException e) {
-				// TODO: Handle exception
-				e.printStackTrace();
+					value = json.getInt("value");
+					year = json.getInt("date");
+					comparisonValues.add(new PointValue(year, value));
+				}*/
 			}
+			
+			
+			if (!measureLabel.contains("%")/* && !comparisonChart*/) {
+				// round the entry value for representation in the graph Y axis
+				createNumberLabels(highestValue, lowestValue);
+			}
+			
+			//if (!comparisonChart) {
+				
+				mainGraphLine.setValues(values);
+				graphLines.add(mainGraphLine);
+				chartData = new LineChartData();
+
+				axisX = new Axis().setMaxLabelChars(4);
+				axisY = new Axis().setName(measureLabel).setHasLines(true)
+						.setMaxLabelChars(11);
+
+				axisY.setValues(axisValues);
+
+				chartData.setAxisXBottom(axisX);
+				chartData.setAxisYLeft(axisY);
+
+				chartData.setLines(graphLines);
+				
+			/*}
+			else {
+				comparisonGraphLine.setValues(comparisonValues);
+				graphLines.add(comparisonGraphLine);
+				chartData.setLines(graphLines);
+				graph.setLineChartData(chartData);
+			}*/
+			
+		} catch (JSONException e) {
+			// TODO: Handle exception
+			e.printStackTrace();
 		}
+
 	}
 
 	// called if the graph contains percent values
