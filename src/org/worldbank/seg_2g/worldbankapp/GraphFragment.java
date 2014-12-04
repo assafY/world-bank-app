@@ -32,12 +32,10 @@ public class GraphFragment extends Fragment {
 	// private GraphViewSeries populationEntries;
 	public static RelativeLayout graphLayout;
 	
-	private boolean comparisonChart = false;
 
 	private String countryName;
 	private String data;
 	private String comparisonData;
-	private GraphActivity context;
 
 	private JSONArray dataFeed;
 	private JSONArray comparisonDataFeed;
@@ -84,9 +82,6 @@ public class GraphFragment extends Fragment {
 	private Axis axisX;
 	private Axis axisY;
 	private Axis rightAxisY;
-
-	
-	
 	
 	// Inflate the layout
 	@Override
@@ -103,7 +98,6 @@ public class GraphFragment extends Fragment {
 			String countryName) {
 		this.countryName = countryName;
 		this.data = JSONdata;
-		this.context = context;
 		
 		graph = new LineChartView(context);
 
@@ -170,21 +164,72 @@ public class GraphFragment extends Fragment {
 
 	protected void createGraph(GraphActivity context, String JSONdata,
 			String comparisonData, String countryName) {
+		
 		this.countryName = countryName;
 		this.data = JSONdata;
 		this.comparisonData = comparisonData;
-		this.context = context;
 		
 		graph = new LineChartView(context);
 		
-		createComparisonGraph();
+		new AsyncTask<Void,Void,Void>() {
+
+			@Override
+			protected Void doInBackground(Void... params) {
+				createComparisonGraph();
+				return null;
+			}
+			
+			@Override
+			protected void onPostExecute(Void v) {
+				
+				graph.setLineChartData(chartData);
+				graph.setBackgroundColor(Color.parseColor("#3399CC"));
+				graph.setZoomEnabled(false);
+				graph.setScrollEnabled(false);
+				graphLayout.removeAllViews();
+				
+				graph.setOnTouchListener(new OnTouchListener() {
+
+					int downX, upX;
+					@Override
+					public boolean onTouch(View v, MotionEvent e) {
+						if (e.getAction() == MotionEvent.ACTION_DOWN) {
+				             downX = (int) e.getX(); 
+				           //  return true;
+				         } 
+
+						else if (e.getAction() == MotionEvent.ACTION_UP) {
+				             upX = (int) e.getX(); 
+				             
+				                 // swipe right
+				             if (downX - upX > -100) {
+				            	 //GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
+				            	 if (GraphActivity.currentPagePosition < 5) {
+				            		 GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
+				            	 }
+				            	 graphLayout.removeAllViews();
+				            	 // swipe left
+				             }
+				             
+
+				             else if (downX - upX < -100) {
+				            	 //GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
+				            	 if (GraphActivity.currentPagePosition > 0) {
+				            		 GraphActivity.graphView.setCurrentItem(--GraphActivity.currentPagePosition);
+				            	 }
+				            	 graphLayout.removeAllViews();
+				            	 // swipe right
+				             }
+						}
+				             return true;	
+					}
+				});
+				
+				graphLayout.addView(graph);
+				
+			}
+		}.execute();
 		
-		graph.setLineChartData(chartData);
-		graph.setBackgroundColor(Color.parseColor("#3399CC"));
-		graph.setZoomEnabled(false);
-		graph.setScrollEnabled(false);
-		graphLayout.removeAllViews();
-		graphLayout.addView(graph);
 
 	}
 
@@ -218,7 +263,9 @@ public class GraphFragment extends Fragment {
 			highestValue = comparisonHighestValue = 0;
 			lowestValue = comparisonLowestValue = 2000000000;
 
-			int raise = 0;
+			float normAddition = 1;
+			float scale = 0;
+			float sub = 0;
 			
 			// put every entry from JSON in graph and create a label
 			for (int i = 0; i < totalEntries; ++i) {
@@ -238,39 +285,32 @@ public class GraphFragment extends Fragment {
 				comparisonValue = comparisonJson.getInt("value");
 				year = json.getInt("date");
 				
-				if (raise == 0) {
-					raise = value / comparisonValue;
+				if (scale == 0) {
+					scale = (float) comparisonValue / value;
+					sub = (float) (value * scale) / 2;
 				}
-				comparisonValue *= raise;
-				// assign highest and lowest value
+				
+				float normalisedValue = (value * scale) * normAddition;
+				normAddition += 0.02;
+				values.add(new PointValue(year, normalisedValue).setLabel(String.valueOf(value).toCharArray()));
+				comparisonValues.add(new PointValue(year, comparisonValue).setLabel(String.valueOf(comparisonValue).toCharArray()));
+				
 				if (value > highestValue) { highestValue = value; }
 				if (value < lowestValue) { lowestValue = value; }
 				if (comparisonValue > comparisonHighestValue) { comparisonHighestValue = comparisonValue; }
 				if (comparisonValue < comparisonLowestValue) { comparisonLowestValue = comparisonValue; }
-				// add year and value to the list later used to draw graph
-				values.add(new PointValue(year, value));
-				comparisonValues.add(new PointValue(year, comparisonValue));
+
 			}
 			
-			createNumberLabels(highestValue, lowestValue);
-			
 			mainGraphLine.setValues(values);
+			mainGraphLine.setHasLabelsOnlyForSelected(true);
 			comparisonGraphLine.setValues(comparisonValues);
 			graphLines.add(mainGraphLine);
 			graphLines.add(comparisonGraphLine);
 			
 			chartData = new LineChartData(graphLines);
 			
-			// Distance axis(bottom X) with formatter that will ad [km] to values, remember to modify max label charts
-			// value.
-			axisX = new Axis().setMaxLabelChars(4).setTextColor(Color.BLACK).setTextSize(11);
-			chartData.setAxisXBottom(axisX);
-			
-			axisY = new Axis(axisValues).setName(measureLabel).setHasLines(true)
-					.setMaxLabelChars(11).setTextColor(Color.BLACK).setLineColor(Color.LTGRAY).setTextSize(11);
-			
-			//createNumberLabels(comparisonHighestValue, comparisonLowestValue);
-			
+			// create axis labels
 			setRoundedValue(comparisonHighestValue);
 			int highestRoundedValue = roundedValue;
 			setRoundedValue(comparisonLowestValue);
@@ -278,6 +318,8 @@ public class GraphFragment extends Fragment {
 			
 			// determine value increment to display in graph axis labels
 			increment = (highestRoundedValue - lowestRoundedValue) / totalEntries;
+			// keep track of points being pulled out of normalised line to use their labels
+			int pointValueListCounter = 0;
 			
 			for (int i = highestRoundedValue; i >= lowestRoundedValue; i -= increment) {
 				
@@ -301,7 +343,15 @@ public class GraphFragment extends Fragment {
 		
 				// add label to new list
 				comparisonAxisValues.add(new AxisValue(roundedValue, label));
+				axisValues.add(new AxisValue(pointValueListCounter + 1, mainGraphLine.getValues().get(pointValueListCounter).getLabel()));
 			}
+			
+			
+			axisX = new Axis().setMaxLabelChars(4).setTextColor(Color.BLACK).setTextSize(11);
+			chartData.setAxisXBottom(axisX);
+			
+			axisY = new Axis(axisValues).setName(measureLabel).setHasLines(true)
+					.setMaxLabelChars(11).setTextColor(Color.BLACK).setLineColor(Color.LTGRAY).setTextSize(11);
 			
 			rightAxisY = new Axis(comparisonAxisValues).setName(comparisonMeasureLabel).setHasLines(true)
 					.setMaxLabelChars(11).setTextColor(Color.BLACK).setLineColor(Color.LTGRAY).setTextSize(11);
