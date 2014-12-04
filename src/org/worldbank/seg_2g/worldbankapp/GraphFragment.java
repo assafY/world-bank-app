@@ -224,8 +224,7 @@ public class GraphFragment extends Fragment {
 				             return true;	
 					}
 				});
-				
-				graphLayout.addView(graph);
+					graphLayout.addView(graph);
 				
 			}
 		}.execute();
@@ -321,10 +320,11 @@ public class GraphFragment extends Fragment {
 			// determine value increment to display in graph axis labels
 			increment = (highestRoundedValue - lowestRoundedValue) / totalEntries;
 			// keep track of points being pulled out of normalised line to use their labels
-			int pointValueListCounter = 0;
+			int pointValueListCounter = values.size() - 1;
 			
+			// create labels for right and left Y axis
 			for (int i = highestRoundedValue; i >= lowestRoundedValue; i -= increment) {
-				
+				// create labels for right Y axis
 				setRoundedValue(i);
 				
 				// put first digit char in new label
@@ -342,10 +342,36 @@ public class GraphFragment extends Fragment {
 		
 				// convert string to char array
 				char[] label = newLabel.toCharArray();
-		
+				
+				int addedRoundedValue = roundedValue;
+				
 				// add label to new list
-				comparisonAxisValues.add(new AxisValue(roundedValue, label));
-				axisValues.add(new AxisValue(pointValueListCounter + 1, mainGraphLine.getValues().get(pointValueListCounter).getLabel()));
+				comparisonAxisValues.add(new AxisValue(addedRoundedValue, label));
+				
+				// create labels for left Y axis
+				if (pointValueListCounter >= 0) {
+					
+					String biggerValue = String.valueOf(values.get(pointValueListCounter--).getLabel());
+					setRoundedValue(Integer.parseInt(biggerValue));
+					
+					// put first digit char in new label
+					newLabel = "" + valueString.charAt(charCounter++);
+			
+					// add commas to the value string
+					while (digitCount > 3) {
+						while (digitCount-- % 3 != 0) {
+							newLabel += valueString.charAt(charCounter++);
+						}
+						newLabel += "," + valueString.charAt(charCounter++);
+					}
+					// finalise new label with last three chars from string
+					newLabel += valueString.substring(charCounter);
+			
+					// convert string to char array
+					char[] mainPointLabel = newLabel.toCharArray();
+					
+					axisValues.add(new AxisValue(addedRoundedValue, mainPointLabel));
+				}
 			}
 			
 			
@@ -353,10 +379,10 @@ public class GraphFragment extends Fragment {
 			chartData.setAxisXBottom(axisX);
 			
 			axisY = new Axis(axisValues).setName(measureLabel).setHasLines(true)
-					.setMaxLabelChars(11).setTextColor(Color.BLACK).setLineColor(Color.LTGRAY).setTextSize(11);
+					.setMaxLabelChars(11).setTextColor(Color.RED).setLineColor(Color.LTGRAY).setTextSize(11);
 			
 			rightAxisY = new Axis(comparisonAxisValues).setName(comparisonMeasureLabel).setHasLines(true)
-					.setMaxLabelChars(11).setTextColor(Color.BLACK).setLineColor(Color.LTGRAY).setTextSize(11);
+					.setMaxLabelChars(11).setTextColor(Color.GREEN).setLineColor(Color.LTGRAY).setTextSize(11);
 			
 			chartData.setAxisYLeft(axisY);
 			chartData.setAxisYRight(rightAxisY);
