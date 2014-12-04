@@ -321,23 +321,24 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[2])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
+						queryJSON = queryGen.getJSON(currentCountry, Settings.FOREST_AREA, startYear, endYear);
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}			
 					break;
 			case 3: 	
 					if (currentTab.equals(CATEGORY[0])) {
-						//queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
-						//comparisonQuery = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
-						//new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
+						queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
+						comparisonQuery = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[1])) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.FOSSIL_FUEL, startYear, endYear);
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[2])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.FOREST_AREA, startYear, endYear);
-						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
+						comparisonQuery = queryGen.getJSON(currentCountry, Settings.FOREST_AREA, startYear, endYear);
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
 					}			
 					break;
 			case 4: 	
@@ -347,13 +348,13 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[1])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.ENERGY_PRODUCTION, startYear, endYear);
-						comparisonQuery = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
-						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
+						comparisonQuery = queryGen.getJSON(currentCountry, Settings.ENERGY_PRODUCTION, startYear, endYear);
+						new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[2])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
-						comparisonQuery = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
+						queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
+						comparisonQuery = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
 					}			
 					break;
@@ -361,12 +362,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 						currentPagePosition = 1;
 						actionBar.setSelectedNavigationItem(++CATEGORY_COUNTER);
 						break;
-					}/* else if (CATEGORY_COUNTER == 2){
-							
-						queryJSON = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
-						comparisonQuery = queryGen.getJSON(currentCountry, Settings.ENERGY_PRODUCTION, startYear, endYear);
-						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());	
-					}*/
+					}
 			}
 		}
 			
