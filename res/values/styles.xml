@@ -16,5 +16,23 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
+    
+         <!-- Theme to make the splash screen transparent -->
+    <style name="splashTheme" parent="android:Theme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowAnimationStyle">@style/splashMotion</item>
+        
+    </style>
+    
+    <!-- animation style to make the splash screen fade in and out -->
+	<style name="motion" parent="@android:Animation" />
+    <style name="splashMotion">
+        <item name="android:windowEnterAnimation">@anim/in</item>
+        <item name="android:windowExitAnimation">@anim/out</item> 
+    </style>
 
 </resources>
