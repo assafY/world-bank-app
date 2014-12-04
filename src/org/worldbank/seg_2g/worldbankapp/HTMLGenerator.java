@@ -67,7 +67,8 @@ public class HTMLGenerator {
 		ArrayList<Country> arrlCountries = new ArrayList<Country>();
 		qG.setCountryList(arrlCountries);
 		String returnString = "";
-
+		
+		
 		for (int i = 0; i < arrlCountries.size(); i++) {
 			Country selectedCountry = arrlCountries.get(i);
 			double value = getAttributeValueForCountry(selectedCountry,
