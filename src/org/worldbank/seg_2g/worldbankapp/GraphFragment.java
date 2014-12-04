@@ -94,7 +94,7 @@ public class GraphFragment extends Fragment {
 		return fragmentView;
 	}
 
-	protected LineChartView createGraph(final GraphActivity context, String JSONdata,
+	protected RelativeLayout createGraph(final GraphActivity context, String JSONdata,
 			String countryName) {
 		this.countryName = countryName;
 		this.data = JSONdata;
@@ -159,10 +159,10 @@ public class GraphFragment extends Fragment {
 			}
 		}.execute();
 		
-		return graph;
+		return graphLayout;
 	}
 
-	protected void createGraph(GraphActivity context, String JSONdata,
+	protected RelativeLayout createGraph(GraphActivity context, String JSONdata,
 			String comparisonData, String countryName) {
 		
 		this.countryName = countryName;
@@ -229,6 +229,8 @@ public class GraphFragment extends Fragment {
 				
 			}
 		}.execute();
+		
+		return graphLayout;
 		
 
 	}

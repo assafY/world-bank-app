@@ -2,6 +2,7 @@ package org.worldbank.seg_2g.worldbankapp;
 
 import java.util.ArrayList;
 
+import lecho.lib.hellocharts.view.LineChartView;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
@@ -21,12 +22,12 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
@@ -37,6 +38,10 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	private static final CharSequence ACTIVITY_TITLE = "Graph Activity";
 	private static final CharSequence DRAWER_TITLE = "Select Country";
 	private static final String[] CATEGORY = {"Population","Energy","Environment"};
+	
+	private static final int NUMBER_OF_CATEGORIES = CATEGORY.length;
+	private static final int NUMBER_OF_PAGES = 4;
+	
 	public static int CATEGORY_COUNTER = 0;
 	
 	private CountryListAdapter listAdapter;
@@ -44,6 +49,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	
 	private ArrayList<Country> countryList;      // will always contain all countries
 	private ArrayList<Country> autoCompleteList; // will be reset every time text changes in text field
+	RelativeLayout[][] chartArray = new RelativeLayout[NUMBER_OF_CATEGORIES][NUMBER_OF_PAGES]; // will save graphs of a certain country
 	
 	private EditText countryTextView;
 	private ListView countryListView;
@@ -284,6 +290,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	 * Contains certain bugs which will be fixed
 	 */
 	public void graphPage(int position) {
+		
 		switch (position) {
 			case 0: if (CATEGORY_COUNTER > 0) {
 						currentPagePosition = 4;
@@ -292,9 +299,8 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 					}	
 			case 1: 
 					if (currentTab.equals(CATEGORY[0])) {
-						
 						queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
-						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						chartArray[0][0] = new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[1])) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.ENERGY_PRODUCTION, startYear, endYear);
