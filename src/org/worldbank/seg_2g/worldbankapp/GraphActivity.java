@@ -2,13 +2,13 @@ package org.worldbank.seg_2g.worldbankapp;
 
 import java.util.ArrayList;
 
+import lecho.lib.hellocharts.view.LineChartView;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -39,11 +39,17 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	private static final CharSequence DRAWER_TITLE = "Select Country";
 	private static final String[] CATEGORY = {"Population","Energy","Environment"};
 	
+	private static final int NUMBER_OF_CATEGORIES = CATEGORY.length;
+	private static final int NUMBER_OF_PAGES = 4;
+	
+	public static int CATEGORY_COUNTER = 0;
+	
 	private CountryListAdapter listAdapter;
 	private CountryListAdapter autoCompleteAdapter;
 	
 	private ArrayList<Country> countryList;      // will always contain all countries
 	private ArrayList<Country> autoCompleteList; // will be reset every time text changes in text field
+	RelativeLayout[][] chartArray = new RelativeLayout[NUMBER_OF_CATEGORIES][NUMBER_OF_PAGES]; // will save graphs of a certain country
 	
 	private EditText countryTextView;
 	private ListView countryListView;
@@ -51,8 +57,8 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	private ActionBarDrawerToggle drawerToggle;
 	private ActionBar actionBar;
 
-	private int categoryCounter;
-	private int currentPagePosition = 1;
+	
+	public static int currentPagePosition = 1;
 	private Country currentCountry;
 	private String currentTab = CATEGORY[0];
 
@@ -61,34 +67,35 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	private String comparisonQuery;
 	
     private	GraphAdapter graphAdapter;
-    private	ViewPager graphView;
-    private RelativeLayout graphLayout;
+    public static	ViewPager graphView;
     
     private SharedPreferences graphPreferences;
 	
 	private final int startYear = 1989;
 	private final int endYear = 2009;
 	private int indicatorSelection = Settings.POPULATION;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_graph);
 
+		
 		// Set up the action bar.
 		actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-		graphLayout = (RelativeLayout) findViewById(R.id.container);
+		
 		
 		graphPreferences = getPreferences(0);
 		
 		// Returns a fragment for each of the categories.
 		graphAdapter = new GraphAdapter(getFragmentManager());		
 
-		graphView = (ViewPager) findViewById(R.id.graphPager);
+		graphView = (ViewPager) findViewById(R.id.graph_pager);
 		graphView.setAdapter(graphAdapter);
-
+		
 		// swap tab
 		graphView.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 					@Override
@@ -98,6 +105,9 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 						graphPage(position);
 					}
 				});
+		
+		
+		
 
 		// add the tabs to the action bar.
 		for (int i = 0; i < CATEGORY.length; i++) {
@@ -280,16 +290,17 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	 * Contains certain bugs which will be fixed
 	 */
 	public void graphPage(int position) {
+		
 		switch (position) {
-			case 0: if (categoryCounter > 0) {
-						actionBar.setSelectedNavigationItem(--categoryCounter);	
-						currentPagePosition = position;
+			case 0: if (CATEGORY_COUNTER > 0) {
+						currentPagePosition = 4;
+						actionBar.setSelectedNavigationItem(--CATEGORY_COUNTER);	
 						break;
 					}	
-			case 1: new GraphFragment().removeFragment();
+			case 1: 
 					if (currentTab.equals(CATEGORY[0])) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
-						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+						chartArray[0][0] = new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[1])) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.ENERGY_PRODUCTION, startYear, endYear);
@@ -300,7 +311,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}
 					break;
-			case 2: new GraphFragment().removeFragment();	
+			case 2: 	
 					if (currentTab.equals(CATEGORY[0])) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.URBAN_RURAL, startYear, endYear);
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
@@ -314,11 +325,11 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}			
 					break;
-			case 3: new GraphFragment().removeFragment();	
+			case 3: 	
 					if (currentTab.equals(CATEGORY[0])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
-						comparisonQuery = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
-						new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
+						//queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
+						//comparisonQuery = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
+						//new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
 					}
 					else if (currentTab.equals(CATEGORY[1])) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.FOSSIL_FUEL, startYear, endYear);
@@ -329,7 +340,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
 					}			
 					break;
-			case 4: new GraphFragment().removeFragment();	
+			case 4: 	
 					if (currentTab.equals(CATEGORY[0])) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
 						comparisonQuery = queryGen.getJSON(currentCountry, Settings.ENERGY_USE, startYear, endYear);
@@ -346,16 +357,16 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
 					}			
 					break;
-			case 5: if (categoryCounter < 2) {
-						actionBar.setSelectedNavigationItem(++categoryCounter);
-						currentPagePosition = position;
+			case 5: if (CATEGORY_COUNTER < 2) {
+						currentPagePosition = 1;
+						actionBar.setSelectedNavigationItem(++CATEGORY_COUNTER);
 						break;
-					}else if(categoryCounter==2){
-						new GraphFragment().removeFragment();	
+					}/* else if (CATEGORY_COUNTER == 2){
+							
 						queryJSON = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
 						comparisonQuery = queryGen.getJSON(currentCountry, Settings.ENERGY_PRODUCTION, startYear, endYear);
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());	
-					}
+					}*/
 			}
 		}
 			

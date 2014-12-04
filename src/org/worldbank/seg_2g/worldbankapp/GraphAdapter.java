@@ -1,5 +1,7 @@
 package org.worldbank.seg_2g.worldbankapp;
 
+import java.util.ArrayList;
+
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
@@ -24,7 +26,7 @@ public class GraphAdapter extends FragmentPagerAdapter {
 	public Fragment getItem(int position) {
 		return GraphFrameHolder.newInstance(position + 1);
 	}
-
+	
 	@Override
 	public int getCount() {
 		// Show number of pages.
@@ -48,7 +50,7 @@ public class GraphAdapter extends FragmentPagerAdapter {
 
 		private static final String CATEGORY_PAGE = "frameID";
 		
-		public static GraphFrameHolder newInstance(int sectionNumber) {
+		static GraphFrameHolder newInstance(int sectionNumber) {
 			GraphFrameHolder graphFrame = new GraphFrameHolder();
 			Bundle fMap = new Bundle();
 			fMap.putInt(CATEGORY_PAGE, sectionNumber);
@@ -62,8 +64,9 @@ public class GraphAdapter extends FragmentPagerAdapter {
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_graph,
+			View rootView = inflater.inflate(R.layout.fragment_graph_holder,
 					container, false);
+			
 			return rootView;
 		}
 	}
