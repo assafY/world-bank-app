@@ -2,17 +2,14 @@ package org.worldbank.seg_2g.worldbankapp;
 
 import java.util.ArrayList;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import android.content.Context;
 
 public class HTMLGenerator {
 
-	QueryGenerator qG;
-
+	DataBank db;
+	
 	public HTMLGenerator(Context context) {
-		qG = new QueryGenerator(context);
+		db = new DataBank(context);
 	}
 
 	public String getHTMLCode(int queryCode, int year) {
@@ -20,11 +17,10 @@ public class HTMLGenerator {
 		// TODO check for internet connection
 
 		String html = "";
-		
-		html = getHTMLBeginning(""+queryCode)
-				+ getCountryValueBlock(queryCode, year)
-				+ getHTMLEnding();
-		
+
+		html = getHTMLBeginning("" + queryCode)
+				+ getCountryValueBlock(queryCode, year) + getHTMLEnding();
+
 		return html;
 	}
 
@@ -46,17 +42,14 @@ public class HTMLGenerator {
 	private String getHTMLEnding() {
 		String s = "        ]);\n"
 				+ "\n"
-				+ "        var options = {};\n"
+				+ "        var options = {\n"
+				+ "          colorAxis: {colors: ['green', 'red']}\n"
+				+ "};\n"
 				+ "\n"
 				+ "        var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));\n"
-				+ "\n"
-				+ "        chart.draw(data, options);\n"
-				+ "      }\n"
-				+ "    </script>\n"
-				+ "  </head>\n"
-				+ "  <body>\n"
-				+ "    <div id=\"regions_div\"></div>\n"
-				+ "  </body>\n"
+				+ "\n" + "        chart.draw(data, options);\n" + "      }\n"
+				+ "    </script>\n" + "  </head>\n" + "  <body>\n"
+				+ "    <div id=\"regions_div\"></div>\n" + "  </body>\n"
 				+ "</html>\n";
 
 		return s;
@@ -64,49 +57,19 @@ public class HTMLGenerator {
 
 	private String getCountryValueBlock(int queryCode, int year) {
 
-		ArrayList<Country> arrlCountries = new ArrayList<Country>();
-		qG.setCountryList(arrlCountries);
 		String returnString = "";
-		
-		
-		for (int i = 0; i < arrlCountries.size(); i++) {
-			Country selectedCountry = arrlCountries.get(i);
-			double value = getAttributeValueForCountry(selectedCountry,
-					queryCode, year);
-			if (value > -1) {
-				returnString += getCountryAttributeLine(selectedCountry, value)
-						+ "\n";
-			}
+		ArrayList<Country> arrl = db.getCountryArrayList();
+		for (int i = 0; i < arrl.size(); i++) {
+			Country country = arrl.get(i);
+			double value = db.getValuesFor(country, queryCode, year);
+			returnString += getCountryAttributeLine(country, value);
 		}
-
+		
 		return returnString;
 	}
 
 	private String getCountryAttributeLine(Country country, double value) {
-		return "          ['" + country.getName() + "', " + value + "],";
+		return "          ['" + country.getName() + "', " + value + "],\n";
 	}
 
-	private double getAttributeValueForCountry(Country selectedCountry,
-			int queryCode, int year) {
-
-		String value = "null";
-
-		try {
-			String data = qG.getJSON(selectedCountry, queryCode, year, year);
-
-			JSONArray dataFeed = new JSONArray(data);
-			JSONObject json = dataFeed.getJSONArray(1).getJSONObject(0);
-
-			value = json.getString("value");
-
-		} catch (Exception e) {
-		}
-
-		if (value == "null")
-			return -1;
-		else {
-			double v = (double) Double.parseDouble(value);
-			return v;
-		}
-	}
 }
