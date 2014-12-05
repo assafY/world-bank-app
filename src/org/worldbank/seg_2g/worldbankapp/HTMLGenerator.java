@@ -15,9 +15,20 @@ public class HTMLGenerator {
 	}
 
 	public String getLoadingCode() {
-		return "<html><head></head><body><br><br><br><br><br><center><h1>Fetching data ...<br><br>Please wait</h1></center></body></html>";
+		return    "<html><body>\n"
+				+ "<br><br><br>\n"
+				+ "<center><h1>Fetching data</h1>"
+				+ "<h1><span id=\"wait\">.</span></h1>"
+				+ "<h1>Please wait</h1></center>\n"
+				+ "\n" + "<script>\n"
+				+ "var dots = window.setInterval( function() {\n"
+				+ "    var wait = document.getElementById(\"wait\");\n"
+				+ "    if ( wait.innerHTML.length > 3 ) \n"
+				+ "        wait.innerHTML = \".\";\n" + "    else \n"
+				+ "        wait.innerHTML += \".\";\n" + "    }, 1000);\n"
+				+ "</script>\n" + "\n" + "</body></html>\n";
 	}
-	
+
 	public String getHTMLCode(int queryCode, int year) {
 
 		// TODO check for internet connection
