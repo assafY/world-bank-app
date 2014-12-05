@@ -10,6 +10,14 @@ public class HTMLGenerator {
 		DataBank.initialise(context);
 	}
 
+	public String getNoDataCode() {
+		return "<html><head></head><body><br><br><br><br><br><center><h1>Please select an attribute</h1></center></body></html>";
+	}
+
+	public String getLoadingCode() {
+		return "<html><head></head><body><br><br><br><br><br><center><h1>Fetching data ...<br><br>Please wait</h1></center></body></html>";
+	}
+	
 	public String getHTMLCode(int queryCode, int year) {
 
 		// TODO check for internet connection
@@ -46,10 +54,14 @@ public class HTMLGenerator {
 				+ "};\n"
 				+ "\n"
 				+ "        var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));\n"
-				+ "\n" + "        chart.draw(data, options);\n" + "      }\n"
-				+ "    </script>\n" + "  </head>\n" + "  <body>\n"
-				+ "    <div id=\"regions_div\" style=\"width: 900px; height: 500px;\"></div>\n" + "  </body>\n"
-				+ "</html>\n";
+				+ "\n"
+				+ "        chart.draw(data, options);\n"
+				+ "      }\n"
+				+ "    </script>\n"
+				+ "  </head>\n"
+				+ "  <body>\n"
+				+ "    <div id=\"regions_div\" style=\"width: 900px; height: 500px;\"></div>\n"
+				+ "  </body>\n" + "</html>\n";
 
 		return s;
 	}
@@ -68,7 +80,10 @@ public class HTMLGenerator {
 	}
 
 	private String getCountryAttributeLine(Country country, double value) {
-		return "          ['" + country.getName() + "', " + value + "],\n";
+		if (value > 0)
+			return "          ['" + country.getName() + "', " + value + "],\n";
+		else
+			return "";
 	}
 
 }

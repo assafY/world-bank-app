@@ -14,10 +14,11 @@
     <string name="app_name">Sun Bank</string>
     <string name="title_activity_graph_fragment">GraphFragment</string>
     <string name="drawer_open">Show Country List</string>
+    <string name = "welcome"><b> <u> SUNBANK</u></b>.</string>
     <string name="drawer_close">Hide Country List</string>
     <string name="title_activity_map">MapActivity</string>
     <string name="start_year_default">1999</string>
     <string name="end_year_default">2009</string>
-    <string name = "welcome"><b> <u> SUNBANK</u></b>.</string>
-
+    <string name="action_modify_attribute">Modify Attribute</string>
+    <string name="action_modify_year">Modify Year</string>
 </resources>

@@ -103,10 +103,6 @@ public class DataBank {
 		return values;
 	}
 
-	public static double[] getValuesFor(Country country, int queryCode) {
-		return dataSheet[queryCode - 1][arrlCountries.indexOf(country)];
-	}
-
 	public static double getValuesFor(Country country, int queryCode, int year) {
 		return dataSheet[queryCode - 1][arrlCountries.indexOf(country)][year
 				- startYear];
