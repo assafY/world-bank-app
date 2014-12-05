@@ -1,6 +1,7 @@
 package org.worldbank.seg_2g.worldbankapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,12 +37,29 @@ public class MapActivity extends Activity {
 	}
 
 	protected void onCreateExtra() {
-		WebView tv = (WebView) findViewById(R.id.webView1);
+		final WebView tv = (WebView) findViewById(R.id.webView1);
 		tv.getSettings().setJavaScriptEnabled(true);
 //		setContentView(tv);
-		HTMLGenerator hg = new HTMLGenerator(this);
-		String s = hg.getHTMLCode(Settings.CO2_EMISSIONS, 1994);
+		final Context contxt = this;
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				HTMLGenerator hg = new HTMLGenerator(contxt);
+				final String s = hg.getHTMLCode(Settings.CO2_EMISSIONS, 1994);
+				tv.post(new Runnable() {
+					
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						tv.loadData(s, "text/html", null);
+					}
+				});
+			}
+		}).start();
+//		HTMLGenerator hg = new HTMLGenerator(this);
+//		String s = hg.getHTMLCode(Settings.CO2_EMISSIONS, 1994);
 //		System.out.println(s);
-		tv.loadData(s, "text/html", null);
+//		tv.loadData(s, "text/html", null);
 	}
 }

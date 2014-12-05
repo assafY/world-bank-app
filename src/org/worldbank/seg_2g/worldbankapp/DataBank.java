@@ -40,7 +40,7 @@ public class DataBank {
 		for (int i = 0; i < attributesNo; i++) {
 			if (!fetched[i]) {
 				for (int j = 0; j < countriesNo; j++) {
-					dataSheet[i][j] = fetchValuesFor(arrlCountries.get(j + 1),
+					dataSheet[i][j] = fetchValuesFor(arrlCountries.get(j),
 							i + 1);
 				}
 				fetched[i] = true;
@@ -52,7 +52,7 @@ public class DataBank {
 		int i = queryCode - 1;
 		if (!fetched[i]) {
 			for (int j = 0; j < countriesNo; j++) {
-				dataSheet[i][j] = fetchValuesFor(arrlCountries.get(j + 1),
+				dataSheet[i][j] = fetchValuesFor(arrlCountries.get(j),
 						i + 1);
 			}
 			fetched[i] = true;
