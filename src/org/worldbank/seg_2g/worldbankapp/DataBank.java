@@ -16,33 +16,51 @@ public class DataBank {
 	private static int countriesNo;
 	private static int yearsNo;
 
+	private static boolean reinit = false, fetched[];
+
 	private static double[][][] dataSheet;
 
-	public DataBank(Context context) {
-		qG = new QueryGenerator(context);
-		qG.setCountryList(arrlCountries);
-		attributesNo = Settings.NUMBER_OF_ATTRIBUTES;
-		countriesNo = arrlCountries.size();
-		yearsNo = 54;
-		dataSheet = new double[attributesNo][countriesNo][yearsNo];
+	public static void initialise(Context context) {
+		if (!reinit) {
+			qG = new QueryGenerator(context);
+			qG.setCountryList(arrlCountries);
+			attributesNo = Settings.NUMBER_OF_ATTRIBUTES;
+			countriesNo = arrlCountries.size();
+			yearsNo = 54;
+			dataSheet = new double[attributesNo][countriesNo][yearsNo];
+			fetched = new boolean[attributesNo];
+			for (int i = 0; i < attributesNo; i++) {
+				fetched[i] = false;
+			}
+			reinit = true;
+		}
 	}
 
-	public void fetchAllData() {
+	public static void fetchAllData() {
 		for (int i = 0; i < attributesNo; i++) {
-			for (int j = 0; j < countriesNo; j++) {
-				dataSheet[i][j] = fetchValuesFor(arrlCountries.get(j+1), i+1);
+			if (!fetched[i]) {
+				for (int j = 0; j < countriesNo; j++) {
+					dataSheet[i][j] = fetchValuesFor(arrlCountries.get(j + 1),
+							i + 1);
+				}
+				fetched[i] = true;
 			}
 		}
 	}
-	
-	public void fetchData(int queryCode) {
-		int i = queryCode-1;
-		for (int j = 0; j < countriesNo; j++) {
-			dataSheet[i][j] = fetchValuesFor(arrlCountries.get(j+1), i+1);
+
+	public static void fetchData(int queryCode) {
+		int i = queryCode - 1;
+		if (!fetched[i]) {
+			for (int j = 0; j < countriesNo; j++) {
+				dataSheet[i][j] = fetchValuesFor(arrlCountries.get(j + 1),
+						i + 1);
+			}
+			fetched[i] = true;
 		}
 	}
 
-	private double[] fetchValuesFor(Country selectedCountry, int queryCode) {
+	private static double[] fetchValuesFor(Country selectedCountry,
+			int queryCode) {
 
 		String value = "nop";
 		int date = 0;
@@ -60,7 +78,7 @@ public class DataBank {
 					value = json.getString("value");
 					date = json.getInt("date");
 					valuess[date - startYear] = value;
-//					System.out.println(date + ": " + value);
+					// System.out.println(date + ": " + value);
 				} catch (Exception e) {
 					i = -100;
 				}
@@ -75,7 +93,8 @@ public class DataBank {
 			try {
 				double v = (double) Double.parseDouble(valuess[i]);
 				values[i] = v;
-//				System.out.println(i + ": " + v + " (" + (i + startYear) + ")");
+				// System.out.println(i + ": " + v + " (" + (i + startYear) +
+				// ")");
 			} catch (Exception e) {
 				values[i] = -1;
 			}
@@ -84,15 +103,16 @@ public class DataBank {
 		return values;
 	}
 
-	public double[] getValuesFor(Country country, int queryCode) {
-		return dataSheet[queryCode-1][arrlCountries.indexOf(country)];
+	public static double[] getValuesFor(Country country, int queryCode) {
+		return dataSheet[queryCode - 1][arrlCountries.indexOf(country)];
 	}
-	
-	public double getValuesFor(Country country, int queryCode, int year) {
-		return dataSheet[queryCode-1][arrlCountries.indexOf(country)][year-startYear];
+
+	public static double getValuesFor(Country country, int queryCode, int year) {
+		return dataSheet[queryCode - 1][arrlCountries.indexOf(country)][year
+				- startYear];
 	}
-	
-	public ArrayList<Country> getCountryArrayList() {
+
+	public static ArrayList<Country> getCountryArrayList() {
 		return arrlCountries;
 	}
 }

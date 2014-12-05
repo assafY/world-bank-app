@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebView;
 
 public class MapActivity extends Activity {
 
@@ -35,14 +36,12 @@ public class MapActivity extends Activity {
 	}
 
 	protected void onCreateExtra() {
-//		WebView tv = (WebView) findViewById(R.id.webView1);
-//		tv.getSettings().setJavaScriptEnabled(true);
-//		HTMLGenerator hg = new HTMLGenerator(this);
-//		String s = hg.getHTMLCode(Settings.CO2_EMISSIONS, 1994);
+		WebView tv = (WebView) findViewById(R.id.webView1);
+		tv.getSettings().setJavaScriptEnabled(true);
+//		setContentView(tv);
+		HTMLGenerator hg = new HTMLGenerator(this);
+		String s = hg.getHTMLCode(Settings.CO2_EMISSIONS, 1994);
 //		System.out.println(s);
-//		tv.loadData(s, "text/html", null);
-		
-//		DataBank db = new DataBank(this);
-//		db.test();
+		tv.loadData(s, "text/html", null);
 	}
 }

@@ -6,10 +6,8 @@ import android.content.Context;
 
 public class HTMLGenerator {
 
-	DataBank db;
-	
 	public HTMLGenerator(Context context) {
-		db = new DataBank(context);
+		DataBank.initialise(context);
 	}
 
 	public String getHTMLCode(int queryCode, int year) {
@@ -18,13 +16,13 @@ public class HTMLGenerator {
 
 		String html = "";
 
-		html = getHTMLBeginning("" + queryCode)
+		html = getHTMLBeginning(Settings.Attributes[queryCode])
 				+ getCountryValueBlock(queryCode, year) + getHTMLEnding();
 
 		return html;
 	}
 
-	private String getHTMLBeginning(String queryCode) {
+	private String getHTMLBeginning(String attribute) {
 		String s = "<html>\n"
 				+ "  <head>\n"
 				+ "    <script type=\"text/javascript\" src=\"https://www.google.com/jsapi\"></script>\n"
@@ -35,7 +33,7 @@ public class HTMLGenerator {
 				+ "      function drawRegionsMap() {\n"
 				+ "\n"
 				+ "        var data = google.visualization.arrayToDataTable([\n"
-				+ "          ['Country', '" + "CO2" + "'],\n";
+				+ "          ['Country', '" + attribute + "'],\n";
 		return s;
 	}
 
@@ -58,13 +56,13 @@ public class HTMLGenerator {
 	private String getCountryValueBlock(int queryCode, int year) {
 
 		String returnString = "";
-		ArrayList<Country> arrl = db.getCountryArrayList();
+		DataBank.fetchData(queryCode);
+		ArrayList<Country> arrl = DataBank.getCountryArrayList();
 		for (int i = 0; i < arrl.size(); i++) {
 			Country country = arrl.get(i);
-			double value = db.getValuesFor(country, queryCode, year);
+			double value = DataBank.getValuesFor(country, queryCode, year);
 			returnString += getCountryAttributeLine(country, value);
 		}
-		
 		return returnString;
 	}
 

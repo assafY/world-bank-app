@@ -1,7 +1,7 @@
 package org.worldbank.seg_2g.worldbankapp;
 
 public class Settings {
-	
+
 	public static final int NUMBER_OF_ATTRIBUTES = 8;
 
 	public static final int POPULATION = 1;
@@ -12,11 +12,14 @@ public class Settings {
 	public static final int FOREST_AREA = 6;
 	public static final int CO2_EMISSIONS = 7;
 	public static final int CH4_EMISSIONS = 8;
+
+	public static final String[] Attributes = { "8", "Population",
+			"Urban vs Rural population", "Energy Production", "Energy Use",
+			"Fossil fuel", "Forest area", "CO2 Emissions", "CH4 Emissions" };
 	
 	public static final int MIN_YEAR = 1960;
 	public static final int MAX_YEAR = 2013;
 	
 	// TODO: Create constant ints for every query
-	
-	
+
 }
