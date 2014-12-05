@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 
 public class MapActivity extends Activity {
@@ -38,7 +39,12 @@ public class MapActivity extends Activity {
 
 	protected void onCreateExtra() {
 		final WebView tv = (WebView) findViewById(R.id.webView1);
-		tv.getSettings().setJavaScriptEnabled(true);
+		WebSettings tvSettings = tv.getSettings();
+		tvSettings.setJavaScriptEnabled(true);
+		tvSettings.setBuiltInZoomControls(true);
+		tvSettings.setDisplayZoomControls(false);
+		tvSettings.setLoadWithOverviewMode(true);
+		tvSettings.setUseWideViewPort(true);
 //		setContentView(tv);
 		final Context contxt = this;
 		new Thread(new Runnable() {

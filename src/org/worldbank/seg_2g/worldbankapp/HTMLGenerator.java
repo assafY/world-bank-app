@@ -41,13 +41,14 @@ public class HTMLGenerator {
 		String s = "        ]);\n"
 				+ "\n"
 				+ "        var options = {\n"
-				+ "          colorAxis: {colors: ['green', 'red']}\n"
+				+ "          colorAxis: {colors: ['green', 'red']},\n"
+				+ "          datalessRegionColor: 'lightgray'\n"
 				+ "};\n"
 				+ "\n"
 				+ "        var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));\n"
 				+ "\n" + "        chart.draw(data, options);\n" + "      }\n"
 				+ "    </script>\n" + "  </head>\n" + "  <body>\n"
-				+ "    <div id=\"regions_div\"></div>\n" + "  </body>\n"
+				+ "    <div id=\"regions_div\" style=\"width: 900px; height: 500px;\"></div>\n" + "  </body>\n"
 				+ "</html>\n";
 
 		return s;
