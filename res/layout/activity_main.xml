@@ -2,9 +2,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/homeimg"
+    android:gravity="top"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
+    
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="org.worldbank.seg_2g.worldbankapp.MainActivity" >
 
@@ -12,31 +13,51 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_alignRight="@+id/button1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/button1"
         android:layout_marginTop="27dp"
+        android:alpha="0.75"
         android:onClick="helpMenu"
-        android:text="@string/button2" />
+        android:text="@string/button2"
+        android:color="#66FF0001" />
 
     <Button
         android:id="@+id/button1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="countryMenu"
-        android:layout_centerHorizontal="true"
+        android:layout_alignLeft="@+id/button3"
+        android:layout_alignRight="@+id/button3"
         android:layout_centerVertical="true"
-        android:text="@string/button1" />
+        android:onClick="countryMenu"
+        android:text="@string/button1"
+        android:color="#66FF0001" 
+        android:alpha="0.75" />
 
     <Button
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/button1"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_alignRight="@+id/button1"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_marginBottom="30dp"
         android:onClick="mapMenu"
-        android:text="MAP" />
+        android:text="MAP"
+        android:color="#66FF0001" 
+        android:alpha="0.75" />
+
+    <TextView
+        
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center_horizontal"
+        android:text="SUNBANK"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="30sp" />
    
 </RelativeLayout>

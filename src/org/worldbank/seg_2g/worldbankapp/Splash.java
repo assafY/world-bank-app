@@ -17,7 +17,7 @@ import android.widget.ImageView;
 
 	
 	    @Override
-	    public void onCreate(Bundle savedInstanceState) {
+	    public void onCreate(Bundle savedInstanceState) { 
 	        super.onCreate(savedInstanceState);
 	        
 	        
