@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.NumberPicker;
 
 public class MapActivity extends Activity {
 	
@@ -122,13 +123,32 @@ public class MapActivity extends Activity {
 			return options;
 		}
 		
+//		@Override
+//		public Dialog onCreateDialog(Bundle savedInstanceState) {
+//			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//			builder.setItems(getOptions(), new DialogInterface.OnClickListener() {
+//				@Override
+//				public void onClick(DialogInterface dialog, int which) {
+//					currentYear = which+1961;
+//					drawMap();
+//				}
+//			});
+//			return builder.create();
+//		}
+		
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-			builder.setItems(getOptions(), new DialogInterface.OnClickListener() {
+			final NumberPicker picker = new NumberPicker(getApplicationContext());
+			picker.setMinValue(1961);
+			picker.setMaxValue(2014);
+			picker.setValue(currentYear);
+			picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
+			builder.setView(picker);
+			builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 				@Override
-				public void onClick(DialogInterface dialog, int which) {
-					currentYear = which+1961;
+				public void onClick(DialogInterface dialog, int id) {
+					currentYear = picker.getValue();
 					drawMap();
 				}
 			});
