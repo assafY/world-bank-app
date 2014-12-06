@@ -79,8 +79,6 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
     private RangeSeekBar<Long> yearSeekBar;
     private TextView startYearView;
     private TextView endYearView;
-    
-    private SharedPreferences graphPreferences;
 	
 	private int startYear = 1989;
 	private int endYear = 2009;
@@ -96,10 +94,6 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		// Set up the action bar.
 		actionBar = getActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-
-		
-		
-		graphPreferences = getPreferences(0);
 		
 		// Returns a fragment for each of the categories.
 		graphAdapter = new GraphAdapter(getFragmentManager());		
@@ -154,12 +148,6 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		createCountryViews();
 		// set listeners for country views
 		setCountryViewListeners();
-		
-		if (!graphPreferences.getBoolean("activityPreviouslyOpened", false)) {
-			// find way to open drawer first time app is used
-			SharedPreferences.Editor graphPrefsEditor = graphPreferences.edit();
-			graphPrefsEditor.putBoolean("activityPreviouslyOpened", true);
-		}
 		 
 	}
 
@@ -273,6 +261,11 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 					// create a new adapter using the new country list and set it to the ListView
 					autoCompleteAdapter = new CountryListAdapter(GraphActivity.this, autoCompleteList);
 					countryListView.setAdapter(autoCompleteAdapter); 
+					
+					// if there is one country in new list, notify user they can press Go to select
+					if (autoCompleteList.size() == 1) {
+						Toast.makeText(getApplicationContext(), "Press 'Go' to select " + autoCompleteList.get(0).toString(), Toast.LENGTH_SHORT).show();
+					}
 				}
 				// if the text field is empty, set the original adapter with the full country list to the ListView
 				else {
