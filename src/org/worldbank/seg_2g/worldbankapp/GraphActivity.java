@@ -2,7 +2,6 @@ package org.worldbank.seg_2g.worldbankapp;
 
 import java.util.ArrayList;
 
-import lecho.lib.hellocharts.view.LineChartView;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
@@ -26,8 +25,8 @@ import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
 import android.widget.Toast;
@@ -69,6 +68,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
     private	GraphAdapter graphAdapter;
     public static	ViewPager graphView;
     
+    private RangeSeekBar<Integer> yearSeekBar;
     private SharedPreferences graphPreferences;
 	
 	private final int startYear = 1989;
@@ -96,6 +96,8 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		graphView = (ViewPager) findViewById(R.id.graph_pager);
 		graphView.setAdapter(graphAdapter);
 		
+		
+		
 		// swap tab
 		graphView.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 					@Override
@@ -117,6 +119,9 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 			
 		}
 		
+		yearSeekBar = new RangeSeekBar<Integer>(Settings.MIN_YEAR, Settings.MAX_YEAR, getApplicationContext());
+		LinearLayout seekBarLayout = (LinearLayout) findViewById(R.id.year_seek_bar_layout);
+		seekBarLayout.addView(yearSeekBar);
 		
 		// load countries into list
 		loadCountries();
