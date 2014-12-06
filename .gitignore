@@ -16,3 +16,4 @@ local.properties
 # eclipse files
 .classpath
 .project
+.settings/
