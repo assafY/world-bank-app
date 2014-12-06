@@ -75,9 +75,9 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
     private TextView startYearView;
     private TextView endYearView;
 	
-	private int startYear = 1989;
-	private int endYear = 2009;
-	//private int indicatorSelection = Settings.POPULATION;
+	private int startYear;
+	private int endYear;
+	private int indicatorSelection;
 	
 
 	@Override
@@ -115,27 +115,33 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 					.setTabListener(this));
 		}
 		
-		/*try {
-			MIN_YEAR = new SimpleDateFormat("yyyy").parse("1960");
-			MAX_YEAR = new SimpleDateFormat("yyyy").parse("2013");
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+		// default year range values
+		startYear = 1989;
+		endYear = 2009;
 		
+		// find year number labels
 		startYearView = (TextView) findViewById(R.id.start_year_textview);
 		endYearView = (TextView) findViewById(R.id.end_year_textview);
 		
+		// construct seekbar and enable live updating
 		yearSeekBar = new RangeSeekBar<Integer>(Settings.MIN_YEAR, Settings.MAX_YEAR, getApplicationContext());
+		yearSeekBar.setSelectedMinValue(startYear);
+		yearSeekBar.setSelectedMaxValue(endYear);
 		yearSeekBar.setNotifyWhileDragging(true);
 		
 		yearSeekBar.setOnRangeSeekBarChangeListener(new OnRangeSeekBarChangeListener<Integer>() {
 	        @Override
 	        public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
-	        	startYearView.setText(String.valueOf(minValue));
-	        	endYearView.setText(String.valueOf(maxValue));
+		        	startYearView.setText(String.valueOf(minValue));
+		        	endYearView.setText(String.valueOf(maxValue));	
 	        	
-	        	// add refresh query method
+	        	if (!bar.isPressed() && (startYear != minValue || endYear != maxValue)) {
+	        		startYear = minValue;
+		        	endYear = maxValue;
+		        	
+		        	graphLayoutArray = new GraphFragment[NUMBER_OF_CATEGORIES][NUMBER_OF_PAGES];
+		        	graphPage(currentPagePosition);
+	        	}
 	        }
 		});
 		
