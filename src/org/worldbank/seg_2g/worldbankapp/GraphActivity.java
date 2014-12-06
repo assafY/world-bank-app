@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.worldbank.seg_2g.worldbankapp.RangeSeekBar.OnRangeSeekBarChangeListener;
+
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
@@ -75,11 +77,14 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
     public static	ViewPager graphView;
     
     private RangeSeekBar<Long> yearSeekBar;
+    private TextView startYearView;
+    private TextView endYearView;
+    
     private SharedPreferences graphPreferences;
 	
-	private final int startYear = 1989;
-	private final int endYear = 2009;
-	private int indicatorSelection = Settings.POPULATION;
+	private int startYear = 1989;
+	private int endYear = 2009;
+	//private int indicatorSelection = Settings.POPULATION;
 	
 
 	@Override
@@ -129,7 +134,17 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 			e.printStackTrace();
 		}
 		
+		startYearView = (TextView) findViewById(R.id.start_year_textview);
+		endYearView = (TextView) findViewById(R.id.end_year_textview);
+		
 		yearSeekBar = new RangeSeekBar<Long>(MIN_YEAR.getTime(), MAX_YEAR.getTime(), getApplicationContext());
+		yearSeekBar.setOnRangeSeekBarChangeListener(new OnRangeSeekBarChangeListener<Long>() {
+	        @Override
+	        public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Long minValue, Long maxValue) {
+	        	
+	        }
+	});
+		
 		LinearLayout seekBarLayout = (LinearLayout) findViewById(R.id.year_seek_bar_layout);
 		seekBarLayout.addView(yearSeekBar);
 		
@@ -287,7 +302,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 					if(!currentInput.equals("")) {
 						//
 						if (autoCompleteList.size() == 1) {
-							queryJSON = queryGen.getJSON(autoCompleteList.get(0), indicatorSelection, startYear, endYear);
+							queryJSON = queryGen.getJSON(autoCompleteList.get(0), Settings.POPULATION, startYear, endYear);
 							new GraphFragment().createGraph(GraphActivity.this, queryJSON, autoCompleteList.get(0).toString());
 							return true;
 						}
