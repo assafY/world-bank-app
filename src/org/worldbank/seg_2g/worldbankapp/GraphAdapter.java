@@ -67,8 +67,7 @@ public class GraphAdapter extends FragmentPagerAdapter {
 			View rootView = inflater.inflate(R.layout.fragment_graph,
 					container, false);
 			
-//			return rootView;
-			return null;
+			return rootView;
 		}
 	}
 
