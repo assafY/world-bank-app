@@ -123,6 +123,9 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		startYearView = (TextView) findViewById(R.id.start_year_textview);
 		endYearView = (TextView) findViewById(R.id.end_year_textview);
 		
+		startYearView.setText(String.valueOf(startYear));
+		endYearView.setText(String.valueOf(endYear));
+		
 		// construct seekbar and enable live updating
 		yearSeekBar = new RangeSeekBar<Integer>(Settings.MIN_YEAR, Settings.MAX_YEAR, getApplicationContext());
 		yearSeekBar.setSelectedMinValue(startYear);
