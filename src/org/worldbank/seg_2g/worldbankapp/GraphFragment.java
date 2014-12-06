@@ -32,6 +32,7 @@ public class GraphFragment extends Fragment {
 	// private GraphViewSeries populationEntries;
 	public static RelativeLayout graphLayout;
 	
+	private GraphActivity context;
 
 	private String countryName;
 	private String data;
@@ -94,10 +95,12 @@ public class GraphFragment extends Fragment {
 		return fragmentView;
 	}
 
-	protected RelativeLayout createGraph(final GraphActivity context, String JSONdata,
+	protected GraphFragment createGraph(final GraphActivity context, String JSONdata,
 			String countryName) {
 		this.countryName = countryName;
 		this.data = JSONdata;
+		
+		this.context = context;
 		
 		graph = new LineChartView(context);
 
@@ -159,15 +162,17 @@ public class GraphFragment extends Fragment {
 			}
 		}.execute();
 		
-		return graphLayout;
+		return this;
 	}
 
-	protected RelativeLayout createGraph(GraphActivity context, String JSONdata,
+	protected GraphFragment createGraph(GraphActivity context, String JSONdata,
 			String comparisonData, String countryName) {
 		
 		this.countryName = countryName;
 		this.data = JSONdata;
 		this.comparisonData = comparisonData;
+		
+		this.context = context;
 		
 		graph = new LineChartView(context);
 		
@@ -229,9 +234,17 @@ public class GraphFragment extends Fragment {
 			}
 		}.execute();
 		
-		return graphLayout;
+		return this;
 		
 
+	}
+	
+	public void reloadGraph() {
+		if (comparisonData == null) {
+			new GraphFragment().createGraph(context, data, countryName);
+		} else {
+			new GraphFragment().createGraph(context, data, comparisonData, countryName);
+		}
 	}
 
 	private void createComparisonGraph() {
