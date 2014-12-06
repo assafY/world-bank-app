@@ -1,9 +1,6 @@
 package org.worldbank.seg_2g.worldbankapp;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.worldbank.seg_2g.worldbankapp.RangeSeekBar.OnRangeSeekBarChangeListener;
 
@@ -11,7 +8,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
@@ -25,7 +21,9 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnTouchListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -42,9 +40,6 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	private static final CharSequence ACTIVITY_TITLE = "Graph Activity";
 	private static final CharSequence DRAWER_TITLE = "Select Country";
 	private static final String[] CATEGORY = {"Population","Energy","Environment"};
-	
-	private static Date MIN_YEAR;
-	private static Date MAX_YEAR;
 	
 	private static final int NUMBER_OF_CATEGORIES = CATEGORY.length;
 	private static final int NUMBER_OF_PAGES = 4;
@@ -76,7 +71,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
     private	GraphAdapter graphAdapter;
     public static	ViewPager graphView;
     
-    private RangeSeekBar<Long> yearSeekBar;
+    private RangeSeekBar<Integer> yearSeekBar;
     private TextView startYearView;
     private TextView endYearView;
 	
@@ -120,24 +115,29 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 					.setTabListener(this));
 		}
 		
-		try {
+		/*try {
 			MIN_YEAR = new SimpleDateFormat("yyyy").parse("1960");
 			MAX_YEAR = new SimpleDateFormat("yyyy").parse("2013");
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		
 		startYearView = (TextView) findViewById(R.id.start_year_textview);
 		endYearView = (TextView) findViewById(R.id.end_year_textview);
 		
-		yearSeekBar = new RangeSeekBar<Long>(MIN_YEAR.getTime(), MAX_YEAR.getTime(), getApplicationContext());
-		yearSeekBar.setOnRangeSeekBarChangeListener(new OnRangeSeekBarChangeListener<Long>() {
+		yearSeekBar = new RangeSeekBar<Integer>(Settings.MIN_YEAR, Settings.MAX_YEAR, getApplicationContext());
+		yearSeekBar.setNotifyWhileDragging(true);
+		
+		yearSeekBar.setOnRangeSeekBarChangeListener(new OnRangeSeekBarChangeListener<Integer>() {
 	        @Override
-	        public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Long minValue, Long maxValue) {
+	        public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
+	        	startYearView.setText(String.valueOf(minValue));
+	        	endYearView.setText(String.valueOf(maxValue));
 	        	
+	        	// add refresh query method
 	        }
-	});
+		});
 		
 		LinearLayout seekBarLayout = (LinearLayout) findViewById(R.id.year_seek_bar_layout);
 		seekBarLayout.addView(yearSeekBar);

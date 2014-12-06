@@ -11,6 +11,9 @@ public class Settings {
 	public static final int CO2_EMISSIONS = 7;
 	public static final int CH4_EMISSIONS = 8;
 	
+	public static final int MIN_YEAR = 1960;
+	public static final int MAX_YEAR = 2013;
+	
 	// TODO: Create constant ints for every query
 	
 	

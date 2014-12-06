@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/year_seek_bar_layout"
         android:layout_alignParentBottom="true"
-        android:text="@string/start_year_default"
         android:paddingLeft="11dp"
         android:paddingBottom="7dp"
         android:textColor="#3399CC" />
@@ -33,7 +32,6 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@id/year_seek_bar_layout"
         android:layout_alignParentBottom="true"
-        android:text="@string/end_year_default"
         android:paddingRight="11dp"
         android:paddingBottom="7dp"
         android:textColor="#3399CC" />
