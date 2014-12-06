@@ -90,7 +90,7 @@ public class GraphFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View fragmentView = inflater.inflate(
 				R.layout.fragment_graph, container, false);
-		graphLayout = (RelativeLayout) fragmentView.findViewById(R.id.graph_fragment);
+		graphLayout = (RelativeLayout) fragmentView.findViewById(R.id.main_graph_layout);
 		
 		return fragmentView;
 	}

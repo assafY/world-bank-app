@@ -1,6 +1,9 @@
 package org.worldbank.seg_2g.worldbankapp;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -38,6 +41,9 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	private static final CharSequence DRAWER_TITLE = "Select Country";
 	private static final String[] CATEGORY = {"Population","Energy","Environment"};
 	
+	private static Date MIN_YEAR;
+	private static Date MAX_YEAR;
+	
 	private static final int NUMBER_OF_CATEGORIES = CATEGORY.length;
 	private static final int NUMBER_OF_PAGES = 4;
 	
@@ -68,7 +74,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
     private	GraphAdapter graphAdapter;
     public static	ViewPager graphView;
     
-    private RangeSeekBar<Integer> yearSeekBar;
+    private RangeSeekBar<Long> yearSeekBar;
     private SharedPreferences graphPreferences;
 	
 	private final int startYear = 1989;
@@ -107,19 +113,23 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 						graphPage(position);
 					}
 				});
-		
-		
-		
 
 		// add the tabs to the action bar.
 		for (int i = 0; i < CATEGORY.length; i++) {
 			actionBar.addTab(actionBar.newTab()
 					.setText(CATEGORY[i])
 					.setTabListener(this));
-			
 		}
 		
-		yearSeekBar = new RangeSeekBar<Integer>(Settings.MIN_YEAR, Settings.MAX_YEAR, getApplicationContext());
+		try {
+			MIN_YEAR = new SimpleDateFormat("yyyy").parse("1960");
+			MAX_YEAR = new SimpleDateFormat("yyyy").parse("2013");
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		yearSeekBar = new RangeSeekBar<Long>(MIN_YEAR.getTime(), MAX_YEAR.getTime(), getApplicationContext());
 		LinearLayout seekBarLayout = (LinearLayout) findViewById(R.id.year_seek_bar_layout);
 		seekBarLayout.addView(yearSeekBar);
 		
