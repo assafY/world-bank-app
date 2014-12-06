@@ -234,6 +234,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 				
 				// if a user is connected, create graph layout
 				if (deviceHasNetwork()) {
+					graphLayoutArray = new GraphFragment[NUMBER_OF_CATEGORIES][NUMBER_OF_PAGES];
 					currentCountry = (Country) parent.getItemAtPosition(pos);
 					graphPage(currentPagePosition);
 				}
@@ -301,8 +302,9 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 					if(!currentInput.equals("")) {
 						//
 						if (autoCompleteList.size() == 1) {
-							queryJSON = queryGen.getJSON(autoCompleteList.get(0), Settings.POPULATION, startYear, endYear);
-							new GraphFragment().createGraph(GraphActivity.this, queryJSON, autoCompleteList.get(0).toString());
+							graphLayoutArray = new GraphFragment[NUMBER_OF_CATEGORIES][NUMBER_OF_PAGES];
+							currentCountry = autoCompleteList.get(0);
+							graphPage(currentPagePosition);
 							return true;
 						}
 					}		
