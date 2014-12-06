@@ -5,5 +5,44 @@
     android:id="@+id/graph_fragment"
     
     tools:context="org.worldbank.seg_2g.worldbankapp.GraphFragment" >
+    
+    <TextView
+        android:id="@+id/start_year_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/year_seek_bar_layout"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="11dp"
+        android:paddingBottom="7dp"
+        android:textColor="#3399CC" />
+    
+    <LinearLayout
+        android:id="@id/year_seek_bar_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+		android:layout_alignBottom="@+id/main_graph_layout"
+        android:layout_alignParentBottom="true"
+        android:paddingLeft="50dp"
+        android:paddingRight="50dp"
+        android:orientation="horizontal" />
+    
+    <TextView
+        android:id="@+id/end_year_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@id/year_seek_bar_layout"
+        android:layout_alignParentBottom="true"
+        android:paddingRight="11dp"
+        android:paddingBottom="7dp"
+        android:textColor="#3399CC" />
+    
+    <RelativeLayout
+        android:id="@id/main_graph_layout"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:paddingBottom="35dp"
+        android:layout_alignParentTop="true" />
+    
+    
  
 </RelativeLayout>

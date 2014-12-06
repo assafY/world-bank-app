@@ -25,17 +25,20 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 public class GraphFragment extends Fragment {
 
-	// TEMP class, once the action bar works properly it will be removed.
-	// private GraphViewSeries populationEntries;
+	private static final String NULL_DATA_TEXT = "No data exists for the selected combination of country, attribute and year range";
+	
 	public static RelativeLayout graphLayout;
 	
+	private GraphActivity activityContext;
 
 	private String countryName;
 	private String data;
 	private String comparisonData;
+	private boolean containsOnlyNullData;
 
 	private JSONArray dataFeed;
 	private JSONArray comparisonDataFeed;
@@ -89,15 +92,17 @@ public class GraphFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View fragmentView = inflater.inflate(
 				R.layout.fragment_graph, container, false);
-		graphLayout = (RelativeLayout) fragmentView.findViewById(R.id.graph_fragment);
+		graphLayout = (RelativeLayout) fragmentView.findViewById(R.id.main_graph_layout);
 		
 		return fragmentView;
 	}
 
-	protected RelativeLayout createGraph(final GraphActivity context, String JSONdata,
+	protected GraphFragment createGraph(final GraphActivity context, String JSONdata,
 			String countryName) {
 		this.countryName = countryName;
 		this.data = JSONdata;
+		
+		this.activityContext = context;
 		
 		graph = new LineChartView(context);
 
@@ -111,63 +116,72 @@ public class GraphFragment extends Fragment {
 			
 			@Override
 			protected void onPostExecute(Void v) {
-				graph.setLineChartData(chartData);
-				graph.setBackgroundColor(Color.parseColor("#3399CC"));
-				graph.setZoomEnabled(false);
-				graph.setScrollEnabled(false);
-				graphLayout.removeAllViews();
 				
+				if (!containsOnlyNullData) {
 				
-				graph.setOnTouchListener(new OnTouchListener() {
-
-					int downX, upX;
-					@Override
-					public boolean onTouch(View v, MotionEvent e) {
-						if (e.getAction() == MotionEvent.ACTION_DOWN) {
-				             downX = (int) e.getX(); 
-				           //  return true;
-				         } 
-
-						else if (e.getAction() == MotionEvent.ACTION_UP) {
-				             upX = (int) e.getX(); 
-				             
-				                 // swipe right
-				             if (downX - upX > -100) {
-				            	 //GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
-				            	 if (GraphActivity.currentPagePosition < 5) {
-				            		 GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
-				            	 }
-				            	 graphLayout.removeAllViews();
-				            	 // swipe left
-				             }
-				             
-
-				             else if (downX - upX < -100) {
-				            	 //GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
-				            	 if (GraphActivity.currentPagePosition > 0) {
-				            		 GraphActivity.graphView.setCurrentItem(--GraphActivity.currentPagePosition);
-				            	 }
-				            	 graphLayout.removeAllViews();
-				            	 // swipe right
-				             }
+					graph.setLineChartData(chartData);
+					graph.setBackgroundColor(Color.parseColor("#3399CC"));
+					graph.setZoomEnabled(false);
+					graph.setScrollEnabled(false);
+					graphLayout.removeAllViews();
+					
+					
+					graph.setOnTouchListener(new OnTouchListener() {
+	
+						int downX, upX;
+						@Override
+						public boolean onTouch(View v, MotionEvent e) {
+							if (e.getAction() == MotionEvent.ACTION_DOWN) {
+					             downX = (int) e.getX(); 
+					           //  return true;
+					         } 
+	
+							else if (e.getAction() == MotionEvent.ACTION_UP) {
+					             upX = (int) e.getX(); 
+					             
+					                 // swipe right
+					             if (downX - upX > -100) {
+					            	 //GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
+					            	 if (GraphActivity.currentPagePosition < 5) {
+					            		 GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
+					            	 }
+					            	 graphLayout.removeAllViews();
+					            	 // swipe left
+					             }
+					             
+	
+					             else if (downX - upX < -100) {
+					            	 //GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
+					            	 if (GraphActivity.currentPagePosition > 0) {
+					            		 GraphActivity.graphView.setCurrentItem(--GraphActivity.currentPagePosition);
+					            	 }
+					            	 graphLayout.removeAllViews();
+					            	 // swipe right
+					             }
+							}
+					             return true;	
 						}
-				             return true;	
-					}
-				});
-				
-				graphLayout.addView(graph);
+					});
+					
+					graphLayout.addView(graph);
+				}
+				else {
+					Toast.makeText(activityContext, NULL_DATA_TEXT, Toast.LENGTH_LONG).show();
+				}
 			}
 		}.execute();
 		
-		return graphLayout;
+		return this;
 	}
 
-	protected RelativeLayout createGraph(GraphActivity context, String JSONdata,
+	protected GraphFragment createGraph(GraphActivity context, String JSONdata,
 			String comparisonData, String countryName) {
 		
 		this.countryName = countryName;
 		this.data = JSONdata;
 		this.comparisonData = comparisonData;
+		
+		this.activityContext = context;
 		
 		graph = new LineChartView(context);
 		
@@ -182,59 +196,76 @@ public class GraphFragment extends Fragment {
 			@Override
 			protected void onPostExecute(Void v) {
 				
-				graph.setLineChartData(chartData);
-				graph.setBackgroundColor(Color.parseColor("#3399CC"));
-				graph.setZoomEnabled(false);
-				graph.setScrollEnabled(false);
-				graphLayout.removeAllViews();
-				
-				graph.setOnTouchListener(new OnTouchListener() {
-
-					int downX, upX;
-					@Override
-					public boolean onTouch(View v, MotionEvent e) {
-						if (e.getAction() == MotionEvent.ACTION_DOWN) {
-				             downX = (int) e.getX(); 
-				           //  return true;
-				         } 
-
-						else if (e.getAction() == MotionEvent.ACTION_UP) {
-				             upX = (int) e.getX(); 
-				             
-				                 // swipe right
-				             if (downX - upX > -100) {
-				            	 //GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
-				            	 if (GraphActivity.currentPagePosition < 5) {
-				            		 GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
-				            	 }
-				            	 graphLayout.removeAllViews();
-				            	 // swipe left
-				             }
-				             
-
-				             else if (downX - upX < -100) {
-				            	 //GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
-				            	 if (GraphActivity.currentPagePosition > 0) {
-				            		 GraphActivity.graphView.setCurrentItem(--GraphActivity.currentPagePosition);
-				            	 }
-				            	 graphLayout.removeAllViews();
-				            	 // swipe right
-				             }
+				if (!containsOnlyNullData) {
+					
+					graph.setLineChartData(chartData);
+					graph.setBackgroundColor(Color.parseColor("#3399CC"));
+					graph.setZoomEnabled(false);
+					graph.setScrollEnabled(false);
+					graphLayout.removeAllViews();
+					
+					graph.setOnTouchListener(new OnTouchListener() {
+	
+						int downX, upX;
+						@Override
+						public boolean onTouch(View v, MotionEvent e) {
+							if (e.getAction() == MotionEvent.ACTION_DOWN) {
+					             downX = (int) e.getX(); 
+					           //  return true;
+					         } 
+	
+							else if (e.getAction() == MotionEvent.ACTION_UP) {
+					             upX = (int) e.getX(); 
+					             
+					                 // swipe right
+					             if (downX - upX > -100) {
+					            	 //GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
+					            	 if (GraphActivity.currentPagePosition < 5) {
+					            		 GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
+					            	 }
+					            	 graphLayout.removeAllViews();
+					            	 // swipe left
+					             }
+					             
+	
+					             else if (downX - upX < -100) {
+					            	 //GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
+					            	 if (GraphActivity.currentPagePosition > 0) {
+					            		 GraphActivity.graphView.setCurrentItem(--GraphActivity.currentPagePosition);
+					            	 }
+					            	 graphLayout.removeAllViews();
+					            	 // swipe right
+					             }
+							}
+					             return true;	
 						}
-				             return true;	
-					}
-				});
-					graphLayout.addView(graph);
-				
+					});
+						graphLayout.addView(graph);
+					
+				}
+				else {
+					Toast.makeText(activityContext, NULL_DATA_TEXT, Toast.LENGTH_LONG).show();
+				}
 			}
 		}.execute();
 		
-		return graphLayout;
+		return this;
 		
 
 	}
+	
+	public void reloadGraph() {
+		if (comparisonData == null) {
+			new GraphFragment().createGraph(activityContext, data, countryName);
+		} else {
+			new GraphFragment().createGraph(activityContext, data, comparisonData, countryName);
+		}
+	}
 
 	private void createComparisonGraph() {
+		
+		containsOnlyNullData = false;
+		
 		try {
 			
 			dataFeed = new JSONArray(data);
@@ -273,6 +304,11 @@ public class GraphFragment extends Fragment {
 				
 				JSONObject json = feedArray.getJSONObject(jsonCounter);
 				JSONObject comparisonJson = comparisonFeedArray.getJSONObject(jsonCounter--);
+				
+				if (json.optInt("value", -1) == -1 || comparisonJson.optInt("value", -1) == -1) {
+					containsOnlyNullData = true;
+					return;
+				}
 				
 				// add measure type label to string
 				if (measureLabel == null) {
@@ -402,6 +438,8 @@ public class GraphFragment extends Fragment {
 
 	private void createLinearGraph() {
 			
+		containsOnlyNullData = false;
+		
 		try {
 			
 			dataFeed = new JSONArray(data);
@@ -429,6 +467,11 @@ public class GraphFragment extends Fragment {
 			for (int i = 0; i < totalEntries; ++i) {
 				
 				JSONObject json = feedArray.getJSONObject(jsonCounter--);
+				
+				if (json.optInt("value", -1) == -1) {
+					containsOnlyNullData = true;
+					return;
+				}
 				
 				// add measure type label to string
 				if (measureLabel == null) {
@@ -464,6 +507,10 @@ public class GraphFragment extends Fragment {
 				}
 			}
 			
+			if (values.size() == 0) {
+				containsOnlyNullData = true;
+				return;
+			}
 			
 			if (!measureLabel.contains("%")) {
 				// round the entry value for representation in the graph Y axis
