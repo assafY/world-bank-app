@@ -138,6 +138,7 @@ public class GraphFragment extends Fragment {
 					graph.setLineChartData(chartData);
 					graph.setZoomEnabled(false);
 					graph.setScrollEnabled(false);
+					
 					graphLayout.removeAllViews();
 					graphLayout.addView(graph);
 					
