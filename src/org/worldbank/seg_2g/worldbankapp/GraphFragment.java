@@ -127,6 +127,7 @@ public class GraphFragment extends Fragment {
 					
 				}
 				else {
+					graphLayout.removeAllViews();
 					Toast.makeText(activityContext, NULL_DATA_TEXT, Toast.LENGTH_LONG).show();
 				}
 			}
@@ -167,6 +168,7 @@ public class GraphFragment extends Fragment {
 					
 				}
 				else {
+					graphLayout.removeAllViews();
 					Toast.makeText(activityContext, NULL_DATA_TEXT, Toast.LENGTH_LONG).show();
 				}
 			}

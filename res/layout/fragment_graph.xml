@@ -40,10 +40,10 @@
         android:id="@id/main_graph_layout"
         android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:paddingBottom="35dp"
-        android:paddingTop="35dp"
-        android:paddingLeft="35dp"
-        android:paddingRight="35dp"
+        android:paddingBottom="@dimen/graph_margin"
+        android:paddingTop="@dimen/graph_margin"
+        android:paddingLeft="@dimen/graph_margin"
+        android:paddingRight="@dimen/graph_margin"
         android:layout_alignParentTop="true" />
     
     
