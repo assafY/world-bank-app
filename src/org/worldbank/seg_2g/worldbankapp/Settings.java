@@ -14,8 +14,8 @@ public class Settings {
 	public static final int CH4_EMISSIONS = 8;
 
 	public static final String[] Attributes = { "8", "Population",
-			"Urban vs Rural population", "Energy Production", "Energy Use",
-			"Fossil fuel", "Forest area", "CO2 Emissions", "CH4 Emissions" };
+			"Urban population (%)", "Energy Production (kt oil equiv.)", "Energy Use (kt oil equiv.)",
+			"Fossil fuel (%)", "Forest area (sq. km)", "CO2 Emissions (kt)", "CH4 Emissions (kt CO2 equiv.)" };
 	
 	public static final int MIN_YEAR = 1960;
 	public static final int MAX_YEAR = 2013;

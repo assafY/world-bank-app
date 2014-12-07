@@ -164,7 +164,7 @@ public class MapActivity extends Activity {
 		private String[] getOptions() {
 			String[] options = new String[54];
 			for (int i = 0; i < 54; i++) {
-				options[i] = "" + (i + 1961);
+				options[i] = "" + (i + Settings.MIN_YEAR+1);
 			}
 			return options;
 		}
@@ -174,8 +174,8 @@ public class MapActivity extends Activity {
 			AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 			final NumberPicker picker = new NumberPicker(
 					getApplicationContext());
-			picker.setMinValue(1961);
-			picker.setMaxValue(2014);
+			picker.setMinValue(Settings.MIN_YEAR+1);
+			picker.setMaxValue(Settings.MAX_YEAR);
 			picker.setValue(currentYear);
 			picker.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
 			builder.setView(picker);
