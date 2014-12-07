@@ -137,7 +137,7 @@ public class QueryGenerator {
 		// Build URL string
 		URL = WB_URL + selectedCountry.getTwoLetterCode() + "/indicators/"
 				+ indicatorCode + "date=" + startYear + ":" + endYear
-				+ "&format=json";
+				+ "&format=json&per_page=100";
 		try {
 			return new getDataFeed().execute().get();
 		} catch (InterruptedException | ExecutionException e) {

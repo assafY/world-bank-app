@@ -20,7 +20,7 @@ public class MapActivity extends Activity {
 	public static final CharSequence NO_NETWORK_TEXT = "Your device has no network";
 	HTMLGenerator htmlGen;
 	WebView webMap;
-	int currentAttribute = 1, currentYear = 2010;
+	int currentAttribute = 1, currentYear = 2013;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
