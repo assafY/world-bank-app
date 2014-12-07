@@ -18,5 +18,6 @@
     <string name="title_activity_map">MapActivity</string>
     <string name="start_year_default">1999</string>
     <string name="end_year_default">2009</string>
+    <string name = "welcome"><b> <u> SUNBANK</u></b>.</string>
 
 </resources>
