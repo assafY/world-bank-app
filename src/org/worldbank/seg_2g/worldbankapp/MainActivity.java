@@ -37,7 +37,7 @@ public class MainActivity extends Activity {
 	
 	// called when help button is clicked
 	public void helpMenu(View view) {
-		Intent helpIntent = new Intent(this, HelpActivity.class);
+		Intent helpIntent = new Intent(getApplicationContext(), HelpActivity.class);
 		startActivity(helpIntent);
 	}
 	

@@ -1,17 +1,42 @@
 package org.worldbank.seg_2g.worldbankapp;
 
+import java.io.InputStream;
+
+import org.worldbank.seg_2g.worldbankapp.R;
+
+
+
 import android.app.Activity;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
-public class HelpActivity extends Activity {
+import android.support.v4.app.FragmentActivity;
+
+
+
+public class HelpActivity extends FragmentActivity  {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_help);
+		
+		if(savedInstanceState == null)
+		{
+			getSupportFragmentManager().beginTransaction()
+			.add(R.id.menuContainer, new MenuFragment()).commit();
+		}
 	}
+	
+	
+	
+	
+	
+	
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
