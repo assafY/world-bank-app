@@ -4,8 +4,9 @@
     <issue id="InflateParams">
         <ignore path="src/org/worldbank/seg_2g/worldbankapp/CountryListAdapter.java" />
     </issue>
-    <issue id="NewApi">
-        <ignore path="src/org/worldbank/seg_2g/worldbankapp/GraphFragment.java" />
+    <issue id="ValidFragment">
+        <ignore path="src/org/worldbank/seg_2g/worldbankapp/ColumnChartFragment.java" />
+        <ignore path="src/org/worldbank/seg_2g/worldbankapp/MapActivity.java" />
     </issue>
     <issue id="ViewHolder" severity="ignore" />
 </lint>
