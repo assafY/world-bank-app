@@ -20,44 +20,61 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 public class GraphFragment extends Fragment {
 
+	// text to display when the graph contains null values
 	private static final String NULL_DATA_TEXT = "No data exists for the selected combination of country, attribute and year range";
 	
+	// the layout new graphs are added to
 	public static RelativeLayout graphLayout;
 	
+	// instance of the graph activity
 	private GraphActivity activityContext;
 
+	// JSON data and country name strings
 	private String countryName;
 	private String data;
 	private String comparisonData;
+	
+	// set to true if the JSON data contains a null value
 	private boolean containsOnlyNullData;
 
+	// JSON arrays for main and comparison line
 	private JSONArray dataFeed;
 	private JSONArray comparisonDataFeed;
-	private JSONObject titleValues;
 	private JSONArray feedArray;
 	private JSONArray comparisonFeedArray;
-
+	
+	// JSON object containing the title and number of entries
+	private JSONObject titleValues;
 	private int totalEntries;
+	private int jsonCounter;
+	
+	// the graph view
 	private LineChartView graph;
+	
+	// graph data information where line list will be added
+	private LineChartData chartData;
+	
+	// point value list for main and comparison line, as well as dummy list to set view of percentage based graph
 	private List<PointValue> values;
 	private List<PointValue> comparisonValues;
 	private List<PointValue> invisiblePercentGraphValues;
 
-	private int jsonCounter;
+	// lists of axis values
 	private List<AxisValue> axisValues;
 	private List<AxisValue> comparisonAxisValues;
+	
+	// strings for attribute titles
 	private String measureLabel;
 	private String comparisonMeasureLabel;
 
+	// fields used for rounding values for axis labels
 	private int value;
 	private int comparisonValue;
 	private float percentValue;
@@ -68,25 +85,24 @@ public class GraphFragment extends Fragment {
 	private int lowestValue;
 	private int comparisonLowestValue;
 	private int increment;
-	
 	private String valueString;
 	private int digitCount;
 	private int charCounter;
 	private String newLabel;
 	private int firstThreeDigits;
 	
+	// the main, comparison and dummy percentage lines and a list of lines these will be added to
 	private Line invisiblePercentGraphLine;
 	private Line mainGraphLine;
 	private Line comparisonGraphLine;
 	private List<Line> graphLines;
 	
-	private LineChartData chartData;
-
+	// the graph axes
 	private Axis axisX;
 	private Axis axisY;
 	private Axis rightAxisY;
 	
-	// Inflate the layout
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {

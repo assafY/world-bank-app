@@ -208,14 +208,14 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 			
 			public void onDrawerClosed(View view) {
 				super.onDrawerClosed(view);
-				actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+				actionBar.show();
 				getActionBar().setTitle(ACTIVITY_TITLE);
 				invalidateOptionsMenu();
 			}
 			
 			public void onDrawerOpened(View drawerView) {
 				super.onDrawerOpened(drawerView);
-				actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+				actionBar.hide();
 				getActionBar().setTitle(DRAWER_TITLE);
 				invalidateOptionsMenu();
 			}
