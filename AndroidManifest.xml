@@ -81,7 +81,8 @@
         </activity>
         <activity
             android:name=".MapActivity"
-            android:label="@string/title_activity_map" >
+            android:label="@string/title_activity_map"
+            android:screenOrientation="landscape" >
         </activity>
     </application>
 
