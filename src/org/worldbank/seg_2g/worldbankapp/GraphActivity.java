@@ -21,9 +21,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnTouchListener;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -142,8 +140,13 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	        		startYear = minValue;
 		        	endYear = maxValue;
 		        	
-		        	graphLayoutArray = new GraphFragment[NUMBER_OF_CATEGORIES][NUMBER_OF_PAGES];
-		        	graphPage(currentPagePosition);
+		        	if (startYear != endYear) {
+		        		graphLayoutArray = new GraphFragment[NUMBER_OF_CATEGORIES][NUMBER_OF_PAGES];
+		        		graphPage(currentPagePosition);
+		        	}
+		        	else {
+		        		Toast.makeText(GraphActivity.this, "Select a range of at least two years", Toast.LENGTH_SHORT).show();
+		        	}
 	        	}
 	        }
 		});
