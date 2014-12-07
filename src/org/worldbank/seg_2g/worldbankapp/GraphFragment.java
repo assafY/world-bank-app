@@ -108,11 +108,13 @@ public class GraphFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View fragmentView = inflater.inflate(
 				R.layout.fragment_graph, container, false);
+		// the layout graphs will be added to
 		graphLayout = (RelativeLayout) fragmentView.findViewById(R.id.main_graph_layout);
 		
 		return fragmentView;
 	}
 
+	// this method will create a single line graph
 	protected GraphFragment createGraph(final GraphActivity context, String JSONdata,
 			String countryName) {
 		this.countryName = countryName;
@@ -124,12 +126,14 @@ public class GraphFragment extends Fragment {
 
 		new AsyncTask<Void,Void,Void>() {
 
+			// create graph in new thread
 			@Override
 			protected Void doInBackground(Void... params) {
 				createLinearGraph();
 				return null;
 			}
 			
+			// after thread runs, if no null data exists, add chart data to chart view and add chart view to layout
 			@Override
 			protected void onPostExecute(Void v) {
 				
@@ -143,6 +147,7 @@ public class GraphFragment extends Fragment {
 					graphLayout.addView(graph);
 					
 				}
+				// if null data exists (resulting in null chart view) notify the user
 				else {
 					graphLayout.removeAllViews();
 					Toast.makeText(activityContext, NULL_DATA_TEXT, Toast.LENGTH_LONG).show();
@@ -150,9 +155,11 @@ public class GraphFragment extends Fragment {
 			}
 		}.execute();
 		
+		// return this graph fragment, to be stores in cache array
 		return this;
 	}
 
+	// same as above method with an extra JSON parameter for a comparison line.
 	protected GraphFragment createGraph(GraphActivity context, String JSONdata,
 			String comparisonData, String countryName) {
 		
@@ -192,10 +199,9 @@ public class GraphFragment extends Fragment {
 		}.execute();
 		
 		return this;
-		
-
 	}
 	
+	// called if fragment instance exists in cache array, rebuilds graph from existing data
 	public void reloadGraph() {
 		if (comparisonData == null) {
 			new GraphFragment().createGraph(activityContext, data, countryName);
@@ -204,6 +210,7 @@ public class GraphFragment extends Fragment {
 		}
 	}
 
+	// creates a double line comparison graph
 	private void createComparisonGraph() {
 		
 		containsOnlyNullData = false;
@@ -213,7 +220,6 @@ public class GraphFragment extends Fragment {
 			dataFeed = new JSONArray(data);
 			comparisonDataFeed = new JSONArray(comparisonData);
 			titleValues = dataFeed.getJSONObject(0);
-			
 			
 			totalEntries = titleValues.getInt("total");
 			
@@ -378,25 +384,33 @@ public class GraphFragment extends Fragment {
 		
 	}
 
+	// creates a single line graph
 	private void createLinearGraph() {
 			
 		containsOnlyNullData = false;
 		
 		try {
-			
+			// extract full JSON array from JSON string
 			dataFeed = new JSONArray(data);
 			titleValues = dataFeed.getJSONObject(0);
 			
 			// get total number of entries
 			totalEntries = titleValues.getInt("total");
 			
+			// initialize point value list
 			values = new ArrayList<PointValue>();
 
+			// extract values JSON array from previous full
 			feedArray = dataFeed.getJSONArray(1);
 
+			// initialize counter with number of entries
 			jsonCounter = totalEntries - 1;
+			
+			// initialize empty axis values list
 			axisValues = new ArrayList<AxisValue>();
+			//initialize empty graph line, set color to red, set line width and point size
 			mainGraphLine = new Line().setColor(Color.RED).setCubic(false).setStrokeWidth(2).setPointRadius(3);
+			// initialize empty line list to which the graph line will be added 
 			graphLines = new ArrayList<Line>();
 
 			measureLabel = null;
@@ -408,8 +422,10 @@ public class GraphFragment extends Fragment {
 			// put every entry from JSON in graph and create a label
 			for (int i = 0; i < totalEntries; ++i) {
 				
+				// initialize new JSON object from JSON array
 				JSONObject json = feedArray.getJSONObject(jsonCounter--);
 				
+				// if the value field in the object is null, stop creating graph and set null data boolean to true
 				if (json.optInt("value", -1) == -1) {
 					containsOnlyNullData = true;
 					return;
