@@ -20,6 +20,13 @@ public class DataBank {
 
 	private static double[][][] dataSheet;
 
+	/**
+	 * Initialisation method for the DataBank. Must be called before any other
+	 * operation. Contains already called check.
+	 * 
+	 * @param context
+	 *            the activity context
+	 */
 	public static void initialise(Context context) {
 		if (!reinit) {
 			qG = new QueryGenerator(context);
@@ -36,6 +43,9 @@ public class DataBank {
 		}
 	}
 
+	/**
+	 * Retrieves data for every attribute for year span.
+	 */
 	public static void fetchAllData() {
 		for (int i = 0; i < attributesNo; i++) {
 			if (!fetched[i]) {
@@ -48,17 +58,23 @@ public class DataBank {
 		}
 	}
 
+	/**
+	 * Retrieves data for specified attribute
+	 * 
+	 * @param queryCode
+	 *            attribute id
+	 */
 	public static void fetchData(int queryCode) {
 		int i = queryCode - 1;
 		if (!fetched[i]) {
 			for (int j = 0; j < countriesNo; j++) {
-				dataSheet[i][j] = fetchValuesFor(arrlCountries.get(j),
-						i + 1);
+				dataSheet[i][j] = fetchValuesFor(arrlCountries.get(j), i + 1);
 			}
 			fetched[i] = true;
 		}
 	}
 
+	// fills in the array with one country line
 	private static double[] fetchValuesFor(Country selectedCountry,
 			int queryCode) {
 
@@ -78,7 +94,6 @@ public class DataBank {
 					value = json.getString("value");
 					date = json.getInt("date");
 					valuess[date - startYear] = value;
-					// System.out.println(date + ": " + value);
 				} catch (Exception e) {
 					i = -100;
 				}
@@ -93,8 +108,6 @@ public class DataBank {
 			try {
 				double v = (double) Double.parseDouble(valuess[i]);
 				values[i] = v;
-				// System.out.println(i + ": " + v + " (" + (i + startYear) +
-				// ")");
 			} catch (Exception e) {
 				values[i] = -1;
 			}
@@ -103,11 +116,28 @@ public class DataBank {
 		return values;
 	}
 
-	public static double getValuesFor(Country country, int queryCode, int year) {
+	/**
+	 * Returns the value for the specific country attribute and year from the
+	 * saved data.
+	 * 
+	 * @param country
+	 *            country
+	 * @param queryCode
+	 *            attribute id
+	 * @param year
+	 *            year
+	 * @return value of attribute for country in year
+	 */
+	public static double getValueFor(Country country, int queryCode, int year) {
 		return dataSheet[queryCode - 1][arrlCountries.indexOf(country)][year
 				- startYear];
 	}
 
+	/**
+	 * Returns an {@link ArrayList} of all {@link Country} objects.
+	 * 
+	 * @return ArrayList of countries
+	 */
 	public static ArrayList<Country> getCountryArrayList() {
 		return arrlCountries;
 	}

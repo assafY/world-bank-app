@@ -77,6 +77,9 @@ public class MapActivity extends Activity {
 
 	}
 
+	/**
+	 * Continuation of the onCreate Method. Used for separation of code.
+	 */
 	protected void onCreateExtra() {
 
 		if (deviceHasNetwork()) {
@@ -97,6 +100,7 @@ public class MapActivity extends Activity {
 
 	}
 
+	// draws the map given the attribute and year
 	private void drawMap() {
 
 		this.setTitle(Settings.Attributes[currentAttribute] + " - "
@@ -121,6 +125,7 @@ public class MapActivity extends Activity {
 		}).start();
 	}
 
+	// attribute selector dialog
 	private class AttributePickerDialogFragment extends DialogFragment {
 
 		private String[] getOptions() {
@@ -153,6 +158,7 @@ public class MapActivity extends Activity {
 		}
 	}
 
+	// year selector dialog
 	private class YearPickerDialogFragment extends DialogFragment {
 
 		private String[] getOptions() {
