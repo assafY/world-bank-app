@@ -1,6 +1,8 @@
-Hello and Welcome to SunBank!.
-This application is aimed at anyone with interest in geography and wants to visually analyse data about the world. 
-We provide data from of all sorts, from population to CO2 emissions and helps you to compare and see the impact they both cause corresponding to each toehr. 
+Hello and Welcome to SunBank!
+
+This application is aimed at anyone with interest in geography and wants to visually analyse
+data about the world. We provide data from of all sorts, from population to CO2 emissions and
+helps you to compare and see the impact they both cause corresponding to each other. 
 This screen will give you help on how to efficiently use this application.
 
 How to use graph screen:
@@ -15,4 +17,4 @@ How to use graph screen:
  From Population, Energy and Environment.
  When one is clicked, it will display
  a graph on one of the previously chosen
- Countries.  		
+ Countries.

@@ -18,10 +18,6 @@ import android.widget.TextView;
 public class Help1Fragment extends Fragment {
 	
 	InputStream assetManager;
-	public Help1Fragment()
-	{
-		
-	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater,
@@ -29,10 +25,7 @@ public class Help1Fragment extends Fragment {
 		
 		View rootView = inflater.inflate(R.layout.fragment_multi_help1, null);
 		
-		TextView txtFileName=(TextView)rootView.findViewById(R.id.txtDisplay);		
-		
-		
-
+		TextView txtFileName=(TextView)rootView.findViewById(R.id.txtDisplay);
 
 	try {
 		
