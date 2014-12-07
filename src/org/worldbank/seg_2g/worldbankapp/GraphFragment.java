@@ -431,7 +431,7 @@ public class GraphFragment extends Fragment {
 					return;
 				}
 				
-				// add measure type label to string
+				// add measure type label to string, this will be displayed beside Y axis
 				if (measureLabel == null) {
 					JSONObject indicator = json.getJSONObject("indicator");
 					measureLabel = indicator.getString("value");
@@ -465,36 +465,37 @@ public class GraphFragment extends Fragment {
 				}
 			}
 			
-			if (values.size() == 0) {
-				containsOnlyNullData = true;
-				return;
-			}
-			
 			if (!measureLabel.contains("%")) {
 				// round the entry value for representation in the graph Y axis
 				createNumberLabels(highestValue, lowestValue);
 			}
 				
+			// add point values to graph line
 			mainGraphLine.setValues(values);
+			// add graph line to line list
 			graphLines.add(mainGraphLine);
+			// initialize empty chart data object
 			chartData = new LineChartData();
 
+			// set the axes max label chars, color and size
 			axisX = new Axis().setMaxLabelChars(4).setTextColor(Color.BLACK).setTextSize(11);
 			axisY = new Axis().setName(measureLabel).setHasLines(true)
 					.setMaxLabelChars(11).setTextColor(Color.BLACK).setLineColor(Color.LTGRAY).setTextSize(11);
 			
-
+			// set the Y axis with rounded value labels
 			axisY.setValues(axisValues);
 
+			// add axes to chart data
 			chartData.setAxisXBottom(axisX);
 			chartData.setAxisYLeft(axisY);
 
+			// set chart data with graph lines
 			chartData.setLines(graphLines);
 			
 			
 		} catch (JSONException e) {
-			// TODO: Handle exception
-			e.printStackTrace();
+			containsOnlyNullData = true;
+			return;
 		}
 
 	}
