@@ -37,7 +37,7 @@ import android.widget.ImageView;
 	        		try{
 	        			//sleep will indicate the time displaying the splash
 	        			
-	        			sleep(7500);
+	        			sleep(5000);
 	        			//the intent will start the Main Activity when the slash is finished.
 	        			Intent intent = new Intent(getApplicationContext(),MainActivity.class);
 	        			startActivity(intent);

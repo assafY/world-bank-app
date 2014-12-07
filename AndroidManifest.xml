@@ -19,7 +19,8 @@
         <activity
             android:name=".Splash"
             android:theme="@style/splashTheme"
-            android:screenOrientation="landscape" >
+            android:screenOrientation="landscape"
+            android:noHistory = "true" >
             
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
