@@ -60,6 +60,7 @@ public class GraphAdapter extends FragmentPagerAdapter {
 		public GraphFrameHolder() {
 		}
 
+		//TODO fix this method
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
 				Bundle savedInstanceState) {
