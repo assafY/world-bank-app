@@ -120,50 +120,11 @@ public class GraphFragment extends Fragment {
 				if (!containsOnlyNullData) {
 				
 					graph.setLineChartData(chartData);
-					graph.setBackgroundColor(Color.parseColor("#3399CC"));
 					graph.setZoomEnabled(false);
 					graph.setScrollEnabled(false);
 					graphLayout.removeAllViews();
-					
-					
-					graph.setOnTouchListener(new OnTouchListener() {
-	
-						int downX, upX;
-						@Override
-						public boolean onTouch(View v, MotionEvent e) {
-							if (e.getAction() == MotionEvent.ACTION_DOWN) {
-					             downX = (int) e.getX(); 
-					           //  return true;
-					         } 
-	
-							else if (e.getAction() == MotionEvent.ACTION_UP) {
-					             upX = (int) e.getX(); 
-					             
-					                 // swipe right
-					             if (downX - upX > -100) {
-					            	 //GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
-					            	 if (GraphActivity.currentPagePosition < 5) {
-					            		 GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
-					            	 }
-					            	 graphLayout.removeAllViews();
-					            	 // swipe left
-					             }
-					             
-	
-					             else if (downX - upX < -100) {
-					            	 //GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
-					            	 if (GraphActivity.currentPagePosition > 0) {
-					            		 GraphActivity.graphView.setCurrentItem(--GraphActivity.currentPagePosition);
-					            	 }
-					            	 graphLayout.removeAllViews();
-					            	 // swipe right
-					             }
-							}
-					             return true;	
-						}
-					});
-					
 					graphLayout.addView(graph);
+					
 				}
 				else {
 					Toast.makeText(activityContext, NULL_DATA_TEXT, Toast.LENGTH_LONG).show();
@@ -199,48 +160,10 @@ public class GraphFragment extends Fragment {
 				if (!containsOnlyNullData) {
 					
 					graph.setLineChartData(chartData);
-					graph.setBackgroundColor(Color.parseColor("#3399CC"));
 					graph.setZoomEnabled(false);
 					graph.setScrollEnabled(false);
-					graphLayout.removeAllViews();
-					
-					graph.setOnTouchListener(new OnTouchListener() {
-	
-						int downX, upX;
-						@Override
-						public boolean onTouch(View v, MotionEvent e) {
-							if (e.getAction() == MotionEvent.ACTION_DOWN) {
-					             downX = (int) e.getX(); 
-					           //  return true;
-					         } 
-	
-							else if (e.getAction() == MotionEvent.ACTION_UP) {
-					             upX = (int) e.getX(); 
-					             
-					                 // swipe right
-					             if (downX - upX > -100) {
-					            	 //GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
-					            	 if (GraphActivity.currentPagePosition < 5) {
-					            		 GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
-					            	 }
-					            	 graphLayout.removeAllViews();
-					            	 // swipe left
-					             }
-					             
-	
-					             else if (downX - upX < -100) {
-					            	 //GraphActivity.graphView.setCurrentItem(++GraphActivity.currentPagePosition);
-					            	 if (GraphActivity.currentPagePosition > 0) {
-					            		 GraphActivity.graphView.setCurrentItem(--GraphActivity.currentPagePosition);
-					            	 }
-					            	 graphLayout.removeAllViews();
-					            	 // swipe right
-					             }
-							}
-					             return true;	
-						}
-					});
-						graphLayout.addView(graph);
+					graphLayout.removeAllViews();					
+					graphLayout.addView(graph);
 					
 				}
 				else {
@@ -524,6 +447,7 @@ public class GraphFragment extends Fragment {
 			axisX = new Axis().setMaxLabelChars(4).setTextColor(Color.BLACK).setTextSize(11);
 			axisY = new Axis().setName(measureLabel).setHasLines(true)
 					.setMaxLabelChars(11).setTextColor(Color.BLACK).setLineColor(Color.LTGRAY).setTextSize(11);
+			
 
 			axisY.setValues(axisValues);
 
