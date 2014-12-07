@@ -378,8 +378,8 @@ public class GraphFragment extends Fragment {
 
 			
 		} catch (JSONException e) {
-			// TODO Handle Exception
-			e.printStackTrace();
+			containsOnlyNullData = true;
+			return;
 		}
 		
 	}
