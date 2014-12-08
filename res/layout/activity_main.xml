@@ -3,61 +3,59 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/homeimg"
-    android:gravity="top"
+    android:orientation="horizontal"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="org.worldbank.seg_2g.worldbankapp.MainActivity" >
 
-    <Button
-        android:id="@+id/button2"
+    <LinearLayout
+        android:id="@+id/linearLayout1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/button1"
-        android:layout_marginTop="27dp"
-        android:alpha="0.75"
-        android:onClick="helpMenu"
-        android:text="@string/button2"
-        android:color="#66FF0001" />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true" >
 
-    <Button
-        android:id="@+id/button1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button3"
-        android:layout_alignRight="@+id/button3"
-        android:layout_centerVertical="true"
-        android:onClick="countryMenu"
-        android:text="@string/button1"
-        android:color="#66FF0001" 
-        android:alpha="0.75" />
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="111dp"
+            android:layout_height="88dp"
+            android:layout_marginBottom="30dp"
+            android:layout_marginRight="49dp"
+            android:alpha="0.75"
+            android:background="@drawable/map"
+            android:onClick="mapMenu"
+            android:color="#66FF0001" />
 
-    <Button
-        android:id="@+id/button3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/button1"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="30dp"
-        android:onClick="mapMenu"
-        android:text="MAP"
-        android:color="#66FF0001" 
-        android:alpha="0.75" />
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="111dp"
+            android:layout_height="88dp"
+            android:layout_marginRight="49dp"
+            android:alpha="0.75"
+            android:background="@drawable/graph"
+            android:onClick="countryMenu"
+            android:color="#66FF0001" />
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:gravity="center_horizontal"
-        android:text="@string/welcome"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="30sp"
-        android:textColor="#FF0000" />
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="111dp"
+            android:layout_height="88dp"
+            android:layout_marginRight="49dp"
+            android:alpha="0.75"
+            android:background="@drawable/help"
+            android:onClick="helpMenu"
+            android:color="#66FF0001" />
+    </LinearLayout>
+
    
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="200dp"
+        android:layout_height="100dp"
+        android:layout_above="@+id/linearLayout1"
+        android:layout_alignLeft="@+id/linearLayout1"
+        android:layout_marginLeft="140dp"
+        android:src="@drawable/homelogo" />
+
 </RelativeLayout>
