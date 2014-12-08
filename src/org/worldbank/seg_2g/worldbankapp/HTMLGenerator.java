@@ -3,6 +3,7 @@ package org.worldbank.seg_2g.worldbankapp;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.util.Log;
 
 public class HTMLGenerator {
 
@@ -119,10 +120,27 @@ public class HTMLGenerator {
 
 	// returns a line from body (Country - value)
 	private String getCountryAttributeLine(Country country, double value) {
-		if (value > 0)
-			return "          ['" + country.getName() + "', " + value + "],\n";
+		if (value > 0) {
+			String name = getGoogleName(country.getName());
+			return "          ['" + name + "', " + value + "],\n";
+		}
 		else
 			return "";
+	}
+	
+	private String getGoogleName(String name) {
+		String gname;
+		switch (name) {
+		case "Russian Federation": gname = "Russia";
+		break;
+		case "Slovak Republic": gname = "Russia";
+		break;
+		case "Macedonia, FYR": gname = "Macedonia";
+		break;
+		default: gname = name;
+		System.out.println( name+" = "+gname);
+		}
+		return gname;
 	}
 
 }
