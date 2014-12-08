@@ -162,8 +162,10 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		        	if (newStartYear != newEndYear) {
 		        		startYear = newStartYear;
 		        		endYear = newEndYear;
-		        		graphLayoutArray = new GraphFragment[NUMBER_OF_CATEGORIES][NUMBER_OF_PAGES];
-		        		graphPage(currentPagePosition);
+		        		if (currentCountry != null) {
+			        		graphLayoutArray = new GraphFragment[NUMBER_OF_CATEGORIES][NUMBER_OF_PAGES];
+			        		graphPage(currentPagePosition);
+		        		}
 		        	}
 		        	// disable selection of same start and end years
 		        	else {
