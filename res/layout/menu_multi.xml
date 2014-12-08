@@ -9,20 +9,20 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Main" />
+        android:text="General Help" />
 
     <Button
         android:id="@+id/buttonHelp2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Help2" />
+        android:text="Graph Visual Help" />
 
     <Button
         android:id="@+id/buttonHelp3"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:text="Help3" />
+        android:text="Map Visual Help" />
 
 </LinearLayout>

@@ -6,7 +6,6 @@ import org.worldbank.seg_2g.worldbankapp.R;
 
 
 
-
 import android.app.Activity;
 import android.content.res.AssetManager;
 import android.os.Bundle;
@@ -14,7 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.support.v4.app.Fragment;
+
 import android.support.v4.app.FragmentActivity;
 
 

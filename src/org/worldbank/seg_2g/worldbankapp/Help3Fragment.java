@@ -27,16 +27,6 @@ public class Help3Fragment extends Fragment {
 		
 		View rootView = inflater.inflate(R.layout.fragment_multi_help3, container, false);
 		
-		Button btnMulti = (Button)rootView.findViewById(R.id.btnMultiOther);
-		
-		btnMulti.setOnClickListener(new OnClickListener(){
-			
-			public void onClick(View v)
-			{
-				Toast.makeText(getActivity(), "Working Progress", Toast.LENGTH_SHORT).show();
-			}
-		});
-		
 		return rootView;
 	}
 }
