@@ -37,7 +37,6 @@ public class QueryGenerator {
 	private static final String CH4_EMISSIONS = "EN.ATM.METH.KT.CE?";
 	private Context context;
 
-	private String[] listOfLocaleCountries = Locale.getISOCountries();
 	private String URL;
 	private String indicatorCode;
 
@@ -61,7 +60,8 @@ public class QueryGenerator {
 			for (int i = 0; i < totalCountries; ++i) {
 				JSONObject json = feedArray.getJSONObject(i);
 				String country = json.getString("name");
-				if (checkCountry(country)) {
+				
+				if (json.optDouble("longitude", -1.0) != -1.0) {
 					Country currentCountry = new Country(country,
 							json.getString("id"), json.getString("iso2Code"),
 							context);
@@ -182,43 +182,6 @@ public class QueryGenerator {
 			// return data
 			return content.toString();
 		}
-	}
-
-	private boolean checkCountry(String isValidCountry) {
-		// check against countries that have different codes to Locale
-		// return true if found
-		if (additionalCountry(isValidCountry)) {
-			return true;
-		} else {
-			// otherwise crosscheck with local android list of countries to
-			// eliminate unwanted entries
-			for (String countryID : listOfLocaleCountries) {
-				Locale country = new Locale("", countryID);
-				if (country.getDisplayCountry().equals(isValidCountry)) {
-					return true;
-				}
-			}
-			return false;
-		}
-	}
-
-	private boolean additionalCountry(String isValidCountry) {
-		if (isValidCountry.contains("Cyprus")
-				|| isValidCountry.contains("Korea, Rep")
-				|| isValidCountry.contains("Korea, Dem. Rep")
-				|| isValidCountry.contains("Egypt")
-				|| isValidCountry.contains("Hong Kong")
-				|| isValidCountry.contains("Iran")
-				|| isValidCountry.contains("Syria")
-				|| isValidCountry.contains("Venezuela")
-				|| isValidCountry.contains("Yemen")
-				|| isValidCountry.contains("Bahamas")
-				|| isValidCountry.contains("Congo")
-				|| isValidCountry.contains("Cabo Verde")) {
-			return true;
-		}
-
-		return false;
 	}
 
 }

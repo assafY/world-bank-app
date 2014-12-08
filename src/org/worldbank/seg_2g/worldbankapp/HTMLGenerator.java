@@ -3,6 +3,7 @@ package org.worldbank.seg_2g.worldbankapp;
 import java.util.ArrayList;
 
 import android.content.Context;
+import android.util.Log;
 
 public class HTMLGenerator {
 
@@ -54,8 +55,6 @@ public class HTMLGenerator {
 	 * @return a {@link String} html page with a coloured world map
 	 */
 	public String getHTMLCode(int queryCode, int year) {
-
-		// TODO check for internet connection
 
 		String html = "";
 
@@ -119,8 +118,9 @@ public class HTMLGenerator {
 
 	// returns a line from body (Country - value)
 	private String getCountryAttributeLine(Country country, double value) {
-		if (value > 0)
-			return "          ['" + country.getName() + "', " + value + "],\n";
+		if (value > 0) {
+			return "          ['" + country.getTwoLetterCode() + "', " + value + "],\n";
+		}
 		else
 			return "";
 	}
