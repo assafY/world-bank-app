@@ -56,8 +56,6 @@ public class HTMLGenerator {
 	 */
 	public String getHTMLCode(int queryCode, int year) {
 
-		// TODO check for internet connection
-
 		String html = "";
 
 		html = getHTMLBeginning(Settings.Attributes[queryCode])
