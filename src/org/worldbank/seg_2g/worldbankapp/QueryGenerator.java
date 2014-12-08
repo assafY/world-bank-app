@@ -100,8 +100,7 @@ public class QueryGenerator {
 
 	private void setIndicatorCode(int indicator) {
 
-		// set indicator string to the correct code based on constant int passed
-		// from main activity (activity does not yet exist)
+		// set indicator string to the correct code based on constant sent to getJSON
 		switch (indicator) {
 		case Settings.POPULATION:
 			indicatorCode = POPULATION;

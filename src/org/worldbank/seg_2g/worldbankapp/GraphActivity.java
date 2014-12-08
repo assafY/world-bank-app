@@ -137,15 +137,32 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		        	endYearView.setText(String.valueOf(maxValue));	
 	        	
 	        	if (!bar.isPressed() && (startYear != minValue || endYear != maxValue)) {
-	        		startYear = minValue;
-		        	endYear = maxValue;
+	        		int newStartYear = minValue;
+		        	int newEndYear = maxValue;
 		        	
-		        	if (startYear != endYear) {
+		        	if (newStartYear != newEndYear) {
+		        		startYear = newStartYear;
+		        		endYear = newEndYear;
 		        		graphLayoutArray = new GraphFragment[NUMBER_OF_CATEGORIES][NUMBER_OF_PAGES];
 		        		graphPage(currentPagePosition);
 		        	}
+		        	// disable selection of same start and end years
 		        	else {
-		        		Toast.makeText(GraphActivity.this, "Select a range of at least two years", Toast.LENGTH_SHORT).show();
+		        		if (startYear != newStartYear) {
+		        			yearSeekBar.setSelectedMinValue(--newStartYear);
+		        			startYear = newStartYear;
+		        			startYearView.setText(String.valueOf(newStartYear));
+		        			graphLayoutArray = new GraphFragment[NUMBER_OF_CATEGORIES][NUMBER_OF_PAGES];
+			        		graphPage(currentPagePosition);
+		        		}
+		        		else {
+		        			yearSeekBar.setSelectedMaxValue(++newEndYear);
+		        			endYear = newEndYear;
+		        			endYearView.setText(String.valueOf(newEndYear));
+		        			graphLayoutArray = new GraphFragment[NUMBER_OF_CATEGORIES][NUMBER_OF_PAGES];
+			        		graphPage(currentPagePosition);
+		        		}
+		        		//Toast.makeText(GraphActivity.this, "Select a range of at least two years", Toast.LENGTH_SHORT).show();
 		        	}
 	        	}
 	        }
@@ -167,7 +184,6 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getActionBar().setIcon(new ColorDrawable(getResources().getColor(android.R.color.transparent)));   
-		getActionBar().setDisplayShowTitleEnabled(false);
 		getMenuInflater().inflate(R.menu.graph, menu);
 		return true;
 	}
@@ -201,22 +217,20 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		countryDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		countryListView = (ListView) findViewById(R.id.countries_list_view);
 		
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setHomeButtonEnabled(true);
+		actionBar.setHomeButtonEnabled(true);
+		actionBar.setTitle("Countries");
 		
 		drawerToggle = new ActionBarDrawerToggle(this, countryDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
 			
 			public void onDrawerClosed(View view) {
 				super.onDrawerClosed(view);
-				actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-				getActionBar().setTitle(ACTIVITY_TITLE);
+				actionBar.show();
 				invalidateOptionsMenu();
 			}
 			
 			public void onDrawerOpened(View drawerView) {
 				super.onDrawerOpened(drawerView);
-				actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-				getActionBar().setTitle(DRAWER_TITLE);
+				actionBar.hide();
 				invalidateOptionsMenu();
 			}
 		};
@@ -243,6 +257,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 					graphLayoutArray = new GraphFragment[NUMBER_OF_CATEGORIES][NUMBER_OF_PAGES];
 					currentCountry = (Country) parent.getItemAtPosition(pos);
 					graphPage(currentPagePosition);
+					actionBar.setTitle(currentCountry.toString());
 				}
 				// if disconnected do nothing and notify with Toast
 				else {

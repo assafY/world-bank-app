@@ -6,6 +6,7 @@
     
     tools:context="org.worldbank.seg_2g.worldbankapp.GraphFragment" >
     
+    
     <TextView
         android:id="@+id/start_year_textview"
         android:layout_width="wrap_content"
