@@ -3,7 +3,6 @@ package org.worldbank.seg_2g.worldbankapp;
 import java.util.ArrayList;
 
 import android.content.Context;
-import android.util.Log;
 
 public class HTMLGenerator {
 
