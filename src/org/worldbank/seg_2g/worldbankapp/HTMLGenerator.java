@@ -121,46 +121,10 @@ public class HTMLGenerator {
 	// returns a line from body (Country - value)
 	private String getCountryAttributeLine(Country country, double value) {
 		if (value > 0) {
-			//String name = getGoogleName(country.getName());
 			return "          ['" + country.getTwoLetterCode() + "', " + value + "],\n";
 		}
 		else
 			return "";
 	}
-	
-//	private String getGoogleName(String name) {
-//		String gname;
-//		switch (name) {
-//		case "Congo, Rep.": gname = "Congo";
-//		break;
-//		case "Congo, Dem. Rep.": gname = "Democratic Republic of the Congo";
-//		break;
-//		case "Egypt, Arab Rep.": gname = "Egypt";
-//		break;
-//		case "Iran, Islamic Rep.": gname = "Iran";
-//		break;
-//		case "Kyrgyz Republic": gname = "Kyrgyzstan";
-//		break;
-//		case "Lao PDR": gname = "Laos";
-//		break;
-//		case "Macedonia, FYR": gname = "Macedonia (FYROM)";
-//		break;
-//		case "Korea, Dem. Rep.": gname = "North Korea";
-//		break;
-//		case "Slovak Republic": gname = "Slovakia";
-//		break;
-//		case "Korea, Rep.": gname = "South Korea";
-//		break;
-//		case "Venezuela, RB": gname = "Venezuela";
-//		break;
-//		case "Yemen, Rep.": gname = "Yemen";
-//		break;
-//		case "Russian Federation": gname = "Russia";
-//		break;
-//		default: gname = name;
-//		}
-//		System.out.println( name+" = "+gname);
-//		return gname;
-//	}
 
 }
