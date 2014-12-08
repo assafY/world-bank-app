@@ -23,6 +23,7 @@ public class GraphAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public Fragment getItem(int position) {
+		pagePosition = position + 1;
 		return GraphFrameHolder.newInstance(position + 1);
 	}
 	

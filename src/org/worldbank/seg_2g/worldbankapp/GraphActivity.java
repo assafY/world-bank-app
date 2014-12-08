@@ -389,7 +389,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 							currentCountry = autoCompleteList.get(0);
 							graphPage(currentPagePosition);
 							graphAdapter.restartGraph();
-							tabCounter =0;
+							tabCounter = 0;
 							return true;
 						}
 					}		
@@ -399,94 +399,154 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		});
 	}
 	
-	/**TEMP this will be improved.
-	 * This will provide the swap motion and will allow to fetch data from a 2D array of fragment [X][Y] where X is the category number and Y is the Graph
-	 * If Position is 0 then it will return to the last category available, starting from page 1 of that category.
-	 * @param position
-	 * Contains certain bugs which will be fixed
-	 */
 	public void graphPage(int position) {
 		
-
 		switch (position) {
 		
 		case 1: 
-				if (currentTab.equals(CATEGORY[0])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
-				         new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
-						break;
-					}
-				
-				else if (currentTab.equals(CATEGORY[1])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.ENERGY_PRODUCTION, startYear, endYear);
-						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
-						break;
-					}
-				else if (currentTab.equals(CATEGORY[2])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
-						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
-						break;
+			if (currentTab.equals(CATEGORY[0])) {
+				if (graphLayoutArray[0][0] == null) {
+					queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
+					graphLayoutArray[0][0] = new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+					break;
 				}
+				else {
+					graphLayoutArray[0][0].reloadGraph();
+					break;
+				}
+			}
+			else if (currentTab.equals(CATEGORY[1])) {
+				if (graphLayoutArray[1][0] == null) {
+					queryJSON = queryGen.getJSON(currentCountry, Settings.ENERGY_PRODUCTION, startYear, endYear);
+					graphLayoutArray[1][0] = new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+					break;
+				}
+				else {
+					graphLayoutArray[1][0].reloadGraph();
+					break;
+				}
+				
+			}
+			else if (currentTab.equals(CATEGORY[2])) {
+				if (graphLayoutArray[2][0] == null) {	
+					queryJSON = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
+					graphLayoutArray[2][0] = new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+					break;
+				}
+				else {
+					graphLayoutArray[2][0].reloadGraph();
+					break;
+				}
+			}
 		case 2: 	
-				if (currentTab.equals(CATEGORY[0])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.URBAN_RURAL, startYear, endYear);
-						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
-						break;
-					}
-				
-				else if (currentTab.equals(CATEGORY[1])) {	
-						queryJSON = queryGen.getJSON(currentCountry, Settings.ENERGY_USE, startYear, endYear);
-						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
-						break;
-					
+			if (currentTab.equals(CATEGORY[0])) {
+				if (graphLayoutArray[0][1] == null) {
+					queryJSON = queryGen.getJSON(currentCountry, Settings.URBAN_RURAL, startYear, endYear);
+					graphLayoutArray[0][1] = new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+					break;
 				}
-				else if (currentTab.equals(CATEGORY[2])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.FOREST_AREA, startYear, endYear);
-				     	new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
-						break;
-					}		
+				else {
+					graphLayoutArray[0][1].reloadGraph();
+					break;
+				}
+			}
+			else if (currentTab.equals(CATEGORY[1])) {
+				if (graphLayoutArray[1][1] == null) {	
+					queryJSON = queryGen.getJSON(currentCountry, Settings.ENERGY_USE, startYear, endYear);
+					graphLayoutArray[1][1] = new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+					break;
+				}
+				else {
+					graphLayoutArray[1][1].reloadGraph();
+					break;
+				}
+			}
+			else if (currentTab.equals(CATEGORY[2])) {
+				if (graphLayoutArray[2][1] == null) {
+					queryJSON = queryGen.getJSON(currentCountry, Settings.FOREST_AREA, startYear, endYear);
+					graphLayoutArray[2][1] = new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+					break;
+				}
+				else {
+					graphLayoutArray[2][1].reloadGraph();
+					break;
+				}
+			}			
 		case 3: 	
-				if (currentTab.equals(CATEGORY[0])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
-						comparisonQuery = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
-				        new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
-						break;
-					}
-				else if (currentTab.equals(CATEGORY[1])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.FOSSIL_FUEL, startYear, endYear);
-						new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
-						break;
-				
+			if (currentTab.equals(CATEGORY[0])) {
+				if (graphLayoutArray[0][2] == null) {
+					queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
+					comparisonQuery = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
+					graphLayoutArray[0][2] = new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
+					break;
 				}
-				else if (currentTab.equals(CATEGORY[2])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
-						comparisonQuery = queryGen.getJSON(currentCountry, Settings.FOREST_AREA, startYear, endYear);
-					    new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
-						break;
-					}
-					
+				else {
+					graphLayoutArray[0][2].reloadGraph();
+					break;
+				}
+			}
+			else if (currentTab.equals(CATEGORY[1])) {
+				if (graphLayoutArray[1][2] == null) {
+					queryJSON = queryGen.getJSON(currentCountry, Settings.FOSSIL_FUEL, startYear, endYear);
+					graphLayoutArray[1][2] = new GraphFragment().createGraph(GraphActivity.this, queryJSON, currentCountry.toString());
+					break;
+				}
+				else {
+					graphLayoutArray[1][2].reloadGraph();
+					break;
+				}
+			}
+			else if (currentTab.equals(CATEGORY[2])) {
+				if (graphLayoutArray[2][2] == null) {
+					queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
+					comparisonQuery = queryGen.getJSON(currentCountry, Settings.FOREST_AREA, startYear, endYear);
+					graphLayoutArray[2][2] = new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
+					break;
+				}
+				else {
+					graphLayoutArray[2][2].reloadGraph();
+					break;
+				}
+			}			
+			break;
 		case 4: 	
-				if (currentTab.equals(CATEGORY[0])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
-						comparisonQuery = queryGen.getJSON(currentCountry, Settings.ENERGY_USE, startYear, endYear);
-						new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
-						break;
+			if (currentTab.equals(CATEGORY[0])) {
+				if (graphLayoutArray[0][3] == null) {
+					queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
+					comparisonQuery = queryGen.getJSON(currentCountry, Settings.ENERGY_USE, startYear, endYear);
+					graphLayoutArray[0][3] = new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
+					break;
 				}
-				else if (currentTab.equals(CATEGORY[1])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
-						comparisonQuery = queryGen.getJSON(currentCountry, Settings.ENERGY_PRODUCTION, startYear, endYear);
-						new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
-						break;
-					
+				else {
+					graphLayoutArray[0][3].reloadGraph();
+					break;
 				}
-				else if (currentTab.equals(CATEGORY[2])) {
-						queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
-						comparisonQuery = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
-						new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
-						break;
+			}
+			else if (currentTab.equals(CATEGORY[1])) {
+				if (graphLayoutArray[1][3] == null) {
+					queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
+					comparisonQuery = queryGen.getJSON(currentCountry, Settings.ENERGY_PRODUCTION, startYear, endYear);
+					graphLayoutArray[1][3] = new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
+					break;
 				}
-		}
-
+				else {
+					graphLayoutArray[1][3].reloadGraph();
+					break;
+				}
+			}
+			else if (currentTab.equals(CATEGORY[2])) {
+				if (graphLayoutArray[2][3] == null) {
+					queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
+					comparisonQuery = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
+					graphLayoutArray[2][3] = new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
+					break;
+				}
+				else {
+					graphLayoutArray[2][3].reloadGraph();
+					break;
+				}
+			}
+	}
 }
 			
 	@Override
