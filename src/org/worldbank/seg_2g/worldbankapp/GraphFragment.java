@@ -250,6 +250,8 @@ public class GraphFragment extends Fragment {
 			float scale = 0;
 			float sub = 0;
 			
+			int originalPreviousValue = 0;
+			
 			// put every entry from JSON in graph and create a label
 			for (int i = 0; i < totalEntries; ++i) {
 				
@@ -273,13 +275,24 @@ public class GraphFragment extends Fragment {
 				comparisonValue = comparisonJson.getInt("value");
 				year = json.getInt("date");
 				
+				if (value > originalPreviousValue) {
+					normAddition += 0.02;
+				}
+				else {
+					normAddition -= 0.02;
+				}
+				
+				originalPreviousValue = value;
+				
 				if (scale == 0) {
 					scale = (float) comparisonValue / value;
 					sub = (float) (value * scale) / 2;
 				}
 				
 				float normalisedValue = (value * scale) * normAddition;
-				normAddition += 0.02;
+
+				//normAddition += 0.02;
+
 				values.add(new PointValue(year, normalisedValue).setLabel(String.valueOf(value).toCharArray()));
 				comparisonValues.add(new PointValue(year, comparisonValue).setLabel(String.valueOf(comparisonValue).toCharArray()));
 				
