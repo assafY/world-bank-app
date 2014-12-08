@@ -140,6 +140,7 @@ public class GraphFragment extends Fragment {
 				if (!containsOnlyNullData) {
 				
 					graph.setLineChartData(chartData);
+					graph.setPadding(0, 10, 0, 0);
 					graph.setZoomEnabled(false);
 					graph.setScrollEnabled(false);
 					
@@ -185,8 +186,10 @@ public class GraphFragment extends Fragment {
 				if (!containsOnlyNullData) {
 					
 					graph.setLineChartData(chartData);
+					graph.setPadding(0, 10, 0, 0);
 					graph.setZoomEnabled(false);
 					graph.setScrollEnabled(false);
+					
 					graphLayout.removeAllViews();					
 					graphLayout.addView(graph);
 					
@@ -210,7 +213,7 @@ public class GraphFragment extends Fragment {
 		}
 	}
 
-	// creates a double line comparison graph
+	// creates a double line comparison graph, with the higher value normalized to show relative growth compared to lower value
 	private void createComparisonGraph() {
 		
 		containsOnlyNullData = false;
@@ -332,38 +335,17 @@ public class GraphFragment extends Fragment {
 				// add label to new list
 				comparisonAxisValues.add(new AxisValue(addedRoundedValue, label));
 				
-				// create labels for left Y axis
+				// create empty label for left Y axis
 				if (pointValueListCounter >= 0) {
-					
-					String biggerValue = String.valueOf(values.get(pointValueListCounter--).getLabel());
-					setRoundedValue(Integer.parseInt(biggerValue));
-					
-					// put first digit char in new label
-					newLabel = "" + valueString.charAt(charCounter++);
-			
-					// add commas to the value string
-					while (digitCount > 3) {
-						while (digitCount-- % 3 != 0) {
-							newLabel += valueString.charAt(charCounter++);
-						}
-						newLabel += "," + valueString.charAt(charCounter++);
-					}
-					// finalise new label with last three chars from string
-					newLabel += valueString.substring(charCounter);
-			
-					// convert string to char array
-					char[] mainPointLabel = newLabel.toCharArray();
-					
-					axisValues.add(new AxisValue(addedRoundedValue, mainPointLabel));
+					axisValues.add(new AxisValue(addedRoundedValue, "".toCharArray()));
 				}
 			}
-			
 			
 			axisX = new Axis().setMaxLabelChars(4).setTextColor(Color.BLACK).setTextSize(11);
 			chartData.setAxisXBottom(axisX);
 			
-			axisY = new Axis(axisValues).setName(measureLabel).setHasLines(true)
-					.setMaxLabelChars(11).setTextColor(Color.RED).setLineColor(Color.LTGRAY).setTextSize(11);
+			axisY = new Axis(axisValues).setName(measureLabel + " (relative growth)").setHasLines(false)
+					.setTextColor(Color.RED).setTextSize(11);
 			
 			rightAxisY = new Axis(comparisonAxisValues).setName(comparisonMeasureLabel).setHasLines(true)
 					.setMaxLabelChars(11).setTextColor(Color.GREEN).setLineColor(Color.LTGRAY).setTextSize(11);
@@ -371,10 +353,10 @@ public class GraphFragment extends Fragment {
 			chartData.setAxisYLeft(axisY);
 			chartData.setAxisYRight(rightAxisY);
 			
-			Viewport v = graph.getMaximumViewport();
+		/*	Viewport v = graph.getMaximumViewport();
 			v.set(v.left, increment, v.right, 0);
 			graph.setMaximumViewport(v);
-			graph.setCurrentViewport(v, false);
+			graph.setCurrentViewport(v, false); */
 
 			
 		} catch (JSONException e) {
