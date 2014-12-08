@@ -4,8 +4,6 @@ package org.worldbank.seg_2g.worldbankapp;
 import android.content.Context;
 
 public class Country implements Comparable<Country> {
-
-	//private Context context;
 	
 	private String name;
 	private String threeLetterCode;
@@ -16,7 +14,6 @@ public class Country implements Comparable<Country> {
 	private int flagId;
 	
 	public Country(String countryName, String threeLetterCode, String twoLetterCode, Context context) {
-		//this.context = context;
 		
 		this.name = countryName;
 		this.threeLetterCode = threeLetterCode;
@@ -62,11 +59,13 @@ public class Country implements Comparable<Country> {
 		return this.name.compareTo(otherCountry.toString());
 	}
 	
-	public void checkFlag(Context context){
-	if(twoLetterCode.equalsIgnoreCase("do")){
-	flagId = context.getResources().getIdentifier(threeLetterCode.toLowerCase(), "drawable", context.getPackageName());
-	}else{
-	flagId = context.getResources().getIdentifier(twoLetterCode.toLowerCase(), "drawable", context.getPackageName());}
+	public void checkFlag(Context context) {
+		if (twoLetterCode.equalsIgnoreCase("do")) {
+			flagId = context.getResources().getIdentifier(threeLetterCode.toLowerCase(), "drawable", context.getPackageName());
+		}
+		else {
+			flagId = context.getResources().getIdentifier(twoLetterCode.toLowerCase(), "drawable", context.getPackageName());
+		}
 	}
 	
 }
