@@ -137,15 +137,32 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		        	endYearView.setText(String.valueOf(maxValue));	
 	        	
 	        	if (!bar.isPressed() && (startYear != minValue || endYear != maxValue)) {
-	        		startYear = minValue;
-		        	endYear = maxValue;
+	        		int newStartYear = minValue;
+		        	int newEndYear = maxValue;
 		        	
-		        	if (startYear != endYear) {
+		        	if (newStartYear != newEndYear) {
+		        		startYear = newStartYear;
+		        		endYear = newEndYear;
 		        		graphLayoutArray = new GraphFragment[NUMBER_OF_CATEGORIES][NUMBER_OF_PAGES];
 		        		graphPage(currentPagePosition);
 		        	}
+		        	// disable selection of same start and end years
 		        	else {
-		        		Toast.makeText(GraphActivity.this, "Select a range of at least two years", Toast.LENGTH_SHORT).show();
+		        		if (startYear != newStartYear) {
+		        			yearSeekBar.setSelectedMinValue(--newStartYear);
+		        			startYear = newStartYear;
+		        			startYearView.setText(String.valueOf(newStartYear));
+		        			graphLayoutArray = new GraphFragment[NUMBER_OF_CATEGORIES][NUMBER_OF_PAGES];
+			        		graphPage(currentPagePosition);
+		        		}
+		        		else {
+		        			yearSeekBar.setSelectedMaxValue(++newEndYear);
+		        			endYear = newEndYear;
+		        			endYearView.setText(String.valueOf(newEndYear));
+		        			graphLayoutArray = new GraphFragment[NUMBER_OF_CATEGORIES][NUMBER_OF_PAGES];
+			        		graphPage(currentPagePosition);
+		        		}
+		        		//Toast.makeText(GraphActivity.this, "Select a range of at least two years", Toast.LENGTH_SHORT).show();
 		        	}
 	        	}
 	        }

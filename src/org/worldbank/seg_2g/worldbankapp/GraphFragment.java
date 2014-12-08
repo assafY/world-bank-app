@@ -309,7 +309,7 @@ public class GraphFragment extends Fragment {
 			// keep track of points being pulled out of normalised line to use their labels
 			int pointValueListCounter = values.size() - 1;
 			
-			// create labels for right and left Y axis
+			// create labels for right and left Y axes
 			for (int i = highestRoundedValue; i >= lowestRoundedValue; i -= increment) {
 				// create labels for right Y axis
 				setRoundedValue(i);
