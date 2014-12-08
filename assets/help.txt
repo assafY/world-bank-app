@@ -1,20 +1,31 @@
 Hello and Welcome to SunBank!
 
-This application is aimed at anyone with interest in geography and wants to visually analyse
-data about the world. We provide data from of all sorts, from population to CO2 emissions and
-helps you to compare and see the impact they both cause corresponding to each other. 
-This screen will give you help on how to efficiently use this application.
+This application is aimed at anyone with interest in geography and wants to visually analyse data about the world. We provide data from of all sorts,
+ from population to CO2 emissions and helps you to compare and see the impact they both cause correspondingto each other. This screen will give you help on how to efficiently
+ use this application.
 
 How to use graph screen:
 
--Top left of the screen allows you to bring the 
- Option menu down and select the country
+-Top left of the screen allows you to bring the Option menu down and select the country
  
--One country is clicked, the graph will appear
+-When a country is clicked, the graph will appear
  (If you have Internet access)
  
--You can choose the categories of Information
- From Population, Energy and Environment.
- When one is clicked, it will display
- a graph on one of the previously chosen
- Countries.
+-The Seekbar below the graph allows you to change the years, by increasing or decreasing on either nodes.
+ 
+-Some countries maybe not have the same range of data(e.g. years).A message will appear to warn you. To get the graph to appear, you will have to shorten the year range using the nodes and decreasing fromleft to right.  
+ 
+-You can choose the categories of Information From Population, Energy and Environment.When one is clicked, it will displaya graph on one of the previously chosenCountries.
+ 
+ CLICK ON THE "GRAPH VISUAL HELP" for Visual Help.
+ 
+ How to use Map screen:
+-There are two options on the top right of the action bar. These options are Attributes and Years.
+
+ -Once the Attribute is picked, a coloured map will appear. The colours will vary between green and red. The darker the colour, the higher the attribute is, in that particular country.
+ 
+ -You can also change the year, in which will affect will attribute.
+
+CLICK ON THE "MAP VISUAL HELP" for Visual Help.
+ 
+ 

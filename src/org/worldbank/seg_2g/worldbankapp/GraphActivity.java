@@ -8,6 +8,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
@@ -17,7 +18,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -215,7 +215,14 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle action bar item events.
 		int id = item.getItemId();
-		if (id == R.id.back) {
+		
+		if (id == R.id.help) {
+			
+			Intent helpIntent = new Intent(getApplicationContext(), HelpActivity.class);
+			startActivity(helpIntent);
+		}
+			
+		else if (id == R.id.back) {
 			// if back button was clicked before country is selected, notify user
 			if (currentCountry == null) {
 				Toast.makeText(getApplicationContext(), NO_COUNTRY_SELECTED, Toast.LENGTH_SHORT).show();
