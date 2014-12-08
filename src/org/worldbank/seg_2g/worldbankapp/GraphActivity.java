@@ -36,6 +36,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 
 	// constant to be shown as Toast across app when a country is selected while device has no network
 	public static final CharSequence NO_NETWORK_TEXT = "Your device has no network";
+	public static final CharSequence NO_COUNTRY_SELECTED = "Please select a country from the list";
 	// constant string array containing tab values
 	private static final String[] CATEGORY = {"Population","Energy","Environment"};
 	// constant integers containing number of tabs and pages under each tab
@@ -81,7 +82,6 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	
 	private int startYear;
 	private int endYear;
-	private int indicatorSelection;
 	
 
 	@Override
@@ -106,9 +106,16 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		graphView.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 					@Override
 					public void onPageSelected(int position) {
-						Log.d("Debug", "Value: " + Integer.toString(position)); // Test Info **DONT REMOVE**
-						currentPagePosition = position;
-						graphPage(position);
+						//Log.d("Debug", "Value: " + Integer.toString(position)); // Test Info **DONT REMOVE**
+					
+						// if next button was clicked before country is selected, notify user
+						if (currentCountry == null) {
+							Toast.makeText(getApplicationContext(), NO_COUNTRY_SELECTED, Toast.LENGTH_SHORT).show();
+						}
+						else {						
+							currentPagePosition = position;
+							graphPage(position);
+						}
 					}
 				});
 
@@ -168,7 +175,6 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		        			graphLayoutArray = new GraphFragment[NUMBER_OF_CATEGORIES][NUMBER_OF_PAGES];
 			        		graphPage(currentPagePosition);
 		        		}
-		        		//Toast.makeText(GraphActivity.this, "Select a range of at least two years", Toast.LENGTH_SHORT).show();
 		        	}
 	        	}
 	        }
@@ -199,28 +205,47 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		// Handle action bar item events.
 		int id = item.getItemId();
 		if (id == R.id.back) {
-			if(graphAdapter.getPosition()>0){
-			graphPage(graphAdapter.getPosition());	
-		    graphAdapter.setBackPosition();
-			}else{
-			if(graphAdapter.getPosition()==0){
-			if(tabCounter>0){
-			actionBar.setSelectedNavigationItem(--tabCounter);	
-			graphAdapter.restartPosition();
-			graphPage(graphAdapter.getPosition());	
-		    graphAdapter.restartGraph();
-			}}}
-			}else if(id == R.id.next){
-			if(graphAdapter.getPosition()<5){
-			graphPage(graphAdapter.getPosition());	
-			graphAdapter.setPosition();
-			}else{
-			if(tabCounter<2){
-			actionBar.setSelectedNavigationItem(++tabCounter);	
-			graphAdapter.restartPosition();
-			graphPage(graphAdapter.getPosition());	
-			graphAdapter.setPosition();
-			}}}
+			// if back button was clicked before country is selected, notify user
+			if (currentCountry == null) {
+				Toast.makeText(getApplicationContext(), NO_COUNTRY_SELECTED, Toast.LENGTH_SHORT).show();
+				return false;
+			}
+			
+			if (graphAdapter.getPosition() > 0) {
+				graphPage(graphAdapter.getPosition());	
+			    graphAdapter.setBackPosition();
+			}
+			else {
+				if (graphAdapter.getPosition() == 0) {
+					if (tabCounter > 0) {
+						actionBar.setSelectedNavigationItem(--tabCounter);	
+						graphAdapter.restartPosition();
+						graphPage(graphAdapter.getPosition());	
+					    graphAdapter.restartGraph();
+					}
+				}
+			}
+		}
+		else if (id == R.id.next) {
+			// if next button was clicked before country is selected, notify user
+			if (currentCountry == null) {
+				Toast.makeText(getApplicationContext(), NO_COUNTRY_SELECTED, Toast.LENGTH_SHORT).show();
+				return false;
+			}
+			
+			if (graphAdapter.getPosition() < 5) {
+				graphPage(graphAdapter.getPosition());	
+				graphAdapter.setPosition();
+			}
+			else {
+				if (tabCounter < 2) {
+					actionBar.setSelectedNavigationItem(++tabCounter);	
+					graphAdapter.restartPosition();
+					graphPage(graphAdapter.getPosition());	
+					graphAdapter.setPosition();
+				}
+			}
+		}
 		else if (drawerToggle.onOptionsItemSelected(item)) {
 			return true;
 		}
@@ -233,7 +258,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		countryList = new ArrayList<Country>();
 		queryGen = new QueryGenerator(this);
 		queryGen.setCountryList(countryList);
-		currentCountry = countryList.get(0);
+		//currentCountry = countryList.get(0);
 	}	
 	
 			
