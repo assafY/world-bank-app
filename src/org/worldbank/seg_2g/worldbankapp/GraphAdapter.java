@@ -11,14 +11,14 @@ import android.widget.RelativeLayout;
 
 public class GraphAdapter extends FragmentPagerAdapter {
 	
-	private static final CharSequence POPULATION = "Population";
-	private static final CharSequence ENERGY = "Energy";
-	private static final CharSequence ENVIRONMENT = "Environment";
 	
+	private static int pagePosition;
 	private static final int TOTAL_PAGES = 6;
 
 	public GraphAdapter(FragmentManager frame) {
 		super(frame);
+		pagePosition =1;
+
 	}
 
 	@Override
@@ -70,6 +70,31 @@ public class GraphAdapter extends FragmentPagerAdapter {
 			return rootView;
 		}
 	}
+	
+	public int getPosition(){
+		return pagePosition;
+	}
+	
+	public void setPosition(){
+		if(pagePosition<5){
+		pagePosition= pagePosition +1;
+		}
+	}
+	
+	public void setBackPosition(){
+		if(pagePosition>0){
+			--pagePosition;
+			}
+	}
 
+	public void restartPosition(){
+	pagePosition =1;
+	}
+	
+	public void restartGraph(){
+		pagePosition =2;
+	}
 }
+
+
 
