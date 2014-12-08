@@ -23,8 +23,6 @@ import android.os.AsyncTask;
 
 public class QueryGenerator {
 
-	// public final static String QUERY_RESULT = "org.worldbank.seg_2g.RESULT";
-
 	// list of contstants containing different indicator query codes to use when
 	// querying server
 	private static final String WB_URL = "http://api.worldbank.org/countries/";

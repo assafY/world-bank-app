@@ -34,20 +34,25 @@ import android.widget.Toast;
 
 public class GraphActivity extends Activity implements ActionBar.TabListener {
 
+	// constant to be shown as Toast across app when a country is selected while device has no network
 	public static final CharSequence NO_NETWORK_TEXT = "Your device has no network";
-	private static final CharSequence ACTIVITY_TITLE = "Graph Activity";
-	private static final CharSequence DRAWER_TITLE = "Select Country";
+	// constant string array containing tab values
 	private static final String[] CATEGORY = {"Population","Energy","Environment"};
-	
+	// constant integers containing number of tabs and pages under each tab
 	private static final int NUMBER_OF_CATEGORIES = CATEGORY.length;
 	private static final int NUMBER_OF_PAGES = 4;
-	
+	// static integer to keep track of which tab the user is in
 	public static int CATEGORY_COUNTER = 0;
 	private int tabCounter;
 
 	
+	// main list, autocomplete list and view pager adapters
 	private CountryListAdapter listAdapter;
 	private CountryListAdapter autoCompleteAdapter;
+	private	GraphAdapter graphAdapter;
+	
+	// viewpager responsible for page swiping
+    public static ViewPager graphView;
 	
 	private ArrayList<Country> countryList;      // will always contain all countries
 	private ArrayList<Country> autoCompleteList; // will be reset every time text changes in text field
@@ -68,8 +73,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	private String queryJSON;
 	private String comparisonQuery;
 	
-    private	GraphAdapter graphAdapter;
-    public static	ViewPager graphView;
+    
     
     private RangeSeekBar<Integer> yearSeekBar;
     private TextView startYearView;
