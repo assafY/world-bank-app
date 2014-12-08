@@ -17,12 +17,13 @@ public class GraphAdapter extends FragmentPagerAdapter {
 
 	public GraphAdapter(FragmentManager frame) {
 		super(frame);
-		pagePosition =1;
+		pagePosition = 1;
 
 	}
 
 	@Override
 	public Fragment getItem(int position) {
+		pagePosition = position + 1;
 		return GraphFrameHolder.newInstance(position + 1);
 	}
 	
@@ -71,28 +72,32 @@ public class GraphAdapter extends FragmentPagerAdapter {
 		}
 	}
 	
-	public int getPosition(){
+	public int getPosition() {
 		return pagePosition;
 	}
 	
-	public void setPosition(){
-		if(pagePosition<5){
-		pagePosition= pagePosition +1;
+	public void setPosition() {
+		if (pagePosition < 5) {
+			++pagePosition;
 		}
 	}
 	
-	public void setBackPosition(){
-		if(pagePosition>0){
+	public void setBackPosition() {
+		if (pagePosition > 0) {
 			--pagePosition;
-			}
+		}
 	}
 
-	public void restartPosition(){
-	pagePosition =1;
+	public void restartPosition() {
+		pagePosition = 1;
 	}
 	
-	public void restartGraph(){
-		pagePosition =2;
+	public void restartGraph() {
+		pagePosition = 2;
+	}
+	
+	public void setNewPosition(int newPosition) {
+		pagePosition = newPosition;
 	}
 }
 

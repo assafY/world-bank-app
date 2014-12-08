@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 
@@ -21,8 +22,6 @@ import android.content.Context;
 import android.os.AsyncTask;
 
 public class QueryGenerator {
-
-	// public final static String QUERY_RESULT = "org.worldbank.seg_2g.RESULT";
 
 	// list of contstants containing different indicator query codes to use when
 	// querying server
@@ -46,18 +45,19 @@ public class QueryGenerator {
 		this.context = context;
 	}
 
-	public void setCountryList(ArrayList<Country> countryList) {
+	public void setCountryList(final ArrayList<Country> countryList) {
+
 		try {
-			// put country json in JSONArray
+			// put full country json in JSONArray
 			JSONArray dataFeed = new JSONArray(loadCountriesFromAssets());
 
 			// get total number of countries
 			JSONObject titleValues = dataFeed.getJSONObject(0);
 			int totalCountries = titleValues.getInt("total");
 
-			// create Country object for all countries and add to list and names
-			// array
+			// extract main country value JSON array from file
 			JSONArray feedArray = dataFeed.getJSONArray(1);
+			// create Country object for all countries and add to list
 			for (int i = 0; i < totalCountries; ++i) {
 				JSONObject json = feedArray.getJSONObject(i);
 				String country = json.getString("name");
@@ -68,10 +68,13 @@ public class QueryGenerator {
 					countryList.add(currentCountry);
 				}
 			}
+			// sort the list by country name
+			Collections.sort(countryList);
 
 		} catch (JSONException e) {
 			// TODO: Handle exception
 		}
+
 	}
 
 	private String loadCountriesFromAssets() {
@@ -181,7 +184,7 @@ public class QueryGenerator {
 		}
 	}
 
-	public boolean checkCountry(String isValidCountry) {
+	private boolean checkCountry(String isValidCountry) {
 		// check against countries that have different codes to Locale
 		// return true if found
 		if (additionalCountry(isValidCountry)) {
@@ -199,7 +202,7 @@ public class QueryGenerator {
 		}
 	}
 
-	public boolean additionalCountry(String isValidCountry) {
+	private boolean additionalCountry(String isValidCountry) {
 		if (isValidCountry.contains("Cyprus")
 				|| isValidCountry.contains("Korea, Rep")
 				|| isValidCountry.contains("Korea, Dem. Rep")

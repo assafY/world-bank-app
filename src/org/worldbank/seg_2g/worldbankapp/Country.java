@@ -3,7 +3,7 @@ package org.worldbank.seg_2g.worldbankapp;
 
 import android.content.Context;
 
-public class Country {
+public class Country implements Comparable<Country> {
 
 	//private Context context;
 	
@@ -57,6 +57,10 @@ public class Country {
 		return name;
 	}
 	
+	@Override
+	public int compareTo(Country otherCountry) {
+		return this.name.compareTo(otherCountry.toString());
+	}
 	
 	public void checkFlag(Context context){
 	if(twoLetterCode.equalsIgnoreCase("do")){
@@ -64,7 +68,5 @@ public class Country {
 	}else{
 	flagId = context.getResources().getIdentifier(twoLetterCode.toLowerCase(), "drawable", context.getPackageName());}
 	}
-	
-
 	
 }
