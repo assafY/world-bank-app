@@ -119,7 +119,6 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 						}
 						else {						
 							currentPagePosition = position;
-							//graphAdapter.setNewPosition(position);
 							graphPage(position);
 						}
 					}
@@ -281,7 +280,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		actionBar.setHomeButtonEnabled(true);
 		actionBar.setTitle("Countries");
 		
-		drawerToggle = new ActionBarDrawerToggle(this, countryDrawerLayout, R.drawable.ic_drawer, R.string.drawer_open, R.string.drawer_close) {
+		drawerToggle = new ActionBarDrawerToggle(this, countryDrawerLayout, R.drawable.worldhelp, R.string.drawer_open, R.string.drawer_close) {
 			
 			public void onDrawerClosed(View view) {
 				super.onDrawerClosed(view);
