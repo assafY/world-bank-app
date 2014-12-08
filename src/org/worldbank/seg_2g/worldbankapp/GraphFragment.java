@@ -268,10 +268,10 @@ public class GraphFragment extends Fragment {
 				JSONObject comparisonJson = comparisonFeedArray.getJSONObject(jsonCounter--);
 				
 				// if either value field in an object is null, stop creating graph and set null data boolean to true
-				/*if (json.optInt("value", -1) == -1 || comparisonJson.optInt("value", -1) == -1) {
+				if (json.optInt("value", -1) == -1 || comparisonJson.optInt("value", -1) == -1) {
 					containsOnlyNullData = true;
 					return;
-				}*/
+				}
 				
 				// add measure type label to string to later create axes labels
 				if (measureLabel == null) {
@@ -313,10 +313,6 @@ public class GraphFragment extends Fragment {
 				if (comparisonValue > comparisonHighestValue) { comparisonHighestValue = comparisonValue; }
 				if (comparisonValue < comparisonLowestValue) { comparisonLowestValue = comparisonValue; }
 
-			}
-			if (values.size() == 0 || comparisonValues.size() == 0) {
-				containsOnlyNullData = true;
-				return;
 			}
 			
 			// set value lists to graph lines
@@ -395,10 +391,10 @@ public class GraphFragment extends Fragment {
 				JSONObject json = feedArray.getJSONObject(jsonCounter--);
 				
 				// if the value field in the object is null, stop creating graph and set null data boolean to true
-				/*if (json.optInt("value", -1) == -1) {
+				if (json.optInt("value", -1) == -1) {
 					containsOnlyNullData = true;
 					return;
-				}*/
+				}
 				
 				// add measure type label to string, this will be displayed beside Y axis
 				if (measureLabel == null) {
@@ -432,11 +428,6 @@ public class GraphFragment extends Fragment {
 					// add year and value to the list later used to draw graph
 					values.add(new PointValue(year, value));
 				}
-			}
-			
-			if (values.size() == 0) {
-				containsOnlyNullData = true;
-				return;
 			}
 			
 			if (!measureLabel.contains("%")) {
