@@ -42,10 +42,9 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	// constant integers containing number of tabs and pages under each tab
 	private static final int NUMBER_OF_CATEGORIES = CATEGORY.length;
 	private static final int NUMBER_OF_PAGES = 4;
-	// static integer to keep track of which tab the user is in
-	public static int CATEGORY_COUNTER = 0;
+	
+	// integer to keep track of which tab the user is in
 	private int tabCounter;
-
 	
 	// main list, autocomplete list and view pager adapters
 	private CountryListAdapter listAdapter;
@@ -55,31 +54,37 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	// viewpager responsible for page swiping
     public static ViewPager graphView;
 	
-	private ArrayList<Country> countryList;      // will always contain all countries
-	private ArrayList<Country> autoCompleteList; // will be reset every time text changes in text field
-	GraphFragment[][] graphLayoutArray = new GraphFragment[NUMBER_OF_CATEGORIES][NUMBER_OF_PAGES]; // will save graphs of a certain country
+    // full country list which will always contain all countries
+	private ArrayList<Country> countryList;
+	// autocomplete country list which will be reset every time text changes in text field
+	private ArrayList<Country> autoCompleteList; 
+	// graph fragment array caches fragments in the background as the user views different graphs
+	GraphFragment[][] graphLayoutArray = new GraphFragment[NUMBER_OF_CATEGORIES][NUMBER_OF_PAGES];
 	
+	// country list drawer views
 	private EditText countryTextView;
 	private ListView countryListView;
 	private DrawerLayout countryDrawerLayout;
 	private ActionBarDrawerToggle drawerToggle;
+	
 	private ActionBar actionBar;
 
-	
+	// fields to keep track of current page, tab and selected country
 	public static int currentPagePosition = 1;
 	private Country currentCountry;
 	private String currentTab = CATEGORY[0];
 
+	// json query generator and strings
 	private QueryGenerator queryGen;
 	private String queryJSON;
 	private String comparisonQuery;
 	
-    
-    
+    // two-handle seekbar and year display
     private RangeSeekBar<Integer> yearSeekBar;
     private TextView startYearView;
     private TextView endYearView;
 	
+    // integers of the currently selected years, used for generating new json queries
 	private int startYear;
 	private int endYear;
 	
@@ -114,6 +119,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 						}
 						else {						
 							currentPagePosition = position;
+							//graphAdapter.setNewPosition(position);
 							graphPage(position);
 						}
 					}
@@ -143,6 +149,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		yearSeekBar.setSelectedMaxValue(endYear);
 		yearSeekBar.setNotifyWhileDragging(true);
 		
+		// set listener to change year labels while user is dragging and redraw graph after a selection is made
 		yearSeekBar.setOnRangeSeekBarChangeListener(new OnRangeSeekBarChangeListener<Integer>() {
 	        @Override
 	        public void onRangeSeekBarValuesChanged(RangeSeekBar<?> bar, Integer minValue, Integer maxValue) {
@@ -179,9 +186,12 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 	        	}
 	        }
 		});
-		tabCounter =0;
+		
 		LinearLayout seekBarLayout = (LinearLayout) findViewById(R.id.year_seek_bar_layout);
 		seekBarLayout.addView(yearSeekBar);
+		
+		// initialize tab counter with default value
+		tabCounter = 0;
 		
 		// load countries into list
 		loadCountries();
@@ -301,7 +311,6 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 			public void onItemClick(AdapterView<?> parent, View view, int pos,
 					long id) {
 				// when a country is selected from the list, get JSON data and create graph
-				// TODO: change hard coded year range to two bar seekbar
 				
 				// if a user is connected, create graph layout
 				if (deviceHasNetwork()) {
@@ -309,6 +318,9 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 					currentCountry = (Country) parent.getItemAtPosition(pos);
 					graphPage(currentPagePosition);
 					actionBar.setTitle(currentCountry.toString());
+					actionBar.setSelectedNavigationItem(0);
+					graphAdapter.restartGraph();
+					tabCounter = 0;
 				}
 				// if disconnected do nothing and notify with Toast
 				else {
@@ -398,11 +410,7 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 		
 
 		switch (position) {
-		case 0: if (CATEGORY_COUNTER > 0) {
-					currentPagePosition = 4;
-					actionBar.setSelectedNavigationItem(--CATEGORY_COUNTER);	
-					break;
-				}	
+		
 		case 1: 
 				if (currentTab.equals(CATEGORY[0])) {
 						queryJSON = queryGen.getJSON(currentCountry, Settings.POPULATION, startYear, endYear);
@@ -477,11 +485,6 @@ public class GraphActivity extends Activity implements ActionBar.TabListener {
 						comparisonQuery = queryGen.getJSON(currentCountry, Settings.CO2_EMISSIONS, startYear, endYear);
 						new GraphFragment().createGraph(GraphActivity.this, queryJSON, comparisonQuery, currentCountry.toString());
 						break;
-				}			
-		case 5: if (CATEGORY_COUNTER < 2) {
-					currentPagePosition = 1;
-					actionBar.setSelectedNavigationItem(++CATEGORY_COUNTER);
-					break;
 				}
 		}
 
